@@ -1684,10 +1684,13 @@ Internet-Draft               Digest Headers                   April 2020
 
    8.  What about mid-stream trailers?
 
-       While mid-stream trailers [11] are interesting, being this
-       specification a rewrite of [RFC3230] we do not think we should
-       face that.  As a first thought, future works on digest-algorithms
-       may consider mid-stream trailers though.
+       While mid-stream trailers [11] are interesting, since this
+       specification is a rewrite of [RFC3230] we do not think we should
+       face that.  As a first thought, nothing in this document
+       precludes future work that would find a use for mid-stream
+       trailers, for example an incremental digest-algorithm.  A
+       document defining such a digest-algorithm is best positioned to
+       describe how it is used.
 
 Acknowledgements
 
@@ -1709,9 +1712,6 @@ Code Samples
    these are formatted as base64.  This function could be adapted to
    other algorithms and should take into account their specific
    formatting rules.
-
-
-
 
 
 
