@@ -355,9 +355,9 @@ Internet-Draft               Digest Headers                   April 2020
    algorithm without knowing whether the recipient supports the digest-
    algorithm, or even knowing that the recipient will ignore it.
 
-   Digest can be used in trailers.  When using incremental digest-
-   algorithms this allows the sender and the receiver to dynamically
-   compute the digest value while streaming the content.
+   Digest can be sent in a trailer section.  When using incremental
+   digest-algorithms this allows the sender and the receiver to
+   dynamically compute the digest value while streaming the content.
 
    Two examples of its use are
 
@@ -1198,8 +1198,8 @@ Internet-Draft               Digest Headers                   April 2020
 
    When used in trailers, the receiver gets the digest value after the
    payload body and may thus be tempted to process the data before
-   validating the digest value.  Instead, data should be always
-   processed after checking that Digest has the expected value.
+   validating the digest value.  Instead, data should only be processed
+   after validating the Digest.
 
    Not every digest-algorithm is suitable for trailers, as they may
    require to pre-process the whole payload before sending a message
