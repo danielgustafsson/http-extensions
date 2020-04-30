@@ -5,8 +5,8 @@
 HTTP Working Group                                              R. Polli
 Internet-Draft                         Team Digitale, Italian Government
 Intended status: Standards Track                               L. Pardue
-Expires: October 29, 2020                                     Cloudflare
-                                                          April 27, 2020
+Expires: November 1, 2020                                     Cloudflare
+                                                          April 30, 2020
 
 
                              Digest Headers
@@ -48,12 +48,12 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on October 29, 2020.
+   This Internet-Draft will expire on November 1, 2020.
 
 
 
 
-Polli & Pardue          Expires October 29, 2020                [Page 1]
+Polli & Pardue          Expires November 1, 2020                [Page 1]
 
 Internet-Draft               Digest Headers                   April 2020
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Polli & Pardue          Expires October 29, 2020                [Page 2]
+Polli & Pardue          Expires November 1, 2020                [Page 2]
 
 Internet-Draft               Digest Headers                   April 2020
 
@@ -127,14 +127,14 @@ Internet-Draft               Digest Headers                   April 2020
    12. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  22
      12.1.  Establish the HTTP Digest Algorithm Values . . . . . . .  22
      12.2.  The "status" Field in the HTTP Digest Algorithm Values .  22
-     12.3.  Deprecate "MD5" Digest Algorithm . . . . . . . . . . . .  23
+     12.3.  Deprecate "MD5" Digest Algorithm . . . . . . . . . . . .  22
      12.4.  Update "CRC32C" Digest Algorithm . . . . . . . . . . . .  23
      12.5.  Obsolete "SHA" Digest Algorithm  . . . . . . . . . . . .  23
      12.6.  Obsolete "ADLER32" Digest Algorithm  . . . . . . . . . .  23
      12.7.  The "ID-SHA-256" Digest Algorithm  . . . . . . . . . . .  24
      12.8.  The "ID-SHA-512" Digest Algorithm  . . . . . . . . . . .  24
      12.9.  Changes compared to RFC5843  . . . . . . . . . . . . . .  24
-     12.10. Want-Digest Field Registration . . . . . . . . . . . . .  25
+     12.10. Want-Digest Field Registration . . . . . . . . . . . . .  24
      12.11. Digest Header Field Registration . . . . . . . . . . . .  25
    13. References  . . . . . . . . . . . . . . . . . . . . . . . . .  25
      13.1.  Normative References . . . . . . . . . . . . . . . . . .  25
@@ -142,12 +142,13 @@ Internet-Draft               Digest Headers                   April 2020
      13.3.  URIs . . . . . . . . . . . . . . . . . . . . . . . . . .  27
    Appendix A.  Resource Representation and Representation-Data  . .  28
    Appendix B.  FAQ  . . . . . . . . . . . . . . . . . . . . . . . .  30
-   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  31
+   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  30
    Code Samples  . . . . . . . . . . . . . . . . . . . . . . . . . .  31
    Changes . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  32
      E.1.  Since draft-ietf-httpbis-digest-headers-00  . . . . . . .  32
-     E.2.  Since draft-ietf-httpbis-digest-headers-01  . . . . . . .  33
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  33
+     E.2.  Since draft-ietf-httpbis-digest-headers-01  . . . . . . .  32
+     E.3.  Since draft-ietf-httpbis-digest-headers-02  . . . . . . .  32
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  32
 
 1.  Introduction
 
@@ -161,15 +162,15 @@ Internet-Draft               Digest Headers                   April 2020
    An HTTP-level integrity mechanism that operates independent of
    transfer can be used to detect programming errors and/or corruption
    of data at rest, be used across multiple hops in order to provide
-   end-to-end integrity guarantees, aid fault diagnosis across hops and
 
 
 
-Polli & Pardue          Expires October 29, 2020                [Page 3]
+Polli & Pardue          Expires November 1, 2020                [Page 3]
 
 Internet-Draft               Digest Headers                   April 2020
 
 
+   end-to-end integrity guarantees, aid fault diagnosis across hops and
    system boundaries, and can be used to validate integrity when
    reconstructing a resource fetched using different HTTP connections.
 
@@ -220,8 +221,7 @@ Internet-Draft               Digest Headers                   April 2020
 
 
 
-
-Polli & Pardue          Expires October 29, 2020                [Page 4]
+Polli & Pardue          Expires November 1, 2020                [Page 4]
 
 Internet-Draft               Digest Headers                   April 2020
 
@@ -277,7 +277,7 @@ Internet-Draft               Digest Headers                   April 2020
 
 
 
-Polli & Pardue          Expires October 29, 2020                [Page 5]
+Polli & Pardue          Expires November 1, 2020                [Page 5]
 
 Internet-Draft               Digest Headers                   April 2020
 
@@ -333,7 +333,7 @@ Internet-Draft               Digest Headers                   April 2020
 
 
 
-Polli & Pardue          Expires October 29, 2020                [Page 6]
+Polli & Pardue          Expires November 1, 2020                [Page 6]
 
 Internet-Draft               Digest Headers                   April 2020
 
@@ -389,7 +389,7 @@ Internet-Draft               Digest Headers                   April 2020
 
 
 
-Polli & Pardue          Expires October 29, 2020                [Page 7]
+Polli & Pardue          Expires November 1, 2020                [Page 7]
 
 Internet-Draft               Digest Headers                   April 2020
 
@@ -415,8 +415,8 @@ Internet-Draft               Digest Headers                   April 2020
 
    Some algorithms, although registered, have since been found
    vulnerable: the MD5 algorithm MUST NOT be used due to collision
-   attacks [CMU-836068] and the SHA algorithm is NOT RECOMMENDED due to
-   collision attacks [IACR-2019-459].
+   attacks [CMU-836068] and the SHA algorithm MUST NOT be used due to
+   collision attacks [IACR-2020-014].
 
    SHA-256
 
@@ -445,7 +445,7 @@ Internet-Draft               Digest Headers                   April 2020
 
 
 
-Polli & Pardue          Expires October 29, 2020                [Page 8]
+Polli & Pardue          Expires November 1, 2020                [Page 8]
 
 Internet-Draft               Digest Headers                   April 2020
 
@@ -464,12 +464,12 @@ Internet-Draft               Digest Headers                   April 2020
 
       *  Description: The SHA-1 algorithm [RFC3174].  The output of this
          algorithm is encoded using the base64 encoding [RFC4648].  The
-         SHA algorithm is NOT RECOMMENDED as it's now vulnerable to
-         collision attacks [IACR-2019-459].
+         SHA algorithm MUST NOT be used as it's now vulnerable to
+         collision attacks [IACR-2020-014].
 
       *  Reference: [RFC3174], [RFC6234], [RFC4648], this document.
 
-      *  Status: obsoleted
+      *  Status: deprecated
 
    UNIXsum
 
@@ -501,7 +501,7 @@ Internet-Draft               Digest Headers                   April 2020
 
 
 
-Polli & Pardue          Expires October 29, 2020                [Page 9]
+Polli & Pardue          Expires November 1, 2020                [Page 9]
 
 Internet-Draft               Digest Headers                   April 2020
 
@@ -557,7 +557,7 @@ Internet-Draft               Digest Headers                   April 2020
 
 
 
-Polli & Pardue          Expires October 29, 2020               [Page 10]
+Polli & Pardue          Expires November 1, 2020               [Page 10]
 
 Internet-Draft               Digest Headers                   April 2020
 
@@ -613,7 +613,7 @@ Internet-Draft               Digest Headers                   April 2020
 
 
 
-Polli & Pardue          Expires October 29, 2020               [Page 11]
+Polli & Pardue          Expires November 1, 2020               [Page 11]
 
 Internet-Draft               Digest Headers                   April 2020
 
@@ -669,7 +669,7 @@ Internet-Draft               Digest Headers                   April 2020
 
 
 
-Polli & Pardue          Expires October 29, 2020               [Page 12]
+Polli & Pardue          Expires November 1, 2020               [Page 12]
 
 Internet-Draft               Digest Headers                   April 2020
 
@@ -725,7 +725,7 @@ Internet-Draft               Digest Headers                   April 2020
 
 
 
-Polli & Pardue          Expires October 29, 2020               [Page 13]
+Polli & Pardue          Expires November 1, 2020               [Page 13]
 
 Internet-Draft               Digest Headers                   April 2020
 
@@ -781,7 +781,7 @@ Internet-Draft               Digest Headers                   April 2020
 
 
 
-Polli & Pardue          Expires October 29, 2020               [Page 14]
+Polli & Pardue          Expires November 1, 2020               [Page 14]
 
 Internet-Draft               Digest Headers                   April 2020
 
@@ -837,7 +837,7 @@ Internet-Draft               Digest Headers                   April 2020
 
 
 
-Polli & Pardue          Expires October 29, 2020               [Page 15]
+Polli & Pardue          Expires November 1, 2020               [Page 15]
 
 Internet-Draft               Digest Headers                   April 2020
 
@@ -893,7 +893,7 @@ Internet-Draft               Digest Headers                   April 2020
 
 
 
-Polli & Pardue          Expires October 29, 2020               [Page 16]
+Polli & Pardue          Expires November 1, 2020               [Page 16]
 
 Internet-Draft               Digest Headers                   April 2020
 
@@ -949,7 +949,7 @@ Internet-Draft               Digest Headers                   April 2020
 
 
 
-Polli & Pardue          Expires October 29, 2020               [Page 17]
+Polli & Pardue          Expires November 1, 2020               [Page 17]
 
 Internet-Draft               Digest Headers                   April 2020
 
@@ -1005,7 +1005,7 @@ Internet-Draft               Digest Headers                   April 2020
 
 
 
-Polli & Pardue          Expires October 29, 2020               [Page 18]
+Polli & Pardue          Expires November 1, 2020               [Page 18]
 
 Internet-Draft               Digest Headers                   April 2020
 
@@ -1061,7 +1061,7 @@ Internet-Draft               Digest Headers                   April 2020
 
 
 
-Polli & Pardue          Expires October 29, 2020               [Page 19]
+Polli & Pardue          Expires November 1, 2020               [Page 19]
 
 Internet-Draft               Digest Headers                   April 2020
 
@@ -1117,7 +1117,7 @@ Internet-Draft               Digest Headers                   April 2020
 
 
 
-Polli & Pardue          Expires October 29, 2020               [Page 20]
+Polli & Pardue          Expires November 1, 2020               [Page 20]
 
 Internet-Draft               Digest Headers                   April 2020
 
@@ -1132,8 +1132,7 @@ Internet-Draft               Digest Headers                   April 2020
 
    However, these rely on collision-resistance for their security proofs
    [CMU-836068].  The MD5 and SHA-1 algorithms are vulnerable to
-   collisions attacks, so MD5 MUST NOT be used and SHA-1 is NOT
-   RECOMMENDED for use with "Digest".
+   collisions attacks, so they MUST NOT be used with "Digest".
 
 11.3.  Other Deprecated Algorithms
 
@@ -1169,17 +1168,15 @@ Internet-Draft               Digest Headers                   April 2020
 
    Digital signatures are widely used together with checksums to provide
    the certain identification of the origin of a message [NIST800-32].
+   Such signatures can protect one or more HTTP fields and there are
+   additional considerations when "Digest" is included in this set.
 
 
 
-
-Polli & Pardue          Expires October 29, 2020               [Page 21]
+Polli & Pardue          Expires November 1, 2020               [Page 21]
 
 Internet-Draft               Digest Headers                   April 2020
 
-
-   Such signatures can protect one or more HTTP fields and there are
-   additional considerations when "Digest" is included in this set.
 
    Since the "Digest" field is a hash of a resource representation, it
    explicitly depends on the "representation metadata" (eg. the values
@@ -1222,24 +1219,20 @@ Internet-Draft               Digest Headers                   April 2020
       or "deprecated" according to the type and status of the primary
       document in which the algorithm is defined.
 
-
-
-
-
-
-
-
-Polli & Pardue          Expires October 29, 2020               [Page 22]
-
-Internet-Draft               Digest Headers                   April 2020
-
-
 12.3.  Deprecate "MD5" Digest Algorithm
 
    This memo updates the "MD5" digest algorithm in the HTTP Digest
    Algorithm Values [5] registry:
 
    o  Digest Algorithm: MD5
+
+
+
+
+Polli & Pardue          Expires November 1, 2020               [Page 22]
+
+Internet-Draft               Digest Headers                   April 2020
+
 
    o  Description: As specified in Section 5.
 
@@ -1283,18 +1276,20 @@ Internet-Draft               Digest Headers                   April 2020
 
    o  Digest Algorithm: ADLER32
 
-
-
-Polli & Pardue          Expires October 29, 2020               [Page 23]
-
-Internet-Draft               Digest Headers                   April 2020
-
-
    o  Description: The ADLER32 algorithm is a checksum specified in
       [RFC1950] "ZLIB Compressed Data Format".  The 32-bit output is
       encoded in hexadecimal (using between 1 and 8 ASCII characters
       from 0-9, A-F, and a-f; leading 0's are allowed).  For example,
       ADLER32=03da0195 and ADLER32=3DA0195 are both valid checksums for
+
+
+
+
+Polli & Pardue          Expires November 1, 2020               [Page 23]
+
+Internet-Draft               Digest Headers                   April 2020
+
+
       the 4-byte message "Wiki".  This algorithm is obsoleted and SHOULD
       NOT be used.
 
@@ -1335,17 +1330,6 @@ Internet-Draft               Digest Headers                   April 2020
    The "ID-SHA-256" and "ID-SHA-512" algorithms have been added to the
    registry.
 
-
-
-
-
-
-
-Polli & Pardue          Expires October 29, 2020               [Page 24]
-
-Internet-Draft               Digest Headers                   April 2020
-
-
 12.10.  Want-Digest Field Registration
 
    This section registers the "Want-Digest" field in the "Hypertext
@@ -1353,6 +1337,14 @@ Internet-Draft               Digest Headers                   April 2020
    [I-D.ietf-httpbis-semantics].
 
    Field name: "Want-Digest"
+
+
+
+
+Polli & Pardue          Expires November 1, 2020               [Page 24]
+
+Internet-Draft               Digest Headers                   April 2020
+
 
    Status: permanent
 
@@ -1383,10 +1375,9 @@ Internet-Draft               Digest Headers                   April 2020
               Semantics", draft-ietf-httpbis-semantics-07 (work in
               progress), March 2020.
 
-   [IACR-2019-459]
-              Leurent, G. and T. Peyrin, "From Collisions to Chosen-
-              Prefix Collisions Application to Full SHA-1", May 2019,
-              <https://eprint.iacr.org/2019/459.pdf>.
+   [IACR-2020-014]
+              Leurent, G. and T. Peyrin, "SHA-1 is a Shambles", January
+              2020, <https://eprint.iacr.org/2020/014.pdf>.
 
    [NIST800-32]
               National Institute of Standards and Technology, U.S.
@@ -1394,13 +1385,6 @@ Internet-Draft               Digest Headers                   April 2020
               Technology and the Federal PKI Infrastructure", February
               2001, <https://nvlpubs.nist.gov/nistpubs/Legacy/SP/
               nistspecialpublication800-32.pdf>.
-
-
-
-Polli & Pardue          Expires October 29, 2020               [Page 25]
-
-Internet-Draft               Digest Headers                   April 2020
-
 
    [RFC1321]  Rivest, R., "The MD5 Message-Digest Algorithm", RFC 1321,
               DOI 10.17487/RFC1321, April 1992,
@@ -1410,6 +1394,13 @@ Internet-Draft               Digest Headers                   April 2020
               Specification version 3.3", RFC 1950,
               DOI 10.17487/RFC1950, May 1996,
               <https://www.rfc-editor.org/info/rfc1950>.
+
+
+
+Polli & Pardue          Expires November 1, 2020               [Page 25]
+
+Internet-Draft               Digest Headers                   April 2020
+
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -1451,13 +1442,6 @@ Internet-Draft               Digest Headers                   April 2020
               DOI 10.17487/RFC6234, May 2011,
               <https://www.rfc-editor.org/info/rfc6234>.
 
-
-
-Polli & Pardue          Expires October 29, 2020               [Page 26]
-
-Internet-Draft               Digest Headers                   April 2020
-
-
    [RFC7405]  Kyzivat, P., "Case-Sensitive String Support in ABNF",
               RFC 7405, DOI 10.17487/RFC7405, December 2014,
               <https://www.rfc-editor.org/info/rfc7405>.
@@ -1465,6 +1449,14 @@ Internet-Draft               Digest Headers                   April 2020
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/info/rfc8174>.
+
+
+
+
+Polli & Pardue          Expires November 1, 2020               [Page 26]
+
+Internet-Draft               Digest Headers                   April 2020
+
 
    [UNIX]     The Open Group, "The Single UNIX Specification, Version 2
               - 6 Vol Set for UNIX 98", February 1997.
@@ -1507,13 +1499,6 @@ Internet-Draft               Digest Headers                   April 2020
 
    [4] https://www.iana.org/assignments/http-dig-alg/http-dig-alg.xhtml
 
-
-
-Polli & Pardue          Expires October 29, 2020               [Page 27]
-
-Internet-Draft               Digest Headers                   April 2020
-
-
    [5] https://www.iana.org/assignments/http-dig-alg/http-dig-alg.xhtml
 
    [6] https://www.iana.org/assignments/http-dig-alg/http-dig-alg.xhtml
@@ -1521,6 +1506,13 @@ Internet-Draft               Digest Headers                   April 2020
    [7] https://www.iana.org/assignments/http-dig-alg/http-dig-alg.xhtml
 
    [8] https://www.iana.org/assignments/http-dig-alg/http-dig-alg.xhtml
+
+
+
+Polli & Pardue          Expires November 1, 2020               [Page 27]
+
+Internet-Draft               Digest Headers                   April 2020
+
 
    [9] https://www.iana.org/assignments/http-dig-alg/http-dig-alg.xhtml
 
@@ -1562,19 +1554,21 @@ Appendix A.  Resource Representation and Representation-Data
 
    Request:
 
-
-
-
-Polli & Pardue          Expires October 29, 2020               [Page 28]
-
-Internet-Draft               Digest Headers                   April 2020
-
-
    GET /entries/1234 HTTP/1.1
    Range: bytes=1-7
 
 
    Response:
+
+
+
+
+
+
+Polli & Pardue          Expires November 1, 2020               [Page 28]
+
+Internet-Draft               Digest Headers                   April 2020
+
 
    HTTP/1.1 206 Partial Content
    Content-Encoding: gzip
@@ -1615,23 +1609,22 @@ Internet-Draft               Digest Headers                   April 2020
 
    Response:
 
-
-
-
-
-
-
-Polli & Pardue          Expires October 29, 2020               [Page 29]
-
-Internet-Draft               Digest Headers                   April 2020
-
-
    HTTP/1.1 201 Created
    Content-Type: application/json
    Content-Location: /authors/123
    Location: /authors/123
 
    {"id": "123", "author": "Camilleri"}
+
+
+
+
+
+
+Polli & Pardue          Expires November 1, 2020               [Page 29]
+
+Internet-Draft               Digest Headers                   April 2020
+
 
 Appendix B.  FAQ
 
@@ -1675,18 +1668,20 @@ Appendix B.  FAQ
        ID-SHA-512 which allows to send a checksum of a resource
        representation with no content codings applied.
 
-
-
-Polli & Pardue          Expires October 29, 2020               [Page 30]
-
-Internet-Draft               Digest Headers                   April 2020
-
-
 Acknowledgements
 
    The vast majority of this document is inherited from [RFC3230], so
    thanks to J.  Mogul and A.  Van Hoff for their great work.  The
    original idea of refreshing this document arose from an interesting
+
+
+
+
+Polli & Pardue          Expires November 1, 2020               [Page 30]
+
+Internet-Draft               Digest Headers                   April 2020
+
+
    discussion with M.  Nottingham, J.  Yasskin and M.  Thomson when
    reviewing the MICE content coding.
 
@@ -1702,41 +1697,6 @@ Code Samples
    these are formatted as base64.  This function could be adapted to
    other algorithms and should take into account their specific
    formatting rules.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Polli & Pardue          Expires October 29, 2020               [Page 31]
-
-Internet-Draft               Digest Headers                   April 2020
-
 
    import base64, json, hashlib, brotli
 
@@ -1767,6 +1727,17 @@ Internet-Draft               Digest Headers                   April 2020
    # Identity | sha512 | b'WZDPaVn/7XgHaAy8pmojAkGWoRx2UFChF41A2s
    vX+TaPm+AbwAgBWnrIiYllu7BNNyealdVLvRwE\nmTHWXvJwew==\n'
 
+
+
+
+
+
+
+Polli & Pardue          Expires November 1, 2020               [Page 31]
+
+Internet-Draft               Digest Headers                   April 2020
+
+
 Changes
 
    _RFC Editor: Please remove this section before publication._
@@ -1787,13 +1758,6 @@ E.1.  Since draft-ietf-httpbis-digest-headers-00
 
    o  Use when acting on resources (POST, PATCH) #853
 
-
-
-Polli & Pardue          Expires October 29, 2020               [Page 32]
-
-Internet-Draft               Digest Headers                   April 2020
-
-
    o  Added Relationship with SRI, draft Use Cases #868, #971
 
    o  Warn about the implications of "Content-Location"
@@ -1809,12 +1773,25 @@ E.2.  Since draft-ietf-httpbis-digest-headers-01
    o  Editorial refactoring, moving headers sections up. #1109-#1112,
       #1116, #1117, #1122-#1124
 
+E.3.  Since draft-ietf-httpbis-digest-headers-02
+
+   o  Deprecate SHA-1 #1154
+
 Authors' Addresses
 
    Roberto Polli
    Team Digitale, Italian Government
 
    Email: robipolli@gmail.com
+
+
+
+
+
+
+Polli & Pardue          Expires November 1, 2020               [Page 32]
+
+Internet-Draft               Digest Headers                   April 2020
 
 
    Lucas Pardue
@@ -1845,4 +1822,27 @@ Authors' Addresses
 
 
 
-Polli & Pardue          Expires October 29, 2020               [Page 33]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Polli & Pardue          Expires November 1, 2020               [Page 33]
