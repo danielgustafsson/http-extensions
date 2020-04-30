@@ -1580,6 +1580,9 @@ Internet-Draft               Digest Headers                   April 2020
 
    [10] https://www.iana.org/assignments/http-dig-alg/http-dig-alg.xhtml
 
+   [11] https://github.com/httpwg/http-core/
+        issues/313#issuecomment-584389706
+
 Appendix A.  Resource Representation and Representation-Data
 
    The following examples show how representation metadata, payload
@@ -1615,9 +1618,6 @@ Appendix A.  Resource Representation and Representation-Data
    representation.
 
    Request:
-
-
-
 
 
 
@@ -1738,6 +1738,16 @@ Polli & Pardue          Expires November 1, 2020               [Page 31]
 Internet-Draft               Digest Headers                   April 2020
 
 
+   8.  What about mid-stream trailers?
+
+       While mid-stream trailers [11] are interesting, since this
+       specification is a rewrite of [RFC3230] we do not think we should
+       face that.  As a first thought, nothing in this document
+       precludes future work that would find a use for mid-stream
+       trailers, for example an incremental digest-algorithm.  A
+       document defining such a digest-algorithm is best positioned to
+       describe how it is used.
+
 Acknowledgements
 
    The vast majority of this document is inherited from [RFC3230], so
@@ -1758,16 +1768,6 @@ Code Samples
    these are formatted as base64.  This function could be adapted to
    other algorithms and should take into account their specific
    formatting rules.
-
-
-
-
-
-
-
-
-
-
 
 
 
