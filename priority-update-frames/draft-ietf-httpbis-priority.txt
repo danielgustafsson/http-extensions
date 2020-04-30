@@ -92,19 +92,19 @@ Table of Contents
    5.  Reprioritization  . . . . . . . . . . . . . . . . . . . . . .   8
      5.1.  HTTP/2 PRIORITY_UPDATE Frame  . . . . . . . . . . . . . .   9
      5.2.  HTTP/3 PRIORITY_UPDATE Frame  . . . . . . . . . . . . . .  10
-   6.  Merging Client- and Server-Driven Parameters  . . . . . . . .  10
-   7.  Security Considerations . . . . . . . . . . . . . . . . . . .  11
+   6.  Merging Client- and Server-Driven Parameters  . . . . . . . .  11
+   7.  Security Considerations . . . . . . . . . . . . . . . . . . .  12
      7.1.  Fairness  . . . . . . . . . . . . . . . . . . . . . . . .  12
-       7.1.1.  Coalescing Intermediaries . . . . . . . . . . . . . .  12
-       7.1.2.  HTTP/1.x Back Ends  . . . . . . . . . . . . . . . . .  13
-       7.1.3.  Intentional Introduction of Unfairness  . . . . . . .  13
-   8.  Considerations  . . . . . . . . . . . . . . . . . . . . . . .  13
-     8.1.  Why use an End-to-End Header Field? . . . . . . . . . . .  13
-   9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  14
-   10. References  . . . . . . . . . . . . . . . . . . . . . . . . .  15
-     10.1.  Normative References . . . . . . . . . . . . . . . . . .  15
+       7.1.1.  Coalescing Intermediaries . . . . . . . . . . . . . .  13
+       7.1.2.  HTTP/1.x Back Ends  . . . . . . . . . . . . . . . . .  14
+       7.1.3.  Intentional Introduction of Unfairness  . . . . . . .  14
+   8.  Considerations  . . . . . . . . . . . . . . . . . . . . . . .  14
+     8.1.  Why use an End-to-End Header Field? . . . . . . . . . . .  14
+   9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  15
+   10. References  . . . . . . . . . . . . . . . . . . . . . . . . .  16
+     10.1.  Normative References . . . . . . . . . . . . . . . . . .  16
      10.2.  Informative References . . . . . . . . . . . . . . . . .  16
-     10.3.  URIs . . . . . . . . . . . . . . . . . . . . . . . . . .  16
+     10.3.  URIs . . . . . . . . . . . . . . . . . . . . . . . . . .  17
    Appendix A.  Acknowledgements . . . . . . . . . . . . . . . . . .  17
 
 
@@ -114,13 +114,13 @@ Oku & Pardue            Expires November 1, 2020                [Page 2]
 Internet-Draft               HTTP Priorities                  April 2020
 
 
-   Appendix B.  Change Log . . . . . . . . . . . . . . . . . . . . .  17
-     B.1.  Since draft-kazuho-httpbis-priority-04  . . . . . . . . .  17
-     B.2.  Since draft-kazuho-httpbis-priority-03  . . . . . . . . .  17
+   Appendix B.  Change Log . . . . . . . . . . . . . . . . . . . . .  18
+     B.1.  Since draft-kazuho-httpbis-priority-04  . . . . . . . . .  18
+     B.2.  Since draft-kazuho-httpbis-priority-03  . . . . . . . . .  18
      B.3.  Since draft-kazuho-httpbis-priority-02  . . . . . . . . .  18
-     B.4.  Since draft-kazuho-httpbis-priority-01  . . . . . . . . .  18
-     B.5.  Since draft-kazuho-httpbis-priority-00  . . . . . . . . .  18
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  18
+     B.4.  Since draft-kazuho-httpbis-priority-01  . . . . . . . . .  19
+     B.5.  Since draft-kazuho-httpbis-priority-00  . . . . . . . . .  19
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  19
 
 1.  Introduction
 
@@ -488,16 +488,16 @@ Internet-Draft               HTTP Priorities                  April 2020
      Flags (8),
      Reserved (1),
      Stream Identifier (31),
-     Reserved (1),
+     R (1),
      Prioritized Stream ID (31),
      Priority Field Value (..),
    }
 
                   Figure 1: HTTP/2 PRIORITY_UPDATE Frame
 
-   If a PRIORITY_UPDATE frame is received with a Prioritized Stream ID
-   of 0x0, the recipient MUST respond with a connection error of type
-   PROTOCOL_ERROR.
+   The PRIORITY_UPDATE frame payload has the following fields:
+
+
 
 
 
@@ -505,6 +505,25 @@ Oku & Pardue            Expires November 1, 2020                [Page 9]
 
 Internet-Draft               HTTP Priorities                  April 2020
 
+
+   R: A reserved 1-bit field.  The semantics of this bit are undefined,
+      and the bit MUST remain unset (0x0) when sending and MUST be
+      ignored when receiving.
+
+   Stream ID:  A 31-bit stream identifier for the stream that is the
+      target of the priority update.
+
+   Priority Field Value:  The priority update value in ASCII text,
+      encoded using Structured Headers.
+
+   The HTTP/2 PRIORITY_UPDATE frame MUST NOT be sent prior to opening
+   the stream.  If a PRIORITY_UPDATE is received prior to the stream
+   being opened, it MAY be treated as a connection error of type
+   PROTOCOL_ERROR.
+
+   If a PRIORITY_UPDATE frame is received with a Prioritized Stream ID
+   of 0x0, the recipient MUST respond with a connection error of type
+   PROTOCOL_ERROR.
 
 5.2.  HTTP/3 PRIORITY_UPDATE Frame
 
@@ -530,30 +549,11 @@ Internet-Draft               HTTP Priorities                  April 2020
 
                   Figure 2: HTTP/3 PRIORITY_UPDATE Frame
 
-   THE PRIORITY_UPDATE frame carries a request Stream ID or a Push ID.
-   If a PRIORITY_UPDATE frame is received which references a Stream ID
-   or Push ID greater than currently allowed on the connection, this
-   MUST be treated as a connection error of H3_ID_ERROR.
+   The PRIORITY_UPDATE frame payload has the following fields:
 
-   If a server receives a PRIORITY_UPDATE frame for a Push ID that has
-   not yet been mentioned by PUSH_PROMISE, this MUST be treated as a
-   connection error of type H3_ID_ERROR.
+   Prioritized Element ID:  The stream ID or push ID that is the target
+      of the priority update.
 
-   If a server receives a PRIORITY_UPDATE for a Stream ID that is not a
-   request stream, this MUST be treated as a connection error of type
-   H3_ID_ERROR.
-
-   Due to reordering, a server might receive a PRIORITY_UPDATE for a
-   Request Stream ID that has either yet to be mentioned, or that has
-   already been closed.  This MUST be ignored.
-
-6.  Merging Client- and Server-Driven Parameters
-
-   It is not always the case that the client has the best understanding
-   of how the HTTP responses deserve to be prioritized.  The server
-   might have additional information that can be combined with the
-   client's indicated priority in order to improve the prioritization of
-   the response.  For example, use of an HTML document might depend
 
 
 
@@ -562,6 +562,43 @@ Oku & Pardue            Expires November 1, 2020               [Page 10]
 Internet-Draft               HTTP Priorities                  April 2020
 
 
+   Priority Field Value:  The priority update value in ASCII text,
+      encoded using Structured Headers.
+
+   The HTTP/3 PRIORITY_UPDATE frame MUST NOT be sent with an invalid
+   identifier, including before the request stream has been opened or
+   before a promised request has been received.  If a server receives a
+   PRIORITY_UPDATE specifying a push ID that has not been promised, it
+   SHOULD be treated as a connection error of type H3_ID_ERROR.
+
+   Because the HTTP/3 PRIORITY_UPDATE frame is sent on the control
+   stream and there are no ordering guarantees between streams, a client
+   that reprioritizes a request before receiving the response data might
+   cause the server to receive a PRIORITY_UPDATE for an unknown request.
+   If the request stream ID is within the client-initiated bidirectional
+   stream limits, the PRIORITY_UPDATE frame SHOULD be buffered until the
+   stream is opened and applied immediately after the request message
+   has been processed.  Holding PRIORITY_UPDATES consumes extra state on
+   the peer, although the size of the state is bounded by bidirectional
+   stream limits.  There is no bound on the number of PRIORITY_UPDATES
+   that can be sent, so an endpoint SHOULD store only the most recently
+   received frame.
+
+   If a server receives a PRIORITY_UPDATE for a Stream ID that is not a
+   request stream, this MUST be treated as a connection error of type
+   H3_ID_ERROR.
+
+   If a server receives a PRIORITY_UPDATE for a Stream ID that is beyond
+   the stream limits, this MUST be treated as a connection error of type
+   H3_ID_ERROR.
+
+6.  Merging Client- and Server-Driven Parameters
+
+   It is not always the case that the client has the best understanding
+   of how the HTTP responses deserve to be prioritized.  The server
+   might have additional information that can be combined with the
+   client's indicated priority in order to improve the prioritization of
+   the response.  For example, use of an HTML document might depend
    heavily on one of the inline images; existence of such dependencies
    is typically best known to the server.  Or, a server that receives
    requests for a font [RFC8081] and images with the same urgency might
@@ -573,6 +610,14 @@ Internet-Draft               HTTP Priorities                  April 2020
    that forwards an HTTP response can use the parameters found in the
    Priority response header field, in combination with the client
    Priority request header field, as input to its prioritization
+
+
+
+Oku & Pardue            Expires November 1, 2020               [Page 11]
+
+Internet-Draft               HTTP Priorities                  April 2020
+
+
    process.  No guidance is provided for merging priorities, this is
    left as an implementation decision.
 
@@ -606,18 +651,6 @@ Internet-Draft               HTTP Priorities                  April 2020
 
 7.  Security Considerations
 
-
-
-
-
-
-
-
-Oku & Pardue            Expires November 1, 2020               [Page 11]
-
-Internet-Draft               HTTP Priorities                  April 2020
-
-
 7.1.  Fairness
 
    As a general guideline, a server SHOULD NOT use priority information
@@ -632,6 +665,15 @@ Internet-Draft               HTTP Priorities                  April 2020
 
    TODO: Discuss if we should add a signal that mitigates this issue.
    For example, we might add a SETTINGS parameter that indicates the
+
+
+
+
+Oku & Pardue            Expires November 1, 2020               [Page 12]
+
+Internet-Draft               HTTP Priorities                  April 2020
+
+
    next hop that the connection is NOT coalesced (see
    https://github.com/kazuho/draft-kazuho-httpbis-priority/issues/99).
 
@@ -666,14 +708,6 @@ Internet-Draft               HTTP Priorities                  April 2020
 
    o  Via ([RFC7230], Section 5.7.1)
 
-
-
-
-Oku & Pardue            Expires November 1, 2020               [Page 12]
-
-Internet-Draft               HTTP Priorities                  April 2020
-
-
    Responding to requests coming through an intermediary in a round-
    robin manner works well when the network bottleneck exists between
    the intermediary and the end client, as the intermediary would be
@@ -683,6 +717,18 @@ Internet-Draft               HTTP Priorities                  April 2020
    urgencies expressed in the requests, so that less urgent responses
    would receive less bandwidth in case the bottleneck exists between
    the server and the intermediary.
+
+
+
+
+
+
+
+
+Oku & Pardue            Expires November 1, 2020               [Page 13]
+
+Internet-Draft               HTTP Priorities                  April 2020
+
 
 7.1.2.  HTTP/1.x Back Ends
 
@@ -721,15 +767,6 @@ Internet-Draft               HTTP Priorities                  April 2020
    Contrary to the prioritization scheme of HTTP/2 that uses a hop-by-
    hop frame, the Priority header field is defined as end-to-end.
 
-
-
-
-
-Oku & Pardue            Expires November 1, 2020               [Page 13]
-
-Internet-Draft               HTTP Priorities                  April 2020
-
-
    The rationale is that the Priority header field transmits how each
    response affects the client's processing of those responses, rather
    than how relatively urgent each response is to others.  The way a
@@ -741,6 +778,14 @@ Internet-Draft               HTTP Priorities                  April 2020
 
    Having the Priority header field defined as end-to-end is important
    for caching intermediaries.  Such intermediaries can cache the value
+
+
+
+Oku & Pardue            Expires November 1, 2020               [Page 14]
+
+Internet-Draft               HTTP Priorities                  April 2020
+
+
    of the Priority header field along with the response, and utilize the
    value of the cached header field when serving the cached response,
    only because the header field is defined as end-to-end rather than
@@ -778,14 +823,6 @@ Internet-Draft               HTTP Priorities                  April 2020
 
    Specification:  This document
 
-
-
-
-Oku & Pardue            Expires November 1, 2020               [Page 14]
-
-Internet-Draft               HTTP Priorities                  April 2020
-
-
    This specification registers the following entry in the HTTP/2 Frame
    Type registry established by [RFC7540]:
 
@@ -797,6 +834,13 @@ Internet-Draft               HTTP Priorities                  April 2020
 
    This specification registers the following entries in the HTTP/3
    Frame Type registry established by [I-D.ietf-quic-http]:
+
+
+
+Oku & Pardue            Expires November 1, 2020               [Page 15]
+
+Internet-Draft               HTTP Priorities                  April 2020
+
 
    Frame Type:  PRIORITY_UPDATE
 
@@ -833,15 +877,6 @@ Internet-Draft               HTTP Priorities                  April 2020
               DOI 10.17487/RFC7540, May 2015,
               <https://www.rfc-editor.org/info/rfc7540>.
 
-
-
-
-
-Oku & Pardue            Expires November 1, 2020               [Page 15]
-
-Internet-Draft               HTTP Priorities                  April 2020
-
-
    [STRUCTURED-HEADERS]
               Nottingham, M. and P. Kamp, "Structured Field Values for
               HTTP", draft-ietf-httpbis-header-structure-18 (work in
@@ -853,6 +888,15 @@ Internet-Draft               HTTP Priorities                  April 2020
               Common Vulnerabilities and Exposures, "CVE-2019-9513",
               March 2019, <https://cve.mitre.org/cgi-bin/
               cvename.cgi?name=CVE-2019-9513>.
+
+
+
+
+
+Oku & Pardue            Expires November 1, 2020               [Page 16]
+
+Internet-Draft               HTTP Priorities                  April 2020
+
 
    [I-D.lassey-priority-setting]
               Lassey, B. and L. Pardue, "Declaring Support for HTTP/2
@@ -889,15 +933,6 @@ Internet-Draft               HTTP Priorities                  April 2020
 
    [5] https://github.com/pmeenan/http3-prioritization-proposal
 
-
-
-
-
-Oku & Pardue            Expires November 1, 2020               [Page 16]
-
-Internet-Draft               HTTP Priorities                  April 2020
-
-
 Appendix A.  Acknowledgements
 
    Roy Fielding presented the idea of using a header field for
@@ -909,6 +944,15 @@ Appendix A.  Acknowledgements
    [I-D.lassey-priority-setting], authored by Brad Lassey and Lucas
    Pardue, with modifications based on feedback that was not
    incorporated into an update to that document.
+
+
+
+
+
+Oku & Pardue            Expires November 1, 2020               [Page 17]
+
+Internet-Draft               HTTP Priorities                  April 2020
+
 
    The motivation for defining an alternative to HTTP/2 priorities is
    drawn from discussion within the broad HTTP community.  Special
@@ -947,13 +991,6 @@ B.2.  Since draft-kazuho-httpbis-priority-03
 
    o  Shorten parameter names (#108)
 
-
-
-Oku & Pardue            Expires November 1, 2020               [Page 17]
-
-Internet-Draft               HTTP Priorities                  April 2020
-
-
    o  Expand on considerations (#105, #107, #109, #110, #111, #113)
 
 B.3.  Since draft-kazuho-httpbis-priority-02
@@ -965,6 +1002,13 @@ B.3.  Since draft-kazuho-httpbis-priority-02
    o  Define PRIORITY_UPDATE frame for HTTP/2 and HTTP/3 (#51)
 
    o  Explain fairness issue and mitigations (#56)
+
+
+
+Oku & Pardue            Expires November 1, 2020               [Page 18]
+
+Internet-Draft               HTTP Priorities                  April 2020
+
 
 B.4.  Since draft-kazuho-httpbis-priority-01
 
@@ -1005,4 +1049,16 @@ Authors' Addresses
 
 
 
-Oku & Pardue            Expires November 1, 2020               [Page 18]
+
+
+
+
+
+
+
+
+
+
+
+
+Oku & Pardue            Expires November 1, 2020               [Page 19]
