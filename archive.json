@@ -1,6 +1,6 @@
 {
   "magic": "B8n2c@e8kvfx",
-  "timestamp": "2020-04-27T14:37:37.096666+00:00",
+  "timestamp": "2020-04-30T09:47:44.320335+00:00",
   "repo": "httpwg/http-extensions",
   "labels": [
     {
@@ -25343,7 +25343,7 @@
       "id": "MDU6SXNzdWU1NDY3Mzk3NDU=",
       "title": "Deprecate sha-1",
       "url": "https://github.com/httpwg/http-extensions/issues/1020",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "ioggstream",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
@@ -25352,8 +25352,8 @@
       ],
       "body": "## I expect\r\n\r\nSHA-1 to be deprecated in `digest-headers` because of https://sha-mbles.github.io/\r\n\r\n## Instead\r\n\r\nIt's NOT RECOMMENDED\r\n\r\n## Notes\r\n\r\nWhen we decided to NOT RECOMMEND sha-1, we knew that collisions were possible. \r\nNow researchers states that\r\n\r\n```\r\nWe have computed the very first chosen-prefix collision for SHA-1. In a nutshell, this means a complete and practical break of the SHA-1 hash function, with dangerous practical implications if you are still using this hash function. To put it in another way: all attacks that are practical on MD5 are now also practical on SHA-1\r\n```\r\n\r\nThe latest paper is here https://eprint.iacr.org/2020/014.pdf \r\n",
       "createdAt": "2020-01-08T09:25:08Z",
-      "updatedAt": "2020-03-07T19:47:32Z",
-      "closedAt": null,
+      "updatedAt": "2020-04-30T09:46:39Z",
+      "closedAt": "2020-04-30T09:46:39Z",
       "comments": [
         {
           "author": "LPardue",
@@ -27696,15 +27696,15 @@
       "id": "MDU6SXNzdWU2MDMwODA1ODc=",
       "title": "rfc6562bis draft-6 section 4.1.1 syntax says US-ASCII but is not?",
       "url": "https://github.com/httpwg/http-extensions/issues/1161",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "bagder",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "News in draft-06 is the %80-FF range added here:\r\n~~~\r\ncookie-octet      = %x21 / %x23-2B / %x2D-3A / %x3C-5B / %x5D-7E / %x80-FF\r\n                      ; US-ASCII characters excluding CTLs,\r\n                      ; whitespace DQUOTE, comma, semicolon,\r\n                      ; and backslash\r\n~~~\r\n... so the text below the syntax define doesn't match the syntax description anymore, as %x80-FF is certainly not US-ASCII...",
       "createdAt": "2020-04-20T09:20:52Z",
-      "updatedAt": "2020-04-27T14:36:50Z",
-      "closedAt": null,
+      "updatedAt": "2020-04-27T17:28:14Z",
+      "closedAt": "2020-04-27T17:28:14Z",
       "comments": [
         {
           "author": "reschke",
@@ -27719,6 +27719,57 @@
           "body": "Merged @reschke's PR. Thank you both!",
           "createdAt": "2020-04-27T14:36:49Z",
           "updatedAt": "2020-04-27T14:36:49Z"
+        }
+      ]
+    },
+    {
+      "number": 1163,
+      "id": "MDU6SXNzdWU2MDg1NDAzNTI=",
+      "title": "RFC 6265bis: Specify that document.cookie should not be able to access SameSite cookies in cross-site iframes",
+      "url": "https://github.com/httpwg/http-extensions/issues/1163",
+      "state": "OPEN",
+      "author": "chlily1",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "[Per mikewest](https://crbug.com/1075610#c5): \r\n\r\n> No, cross-site frames should not be able to access `SameSite=AnythingButNone` cookies via `document.cookie`. The spec doesn't make this clear (you have to read between the lines of bullet 5 of step 1 of https://tools.ietf.org/html/draft-ietf-httpbis-rfc6265bis-06#section-5.5), so we should change the spec.",
+      "createdAt": "2020-04-28T18:55:56Z",
+      "updatedAt": "2020-04-28T18:55:56Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 1164,
+      "id": "MDU6SXNzdWU2MDk2ODk0MjU=",
+      "title": "Dictionary serialisation algo problem",
+      "url": "https://github.com/httpwg/http-extensions/issues/1164",
+      "state": "OPEN",
+      "author": "mnot",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "mnot"
+      ],
+      "labels": [
+        "header-structure"
+      ],
+      "body": "@annevk noticed that [dictionary serialisation](https://httpwg.org/http-extensions/draft-ietf-httpbis-header-structure.html#ser-dictionary) is messed up.\r\n\r\nI _think_ the fix is to indent the top-level 2-5 -- but I want to have a good look at it, compare to implementation, and I'd like others to verify, as I'm wary of making changes at this late stage.\r\n\r\nBlame seems to be [this commit](https://github.com/httpwg/http-extensions/commit/4f3252bbc73844559bf7bc8891424de08531f7da), which I vaguely remember as being... surprising. That will teach me to slow down when something weird happens with Git...",
+      "createdAt": "2020-04-30T08:02:04Z",
+      "updatedAt": "2020-04-30T08:20:56Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "mnot",
+          "authorAssociation": "MEMBER",
+          "body": "Ping @bsdphk @phluid61 @clelland to look over my shoulder...",
+          "createdAt": "2020-04-30T08:02:33Z",
+          "updatedAt": "2020-04-30T08:02:33Z"
+        },
+        {
+          "author": "annevk",
+          "authorAssociation": "NONE",
+          "body": "Looking at https://github.com/httpwg/http-extensions/pull/999/files the problem is that what became top-level 3 and 4 should have been steps inside top-level 2. Further changes have happened so now that applies to top-level 5 as well. (Top-level 2 itself seems good as that initiates the loop.)\r\n\r\n(Other for each statements do appear to have correct indenting.)",
+          "createdAt": "2020-04-30T08:20:56Z",
+          "updatedAt": "2020-04-30T08:20:56Z"
         }
       ]
     }
@@ -55646,7 +55697,7 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NDAzNzkzOTEz",
       "title": "Fix: #1020. Deprecate sha-1",
       "url": "https://github.com/httpwg/http-extensions/pull/1154",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "ioggstream",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
@@ -55655,12 +55706,26 @@
       ],
       "body": "## This PR\r\n\r\nDeprecates SHA-1 as it's now vulnerable to collisions.\r\n\r\nFixes: #1020 ",
       "createdAt": "2020-04-15T14:27:22Z",
-      "updatedAt": "2020-04-24T10:05:12Z",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
+      "updatedAt": "2020-04-30T09:46:40Z",
+      "closedAt": "2020-04-30T09:46:39Z",
+      "mergedAt": "2020-04-30T09:46:39Z",
+      "mergedBy": "ioggstream",
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDAzMzY0OTEz",
+          "commit": {
+            "abbreviatedOid": "83d33f8"
+          },
+          "author": "LPardue",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "lgtm",
+          "createdAt": "2020-04-30T09:45:54Z",
+          "updatedAt": "2020-04-30T09:45:54Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 1155,
