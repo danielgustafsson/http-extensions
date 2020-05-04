@@ -1,6 +1,6 @@
 {
   "magic": "B8n2c@e8kvfx",
-  "timestamp": "2020-04-30T09:47:44.320335+00:00",
+  "timestamp": "2020-05-04T15:27:30.460148+00:00",
   "repo": "httpwg/http-extensions",
   "labels": [
     {
@@ -22339,9 +22339,9 @@
       "labels": [
         "digest-headers"
       ],
-      "body": "## Suggestion\r\n\r\nMention `digest` usage with `Transfer-Encoding` and trailers\r\n\r\n * [ ] use with transfer coding should not affect `digest` because it's not a property of the representation;\r\n * [ ] use with multiple transfer codings (eg with intermediaries?) should not affect `digest` too;\r\n * [ ] caveats with transfer codings, trailers and signatures;\r\n\r\n\r\n## Considerations\r\n\r\n- sending `digest` in HTTP trailers may help the sender in dinamically calculating `digest-value`\r\n  while streaming content;\r\n- this only work if it's the Origin-Server to apply the `Transfer-Coding`;\r\n- [ ] this may not work for all  `digest-algorithms`, eg. see [mi-sha256 in MICE I-D](https://github.com/martinthomson/http-mice/blob/master/draft-thomson-http-mice.md) for a counter-example); @martinthomson @jyasskin \r\n- a clarification on using `Digest` with `Transfer-Encoding` should be added before adding this;\r\n\r\n\r\n## Notes\r\n\r\n- Suggested in https://lists.w3.org/Archives/Public/ietf-http-wg/2019JulSep/0087.html\r\n- being transfer coding a representation manipulation assimilated in this spec to range-requests  co, we should provide the following examples:\r\n\r\n",
+      "body": "## Suggestion\r\n\r\nMention `digest` usage with `Transfer-Encoding` and trailers\r\n\r\n * [x] use with transfer coding should not affect `digest` because it's not a property of the representation;\r\n * [ ] use with multiple transfer codings (eg with intermediaries?) should not affect `digest` too;\r\n * [ ] caveats with transfer codings, trailers and signatures;\r\n\r\n\r\n## Considerations\r\n\r\n- [x] sending `digest` in HTTP trailers may help the sender in dinamically calculating `digest-value`\r\n  while streaming content; #1157 \r\n- this only work if it's the Origin-Server to apply the `Transfer-Coding`;\r\n- [x] this may not work for all  `digest-algorithms`, eg. see [mi-sha256 in MICE I-D](https://github.com/martinthomson/http-mice/blob/master/draft-thomson-http-mice.md) for a counter-example); @martinthomson @jyasskin  #1157 \r\n- a clarification on using `Digest` with `Transfer-Encoding` should be added before adding this;\r\n- [x] Digest in trailer MUST NOT be discarded #1157\r\n\r\n## Notes\r\n\r\n- Suggested in https://lists.w3.org/Archives/Public/ietf-http-wg/2019JulSep/0087.html\r\n- being transfer coding a representation manipulation assimilated in this spec to range-requests  co, we should provide the following examples:\r\n\r\n",
       "createdAt": "2019-07-31T16:22:04Z",
-      "updatedAt": "2020-04-15T15:49:26Z",
+      "updatedAt": "2020-04-30T11:04:12Z",
       "closedAt": null,
       "comments": [
         {
@@ -22374,7 +22374,7 @@
       ],
       "body": "draft-ietf-httpbis-digest-headers introduces id-sha-256 as a separate algorithm to sha-256 for the Digest HTTP header to allow an integrity check that doesn't depend on the content-encoding.\r\n\r\nThe desire to apply integrity to the content-encoded representation, or the decoded representation, is independent of the choice of integrity algorithm.\r\n\r\nHow about defining \"id-\" as a prefix that can be applied to any integrity algorithm to indicate the choice of representation? That avoids the need to duplicate sha-256 and sha-512 entries (and others) in the table of Digest algorithms.",
       "createdAt": "2019-08-01T03:12:56Z",
-      "updatedAt": "2019-08-09T09:44:34Z",
+      "updatedAt": "2020-04-30T11:25:00Z",
       "closedAt": null,
       "comments": [
         {
@@ -22390,6 +22390,13 @@
           "body": "@manger \r\n\r\n> How about defining \"id-\" as a prefix that can be applied to any integrity algorithm\r\nThat was the original idea, though it come with some complexities, eg registering all possible\r\nvalues to the IANA table.\r\n\r\n@martinthomson can we provide a new, short, separate, I-D defining the `id-` prefix for digest-algoritms? The same I-D could be used to add other hash functions (eg, sha-384) to the IANA table.\r\n\r\nI can provide it in a brief time if there's agreement on that.\r\n\r\nSee https://github.com/martinthomson/http-mice/issues/17 that's somewhat related.",
           "createdAt": "2019-08-01T08:05:23Z",
           "updatedAt": "2019-08-01T08:08:59Z"
+        },
+        {
+          "author": "ioggstream",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Let's add it in a FAQ and close this",
+          "createdAt": "2020-04-30T11:24:59Z",
+          "updatedAt": "2020-04-30T11:24:59Z"
         }
       ]
     },
@@ -25392,7 +25399,7 @@
       ],
       "body": "There has been some debate about the relative utility of frames as a means of prioritizing and reprioritizing requests.  \r\n\r\nFrames are not guaranteed to be end-to-end and don't enjoy the benefits listed in [Section 8.1](https://httpwg.org/http-extensions/draft-ietf-httpbis-priority.html#why-use-an-end-to-end-header-field).  An (unlisted) reason is that the API for header fields is better understood and more likely to be available than a new and unspecified API.  HTTP/2 defined the use of frames for reprioritization, but APIs are not widely available, nor are they consistent.\r\n\r\nFrames provide two obvious benefits:\r\n\r\n1. They are scoped to the current connection and so only propagate if the receiving endpoint explicitly propagates them.\r\n\r\n2. They can be sent at any time.  This allows for reprioritization, but the requirement to have them sent after requests are complete means that they can't be sent \"on\" a stream, they have to instead refer to a stream, which complicates the design somewhat.  The proposal to allow trailers at any time helps a little here, but only to the extent that it remains possible to send.  Stream closure is used to terminate request bodies in some cases, making any trailer-based solution limited.\r\n\r\nHowever, frames have shortcomings too:\r\n\r\n1. They are complex.  The encoding of a header field into a frame is suboptimal, but necessary for extensibility and consistency reasons.  And the manner in which they refer to requests (or pushes) makes them more complex to manage than a header field.\r\n\r\n2. They are only scoped to a connection, which means that the extent of propagation can be non-deterministic.  In particular, they depend on the connection supporting the signaling.  This is the flip side of the benefit, and - in my opinion - outweighs it.\r\n\r\n3. The API is far more difficult compared to header fields.\r\n\r\nWe know little enough about the efficacy of prioritization that we should defer the definition of frames absent strong motivation for their efficacy and desirability.  The current document makes a good case for header fields, but the motivation for frames is weaker.  It is true that cases like escalation of a speculative fetch to blocking status are *theoretically* appealing, but those cases are rare and unlikely to benefit from reprioritization.  In particular, the mismatch between end-to-end and hop-by-hop (excuse the use of deprecated terminology) characteristics here makes it very hard to reason about the outcome.\r\n\r\nI know that others (@RyanAtGoogle in particular) have questions about the header field from a different angle and would prefer frames, exclusively.  So this probably comes down to having more discussion about which approach to take: headers, frames, or both.  \r\n\r\nIn either case, I would suggest that we have a need for both clear signals that the mechanism is broadly useful and evidence that that it is likely to be widely implemented.\r\n",
       "createdAt": "2020-01-09T04:21:20Z",
-      "updatedAt": "2020-01-28T22:12:14Z",
+      "updatedAt": "2020-04-30T13:58:37Z",
       "closedAt": null,
       "comments": [
         {
@@ -25478,6 +25485,13 @@
           "body": "Trying to return this to something more concrete:\r\n\r\nI see two ways this can go. One is that we drop the header and use a frame only. I prefer this for a number of reasons already mentioned. The other is that we keep the header. I am open to this (despite preferring the frame) if we can resolve the following questions:\r\n\r\n* What happens at proxies that don't understand the header? For example, what happens if a proxy merges many client requests onto a single proxy-to-origin connection and blindy forwards the header across that connection?\r\n\r\n* What is an H1 server expected to do with this header?\r\n\r\n* I know that Martin and others believe the header will simplify APIs. Even if we assume this is true, we need some other API to support reprioritization. It follows that implementations will use a second API for reprioritization, or they'll use a single non-header API for all cases, or they will drop reprioritization entirely. It seems that we cannot get this (potential) benefit of header-based APIs without dropping reprioritization entirely?\r\n\r\nMartin had a good comment [earlier](https://github.com/httpwg/http-extensions/issues/1021#issuecomment-572857972) regarding the first two questions. What I got from that comment was: cookies could work, but many people dislike cookies; IP could work, except for large-scale NATs; you could use cookies or IPs to do something on H1, but it seems unlikely anyone will do so due to the complexity. Therefore, in practice, we'll likely end up in the same place that we would with frames: priority will apply within individual H2/H3 connections.",
           "createdAt": "2020-01-28T22:12:14Z",
           "updatedAt": "2020-01-28T22:12:14Z"
+        },
+        {
+          "author": "LPardue",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Going back to the OP, MT said\r\n\r\n> In either case, I would suggest that we have a need for both clear signals that the mechanism is broadly useful and evidence that that it is likely to be widely implemented.\r\n\r\nI've prepared the following PR that roughs in a new HTTP/3 frame to allow this along with some basic discussion. There's probably more to be added so comments are welcome, although we might choose to land the PR and address things further in followups.\r\n\r\nhttps://github.com/httpwg/http-extensions/pull/1168/files",
+          "createdAt": "2020-04-30T13:58:37Z",
+          "updatedAt": "2020-04-30T13:58:37Z"
         }
       ]
     },
@@ -55741,7 +55755,7 @@
       ],
       "body": "## This PR\r\n\r\n- adds an example of a request with no payload body (eg. HEAD)\r\n- mention an use-case in the Signature section.\r\n\r\nFixes: #1143 ",
       "createdAt": "2020-04-15T15:10:15Z",
-      "updatedAt": "2020-04-24T10:05:44Z",
+      "updatedAt": "2020-05-04T13:41:05Z",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -55754,14 +55768,68 @@
           "updatedAt": "2020-04-15T15:11:37Z"
         }
       ],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDAzMzc5MDI1",
+          "commit": {
+            "abbreviatedOid": "728deb3"
+          },
+          "author": "LPardue",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-04-30T10:05:36Z",
+          "updatedAt": "2020-04-30T10:05:36Z",
+          "comments": [
+            {
+              "originalPosition": 25,
+              "body": "I don't quite follow what this is trying to say. To rephrase it based on my understanding, is it this?\r\n\r\n\"Using signatures to protect the `Digest` of an empty representation allows receiving endpoints to detect if an eventual payload has been stripped or added.\"",
+              "createdAt": "2020-04-30T10:05:36Z",
+              "updatedAt": "2020-04-30T11:23:34Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDAzNDI5NDAx",
+          "commit": {
+            "abbreviatedOid": "a346300"
+          },
+          "author": "ioggstream",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-04-30T11:24:09Z",
+          "updatedAt": "2020-04-30T11:24:09Z",
+          "comments": [
+            {
+              "originalPosition": 25,
+              "body": "done.",
+              "createdAt": "2020-04-30T11:24:09Z",
+              "updatedAt": "2020-04-30T11:24:09Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDA0OTk3MDcz",
+          "commit": {
+            "abbreviatedOid": "a346300"
+          },
+          "author": "LPardue",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-05-04T13:41:05Z",
+          "updatedAt": "2020-05-04T13:41:05Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 1156,
       "id": "MDExOlB1bGxSZXF1ZXN0NDAzODI5MTU3",
       "title": "Update 7231->httpbis-semantics",
       "url": "https://github.com/httpwg/http-extensions/pull/1156",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "ioggstream",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
@@ -55770,10 +55838,10 @@
       ],
       "body": "## This PR\r\n\r\nUpdates a reference 7231->httpbis-semantics",
       "createdAt": "2020-04-15T15:24:16Z",
-      "updatedAt": "2020-04-24T10:04:40Z",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
+      "updatedAt": "2020-04-30T10:10:25Z",
+      "closedAt": "2020-04-30T10:10:24Z",
+      "mergedAt": "2020-04-30T10:10:24Z",
+      "mergedBy": "LPardue",
       "comments": [
         {
           "author": "ioggstream",
@@ -55783,28 +55851,149 @@
           "updatedAt": "2020-04-24T10:04:18Z"
         }
       ],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDAzMzc5NjYw",
+          "commit": {
+            "abbreviatedOid": "da15689"
+          },
+          "author": "LPardue",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-04-30T10:06:29Z",
+          "updatedAt": "2020-04-30T10:06:29Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 1157,
       "id": "MDExOlB1bGxSZXF1ZXN0NDAzODQ0OTM2",
       "title": "Start mentioning trailers. See #884.",
       "url": "https://github.com/httpwg/http-extensions/pull/1157",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "ioggstream",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [
         "digest-headers"
       ],
-      "body": "## This PR\r\n\r\nMention trailers.\r\n\r\nSee #884",
+      "body": "## This PR\r\n\r\nMention trailers.\r\n\r\n```\r\nIf received in trailers, Digest MUST NOT be discarded; instead it MAY be merged in the header section (See Section 7.1.2 of {{!MESSAGING=I-D.ietf-httpbis-messaging}}).\r\n```\r\n\r\nSee #884",
       "createdAt": "2020-04-15T15:51:47Z",
-      "updatedAt": "2020-04-24T09:13:45Z",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
+      "updatedAt": "2020-04-30T11:01:50Z",
+      "closedAt": "2020-04-30T11:01:48Z",
+      "mergedAt": "2020-04-30T11:01:48Z",
+      "mergedBy": "ioggstream",
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDAzMzg0ODc4",
+          "commit": {
+            "abbreviatedOid": "24ec64b"
+          },
+          "author": "LPardue",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-04-30T10:14:07Z",
+          "updatedAt": "2020-04-30T10:14:08Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "```suggestion\r\nDigest can be sent in a trailer section. When using incremental digest-algorithms\r\nthis allows the sender and the receiver to dynamically compute the digest value\r\nwhile streaming the content.\r\n```",
+              "createdAt": "2020-04-30T10:14:08Z",
+              "updatedAt": "2020-04-30T10:53:25Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDAzMzg3NzYw",
+          "commit": {
+            "abbreviatedOid": "24ec64b"
+          },
+          "author": "LPardue",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-04-30T10:18:39Z",
+          "updatedAt": "2020-04-30T10:18:40Z",
+          "comments": [
+            {
+              "originalPosition": 19,
+              "body": "```suggestion\r\nInstead, data should only be processed after validating the Digest.\r\n```\r\n\r\ndo you want to make this should a normative requirement?",
+              "createdAt": "2020-04-30T10:18:39Z",
+              "updatedAt": "2020-04-30T10:53:25Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDAzMzg4MzU3",
+          "commit": {
+            "abbreviatedOid": "24ec64b"
+          },
+          "author": "LPardue",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "I have a couple of readability suggestions, and a question about normative requirements.",
+          "createdAt": "2020-04-30T10:19:34Z",
+          "updatedAt": "2020-04-30T10:19:34Z",
+          "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDAzNDA5NTMx",
+          "commit": {
+            "abbreviatedOid": "c243b7f"
+          },
+          "author": "LPardue",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Lgtm",
+          "createdAt": "2020-04-30T10:51:52Z",
+          "updatedAt": "2020-04-30T10:51:52Z",
+          "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDAzNDExODIy",
+          "commit": {
+            "abbreviatedOid": "a676661"
+          },
+          "author": "ioggstream",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-04-30T10:55:31Z",
+          "updatedAt": "2020-04-30T10:55:32Z",
+          "comments": [
+            {
+              "originalPosition": 72,
+              "body": "@LPardue sorry Lucas, could you please check this part I stumbled upon re-reading http-messaging-latest?\r\n\r\n",
+              "createdAt": "2020-04-30T10:55:31Z",
+              "updatedAt": "2020-04-30T10:55:32Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDAzNDEzNTY0",
+          "commit": {
+            "abbreviatedOid": "a676661"
+          },
+          "author": "LPardue",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-04-30T10:58:23Z",
+          "updatedAt": "2020-04-30T10:58:23Z",
+          "comments": [
+            {
+              "originalPosition": 72,
+              "body": "lgtm",
+              "createdAt": "2020-04-30T10:58:23Z",
+              "updatedAt": "2020-04-30T10:58:23Z"
+            }
+          ]
+        }
+      ]
     },
     {
       "number": 1160,
@@ -55881,6 +56070,139 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 1165,
+      "id": "MDExOlB1bGxSZXF1ZXN0NDExMzAzMjQx",
+      "title": "Mention mid-stream trailers in the FAQ.",
+      "url": "https://github.com/httpwg/http-extensions/pull/1165",
+      "state": "MERGED",
+      "author": "ioggstream",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [
+        "digest-headers"
+      ],
+      "body": "## This PR\r\n\r\nmentions mid-stream trailers in the FAQ. They cannot be treated easily in this spec\r\nas they are an hypothesis for now. Future digest-algos may consider them.\r\n\r\n",
+      "createdAt": "2020-04-30T09:52:47Z",
+      "updatedAt": "2020-04-30T11:08:35Z",
+      "closedAt": "2020-04-30T11:08:33Z",
+      "mergedAt": "2020-04-30T11:08:33Z",
+      "mergedBy": "ioggstream",
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDAzMzg5NjE0",
+          "commit": {
+            "abbreviatedOid": "be72b3e"
+          },
+          "author": "LPardue",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "looks good but I suggested a slight rewording",
+          "createdAt": "2020-04-30T10:21:29Z",
+          "updatedAt": "2020-04-30T10:29:18Z",
+          "comments": [
+            {
+              "originalPosition": 8,
+              "body": "```suggestion\r\n   are interesting, since this specification is a rewrite of [RFC3230] we do not\r\n```",
+              "createdAt": "2020-04-30T10:21:29Z",
+              "updatedAt": "2020-04-30T11:06:04Z"
+            },
+            {
+              "originalPosition": 10,
+              "body": "```suggestion\r\n   think we should face that. As a first thought, nothing in this document \r\n   precludes future work that would find a use for mid-stream trailers, for \r\n   example an incremental digest-algorithm. A document defining such a\r\n   digest-algorithm is best positioned to describe how it is used.\r\n```",
+              "createdAt": "2020-04-30T10:28:43Z",
+              "updatedAt": "2020-04-30T11:06:04Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 1166,
+      "id": "MDExOlB1bGxSZXF1ZXN0NDExMzUxODE0",
+      "title": "Create an inline reference to semantics.",
+      "url": "https://github.com/httpwg/http-extensions/pull/1166",
+      "state": "OPEN",
+      "author": "ioggstream",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [
+        "digest-headers"
+      ],
+      "body": "## This PR\r\n\r\nReferences I-D.httpbis-semantics using an inline referece to {{SEMANTICS}}.\r\nThis will ease the transition once SEMANTICS is updated to RFC.",
+      "createdAt": "2020-04-30T11:05:15Z",
+      "updatedAt": "2020-05-04T13:40:32Z",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDA0OTk2NjAw",
+          "commit": {
+            "abbreviatedOid": "e5a4539"
+          },
+          "author": "LPardue",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-05-04T13:40:32Z",
+          "updatedAt": "2020-05-04T13:40:32Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 1167,
+      "id": "MDExOlB1bGxSZXF1ZXN0NDExNTE0MTA5",
+      "title": "Fill out TODOs in PRIORITY_UPDATE, split H3 frames into two types",
+      "url": "https://github.com/httpwg/http-extensions/pull/1167",
+      "state": "OPEN",
+      "author": "LPardue",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [
+        "priorities"
+      ],
+      "body": "This attempts to address #1096 and #1079. \r\n\r\nI made the call to restrict the PRIORITY_UPDATE frame to only be sent by clients.\r\n\r\nIt replaces ASCII art with new QUIC-style frame definitions.",
+      "createdAt": "2020-04-30T13:45:24Z",
+      "updatedAt": "2020-05-04T15:26:05Z",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 1168,
+      "id": "MDExOlB1bGxSZXF1ZXN0NDExNTIyNzEx",
+      "title": "Initial priority frame",
+      "url": "https://github.com/httpwg/http-extensions/pull/1168",
+      "state": "CLOSED",
+      "author": "LPardue",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [
+        "priorities"
+      ],
+      "body": "This is a follow up to the PRIORITY_UPDATE tweaks in https://github.com/httpwg/http-extensions/pull/1167\r\n\r\nIn this PR we acknowledge that some people would like to use a frame to signal the initial priority, so we define a new frame INITIAL_PRIORITY that is sent on the request or push stream.\r\n\r\nI can't recall if we thought this would work for HTTP/2, so I've only defined the frame in HTTP/3. Hoping to resolve that either in this PR or in later discussion.\r\n\r\nSomething to look out for, compared to the PRIORITY_UPDATE frame, I've allowed this to be sent by either endpoint, so that it mirrors the flexibility of the header.\r\n\r\nSince having two ways to do something means that there will inevitable be an endpoint that chooses to use both signals at the same time, I've added some text to discuss it. ",
+      "createdAt": "2020-04-30T13:52:54Z",
+      "updatedAt": "2020-05-04T13:52:00Z",
+      "closedAt": "2020-05-04T13:52:00Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "comments": [
+        {
+          "author": "LPardue",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I overlooked the discussion on https://lists.w3.org/Archives/Public/ietf-http-wg/2020JanMar/0171.html which implied we'd be happy enough just using a PRIORITY_UPDATE frame on the control stream.\r\n\r\nClosing this PR.",
+          "createdAt": "2020-05-04T13:52:00Z",
+          "updatedAt": "2020-05-04T13:52:00Z"
+        }
+      ],
+      "reviews": []
     }
   ]
 }
