@@ -1,6 +1,6 @@
 {
   "magic": "B8n2c@e8kvfx",
-  "timestamp": "2020-05-05T04:35:30.851592+00:00",
+  "timestamp": "2020-05-05T18:08:35.646044+00:00",
   "repo": "httpwg/http-extensions",
   "labels": [
     {
@@ -27577,7 +27577,7 @@
       "id": "MDU6SXNzdWU1OTYwMTQxMDE=",
       "title": "Add example for Tokens?",
       "url": "https://github.com/httpwg/http-extensions/issues/1147",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "tfpauly",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
@@ -27586,8 +27586,8 @@
       ],
       "body": "In Section 3.3.4. Tokens, there isn't an example `Example-TokenHeader:`. It's pretty trivial for this case, but since other types all provide an example, it might be nice to include one here as well.\r\n\r\nAlso, on the topic of examples, the existing examples are inconsistent with naming it \"Header\" or \"Hdr\"\r\n\r\n`Example-IntegerHeader`\r\n`Example-DecimalHeader`\r\n`Example-StringHeader`\r\n`Example-BinaryHdr`\r\n`Example-BoolHdr`",
       "createdAt": "2020-04-07T16:55:01Z",
-      "updatedAt": "2020-04-20T06:36:06Z",
-      "closedAt": null,
+      "updatedAt": "2020-05-05T04:46:48Z",
+      "closedAt": "2020-05-05T04:46:48Z",
       "comments": [
         {
           "author": "mnot",
@@ -27764,7 +27764,7 @@
       "id": "MDU6SXNzdWU2MDk2ODk0MjU=",
       "title": "Dictionary serialisation algo problem",
       "url": "https://github.com/httpwg/http-extensions/issues/1164",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "mnot",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -27775,8 +27775,8 @@
       ],
       "body": "@annevk noticed that [dictionary serialisation](https://httpwg.org/http-extensions/draft-ietf-httpbis-header-structure.html#ser-dictionary) is messed up.\r\n\r\nI _think_ the fix is to indent the top-level 2-5 -- but I want to have a good look at it, compare to implementation, and I'd like others to verify, as I'm wary of making changes at this late stage.\r\n\r\nBlame seems to be [this commit](https://github.com/httpwg/http-extensions/commit/4f3252bbc73844559bf7bc8891424de08531f7da), which I vaguely remember as being... surprising. That will teach me to slow down when something weird happens with Git...",
       "createdAt": "2020-04-30T08:02:04Z",
-      "updatedAt": "2020-04-30T08:20:56Z",
-      "closedAt": null,
+      "updatedAt": "2020-05-05T05:05:15Z",
+      "closedAt": "2020-05-05T05:05:15Z",
       "comments": [
         {
           "author": "mnot",
@@ -27791,6 +27791,13 @@
           "body": "Looking at https://github.com/httpwg/http-extensions/pull/999/files the problem is that what became top-level 3 and 4 should have been steps inside top-level 2. Further changes have happened so now that applies to top-level 5 as well. (Top-level 2 itself seems good as that initiates the loop.)\r\n\r\n(Other for each statements do appear to have correct indenting.)",
           "createdAt": "2020-04-30T08:20:56Z",
           "updatedAt": "2020-04-30T08:20:56Z"
+        },
+        {
+          "author": "mnot",
+          "authorAssociation": "MEMBER",
+          "body": "Like that?",
+          "createdAt": "2020-05-05T04:41:09Z",
+          "updatedAt": "2020-05-05T04:41:09Z"
         }
       ]
     }
@@ -56175,12 +56182,59 @@
       ],
       "body": "This attempts to address #1096 and #1079. It might help towards overcoming the headers vs frames debate.\r\n\r\nI made the call to restrict the PRIORITY_UPDATE frame to only be sent by clients.\r\n\r\nIt replaces ASCII art with new QUIC-style frame definitions.",
       "createdAt": "2020-04-30T13:45:24Z",
-      "updatedAt": "2020-05-04T15:51:04Z",
+      "updatedAt": "2020-05-05T18:07:26Z",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDA2MDIwMzA0",
+          "commit": {
+            "abbreviatedOid": "b0976a6"
+          },
+          "author": "ianswett",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "It seems like there may be some opportunities for de-duplicating some text, but I don't have a specific suggestion.",
+          "createdAt": "2020-05-05T17:50:00Z",
+          "updatedAt": "2020-05-05T17:53:21Z",
+          "comments": [
+            {
+              "originalPosition": 21,
+              "body": "```suggestion\r\nHaving two mechanisms to carry the initial priority signal brings the dilemma of\r\n```",
+              "createdAt": "2020-05-05T17:50:00Z",
+              "updatedAt": "2020-05-05T18:07:26Z"
+            },
+            {
+              "originalPosition": 61,
+              "body": "```suggestion\r\nof any other value MUST be treated as a connection error of type PROTOCOL_ERROR.\r\n```",
+              "createdAt": "2020-05-05T17:51:18Z",
+              "updatedAt": "2020-05-05T18:07:26Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDA2MDMyMjM0",
+          "commit": {
+            "abbreviatedOid": "b0976a6"
+          },
+          "author": "royfielding",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-05-05T18:05:45Z",
+          "updatedAt": "2020-05-05T18:05:46Z",
+          "comments": [
+            {
+              "originalPosition": 21,
+              "body": "+1",
+              "createdAt": "2020-05-05T18:05:45Z",
+              "updatedAt": "2020-05-05T18:07:26Z"
+            }
+          ]
+        }
+      ]
     },
     {
       "number": 1168,
@@ -56210,6 +56264,66 @@
         }
       ],
       "reviews": []
+    },
+    {
+      "number": 1169,
+      "id": "MDExOlB1bGxSZXF1ZXN0NDEzMzAxNzgx",
+      "title": "Correct indentation in ser-dictionary",
+      "url": "https://github.com/httpwg/http-extensions/pull/1169",
+      "state": "MERGED",
+      "author": "mnot",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes #1164",
+      "createdAt": "2020-05-05T04:39:12Z",
+      "updatedAt": "2020-05-05T05:05:17Z",
+      "closedAt": "2020-05-05T05:05:15Z",
+      "mergedAt": "2020-05-05T05:05:15Z",
+      "mergedBy": "mnot",
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDA1NDg5OTE2",
+          "commit": {
+            "abbreviatedOid": "0bad85e"
+          },
+          "author": "annevk",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "Looks good to me.",
+          "createdAt": "2020-05-05T04:47:17Z",
+          "updatedAt": "2020-05-05T04:47:35Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "This is a pre-existing issue, but remain is a bit weird as \"for each\" is typically not an operation that immediately consumes, or maybe it is in languages I'm not familiar with?",
+              "createdAt": "2020-05-05T04:47:17Z",
+              "updatedAt": "2020-05-05T04:47:42Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDA1NDk0MjYz",
+          "commit": {
+            "abbreviatedOid": "61d7a2a"
+          },
+          "author": "mnot",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-05-05T05:05:10Z",
+          "updatedAt": "2020-05-05T05:05:10Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "There's language elsewhere that says that the functions consume input.",
+              "createdAt": "2020-05-05T05:05:10Z",
+              "updatedAt": "2020-05-05T05:05:10Z"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
