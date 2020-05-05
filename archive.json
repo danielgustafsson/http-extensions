@@ -1,6 +1,6 @@
 {
   "magic": "B8n2c@e8kvfx",
-  "timestamp": "2020-05-04T15:27:30.460148+00:00",
+  "timestamp": "2020-05-05T04:35:30.851592+00:00",
   "repo": "httpwg/http-extensions",
   "labels": [
     {
@@ -25399,7 +25399,7 @@
       ],
       "body": "There has been some debate about the relative utility of frames as a means of prioritizing and reprioritizing requests.  \r\n\r\nFrames are not guaranteed to be end-to-end and don't enjoy the benefits listed in [Section 8.1](https://httpwg.org/http-extensions/draft-ietf-httpbis-priority.html#why-use-an-end-to-end-header-field).  An (unlisted) reason is that the API for header fields is better understood and more likely to be available than a new and unspecified API.  HTTP/2 defined the use of frames for reprioritization, but APIs are not widely available, nor are they consistent.\r\n\r\nFrames provide two obvious benefits:\r\n\r\n1. They are scoped to the current connection and so only propagate if the receiving endpoint explicitly propagates them.\r\n\r\n2. They can be sent at any time.  This allows for reprioritization, but the requirement to have them sent after requests are complete means that they can't be sent \"on\" a stream, they have to instead refer to a stream, which complicates the design somewhat.  The proposal to allow trailers at any time helps a little here, but only to the extent that it remains possible to send.  Stream closure is used to terminate request bodies in some cases, making any trailer-based solution limited.\r\n\r\nHowever, frames have shortcomings too:\r\n\r\n1. They are complex.  The encoding of a header field into a frame is suboptimal, but necessary for extensibility and consistency reasons.  And the manner in which they refer to requests (or pushes) makes them more complex to manage than a header field.\r\n\r\n2. They are only scoped to a connection, which means that the extent of propagation can be non-deterministic.  In particular, they depend on the connection supporting the signaling.  This is the flip side of the benefit, and - in my opinion - outweighs it.\r\n\r\n3. The API is far more difficult compared to header fields.\r\n\r\nWe know little enough about the efficacy of prioritization that we should defer the definition of frames absent strong motivation for their efficacy and desirability.  The current document makes a good case for header fields, but the motivation for frames is weaker.  It is true that cases like escalation of a speculative fetch to blocking status are *theoretically* appealing, but those cases are rare and unlikely to benefit from reprioritization.  In particular, the mismatch between end-to-end and hop-by-hop (excuse the use of deprecated terminology) characteristics here makes it very hard to reason about the outcome.\r\n\r\nI know that others (@RyanAtGoogle in particular) have questions about the header field from a different angle and would prefer frames, exclusively.  So this probably comes down to having more discussion about which approach to take: headers, frames, or both.  \r\n\r\nIn either case, I would suggest that we have a need for both clear signals that the mechanism is broadly useful and evidence that that it is likely to be widely implemented.\r\n",
       "createdAt": "2020-01-09T04:21:20Z",
-      "updatedAt": "2020-04-30T13:58:37Z",
+      "updatedAt": "2020-05-04T15:46:59Z",
       "closedAt": null,
       "comments": [
         {
@@ -25489,9 +25489,16 @@
         {
           "author": "LPardue",
           "authorAssociation": "CONTRIBUTOR",
-          "body": "Going back to the OP, MT said\r\n\r\n> In either case, I would suggest that we have a need for both clear signals that the mechanism is broadly useful and evidence that that it is likely to be widely implemented.\r\n\r\nI've prepared the following PR that roughs in a new HTTP/3 frame to allow this along with some basic discussion. There's probably more to be added so comments are welcome, although we might choose to land the PR and address things further in followups.\r\n\r\nhttps://github.com/httpwg/http-extensions/pull/1168/files",
+          "body": "~~Going back to the OP, MT said~~\r\n\r\n~~> In either case, I would suggest that we have a need for both clear signals that the mechanism is broadly useful and evidence that that it is likely to be widely implemented.~~\r\n\r\n~~I've prepared the following PR that roughs in a new HTTP/3 frame to allow this along with some basic discussion. There's probably more to be added so comments are welcome, although we might choose to land the PR and address things further in followups.~~\r\n\r\n~~https://github.com/httpwg/http-extensions/pull/1168/files~~",
           "createdAt": "2020-04-30T13:58:37Z",
-          "updatedAt": "2020-04-30T13:58:37Z"
+          "updatedAt": "2020-05-04T15:44:27Z"
+        },
+        {
+          "author": "LPardue",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "My previous comment is a blatant misread on MT's. Apologies. Martin was asking for a signal that reprioritization is a mechanism that is useful, and that there is evidence that people would implement it. \r\n\r\nThe linked PR does not answer the question about reprioritization. What it allows is the use of a frame for the initial priority signal. Sending a signal on a different stream to the request means that there will be ordering edge-cases, a server that can accomodate that doesn't need to do too much work to support reprioritization while a response is in flight.",
+          "createdAt": "2020-05-04T15:46:59Z",
+          "updatedAt": "2020-05-04T15:46:59Z"
         }
       ]
     },
@@ -27552,7 +27559,7 @@
       "id": "MDU6SXNzdWU1ODMxOTcxMDg=",
       "title": "Digest in requests with no payload body",
       "url": "https://github.com/httpwg/http-extensions/issues/1143",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "ioggstream",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
@@ -27561,8 +27568,8 @@
       ],
       "body": "## I expect\r\n\r\nAn example of using Digest in a request with no payload body.\r\nThere is a misconceptions that Digest does not apply to request with no payload body. \r\n\r\nAs it's not a special case https://github.com/httpwg/http-extensions/issues/849#issuecomment-558096111 for sha-256 we can just use \r\n\r\n```\r\nIn [120]: sha256(b'').hexdigest()                                                                                                                                                                                                            \r\nOut[120]: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'\r\n```\r\n\r\nOther algorithms are free to define a different computation, and the examples will only be tied to sha-256\r\n\r\n",
       "createdAt": "2020-03-17T18:00:16Z",
-      "updatedAt": "2020-04-15T01:23:03Z",
-      "closedAt": null,
+      "updatedAt": "2020-05-04T17:32:59Z",
+      "closedAt": "2020-05-04T17:32:59Z",
       "comments": []
     },
     {
@@ -55746,7 +55753,7 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NDAzODIwNTY1",
       "title": "Fix: #1143. Example of an empty payload body.",
       "url": "https://github.com/httpwg/http-extensions/pull/1155",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "ioggstream",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
@@ -55755,10 +55762,10 @@
       ],
       "body": "## This PR\r\n\r\n- adds an example of a request with no payload body (eg. HEAD)\r\n- mention an use-case in the Signature section.\r\n\r\nFixes: #1143 ",
       "createdAt": "2020-04-15T15:10:15Z",
-      "updatedAt": "2020-05-04T13:41:05Z",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
+      "updatedAt": "2020-05-04T17:33:01Z",
+      "closedAt": "2020-05-04T17:32:59Z",
+      "mergedAt": "2020-05-04T17:32:59Z",
+      "mergedBy": "ioggstream",
       "comments": [
         {
           "author": "ioggstream",
@@ -56124,7 +56131,7 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NDExMzUxODE0",
       "title": "Create an inline reference to semantics.",
       "url": "https://github.com/httpwg/http-extensions/pull/1166",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "ioggstream",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
@@ -56133,10 +56140,10 @@
       ],
       "body": "## This PR\r\n\r\nReferences I-D.httpbis-semantics using an inline referece to {{SEMANTICS}}.\r\nThis will ease the transition once SEMANTICS is updated to RFC.",
       "createdAt": "2020-04-30T11:05:15Z",
-      "updatedAt": "2020-05-04T13:40:32Z",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
+      "updatedAt": "2020-05-04T17:33:27Z",
+      "closedAt": "2020-05-04T17:33:26Z",
+      "mergedAt": "2020-05-04T17:33:26Z",
+      "mergedBy": "ioggstream",
       "comments": [],
       "reviews": [
         {
@@ -56157,7 +56164,7 @@
     {
       "number": 1167,
       "id": "MDExOlB1bGxSZXF1ZXN0NDExNTE0MTA5",
-      "title": "Fill out TODOs in PRIORITY_UPDATE, split H3 frames into two types",
+      "title": "PRIORITY_UPDATE can be used for initial priority, split H3 frames into two types",
       "url": "https://github.com/httpwg/http-extensions/pull/1167",
       "state": "OPEN",
       "author": "LPardue",
@@ -56166,9 +56173,9 @@
       "labels": [
         "priorities"
       ],
-      "body": "This attempts to address #1096 and #1079. \r\n\r\nI made the call to restrict the PRIORITY_UPDATE frame to only be sent by clients.\r\n\r\nIt replaces ASCII art with new QUIC-style frame definitions.",
+      "body": "This attempts to address #1096 and #1079. It might help towards overcoming the headers vs frames debate.\r\n\r\nI made the call to restrict the PRIORITY_UPDATE frame to only be sent by clients.\r\n\r\nIt replaces ASCII art with new QUIC-style frame definitions.",
       "createdAt": "2020-04-30T13:45:24Z",
-      "updatedAt": "2020-05-04T15:26:05Z",
+      "updatedAt": "2020-05-04T15:51:04Z",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
