@@ -1964,7 +1964,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
 C.1.  Since draft-ietf-httpbis-header-structure-18
 
-   _tbd_
+   o  Fix indentation in Dictionary serialisation (#1164).
 
 C.2.  Since draft-ietf-httpbis-header-structure-17
 
