@@ -258,8 +258,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
    algorithms, but MAY vary in implementation so as the behaviors are
    indistinguishable from specified behavior.  If there is disagreement
    between the parsing algorithms and ABNF, the specified algorithms
-   take precedence.  In some places, the algorithms are "greedy" with
-   whitespace, but this should not affect conformance.
+   take precedence.
 
    For serialization to HTTP fields, the ABNF illustrates the range of
    acceptable wire representations with as much fidelity as possible,
@@ -271,9 +270,10 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
    To specify a HTTP field as a Structured Field, its authors needs to:
 
-   o  Reference this specification.  Recipients and generators of the
-      field need to know that the requirements of this document are in
-      effect.
+   o  Normatively reference this specification.  Recipients and
+      generators of the field need to know that the requirements of this
+      document are in effect.
+
 
 
 
@@ -546,8 +546,8 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
    Example-ParamList: abc;a=1;b=2; cde_456, (ghi;jk=4 l);q="9";r=w
 
-   Parameters whose value is Boolean true MUST omit that value when
-   serialized.  For example:
+   Parameters whose value is Boolean (see Section 3.3.6) true MUST omit
+   that value when serialized.  For example:
 
    Example-Int: 1; a; b=?0
 
@@ -592,8 +592,9 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
    Example-Dict: en="Applepie", da=:w4ZibGV0w6ZydGU=:
 
-   Members whose value is Boolean true MUST omit that value when
-   serialized.  For example, here both "b" and "c" are true:
+   Members whose value is Boolean (see Section 3.3.6) true MUST omit
+   that value when serialized.  For example, here both "b" and "c" are
+   true:
 
    Example-Dict: a=?0, b, c; foo=bar
 
@@ -609,7 +610,6 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
    Parameters:
 
    Example-MixDict: a=(1 2), b=3, c=4;aa=bb, d=(5 6);valid
-
 
 
 
@@ -1975,6 +1975,8 @@ C.1.  Since draft-ietf-httpbis-header-structure-18
 
    o  Add example for Token; tweak example field names (#1147).
 
+   o  Editorial improvements.
+
 C.2.  Since draft-ietf-httpbis-header-structure-17
 
    o  Editorial improvements.
@@ -2008,8 +2010,6 @@ C.5.  Since draft-ietf-httpbis-header-structure-14
 
    o  Allow empty dictionary values (#992).
 
-   o  Change value of omitted parameter value to True (#995).
-
 
 
 
@@ -2017,6 +2017,8 @@ Nottingham & Kamp       Expires November 6, 2020               [Page 36]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
+
+   o  Change value of omitted parameter value to True (#995).
 
    o  Explain more about splitting dictionaries and lists across header
       instances (#997).
@@ -2065,14 +2067,14 @@ C.7.  Since draft-ietf-httpbis-header-structure-12
 
    o  Reworked float serialisation (#896).
 
-   o  Don't add a trailing space in inner-list (#904).
-
 
 
 Nottingham & Kamp       Expires November 6, 2020               [Page 37]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
+
+   o  Don't add a trailing space in inner-list (#904).
 
 C.8.  Since draft-ietf-httpbis-header-structure-11
 
@@ -2121,14 +2123,14 @@ C.11.  Since draft-ietf-httpbis-header-structure-08
 
    o  Use "?" instead of "!" to indicate a Boolean (#719).
 
-   o  Added "Intentionally Strict Processing" (#684).
-
 
 
 Nottingham & Kamp       Expires November 6, 2020               [Page 38]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
+
+   o  Added "Intentionally Strict Processing" (#684).
 
    o  Gave better names for referring specs to use in Parameterised
       Lists (#720).
@@ -2175,8 +2177,6 @@ C.14.  Since draft-ietf-httpbis-header-structure-05
 
    o  Define serialisation algorithms.
 
-   o  Refine relationship between ABNF, parsing and serialisation
-      algorithms.
 
 
 
@@ -2185,6 +2185,9 @@ Nottingham & Kamp       Expires November 6, 2020               [Page 39]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
+
+   o  Refine relationship between ABNF, parsing and serialisation
+      algorithms.
 
 C.15.  Since draft-ietf-httpbis-header-structure-04
 
@@ -2230,9 +2233,6 @@ C.19.  Since draft-ietf-httpbis-header-structure-00
       unicode-string.
 
    o  Change h1_blob delimiter to ":" since "'" is valid t_char
-
-
-
 
 
 
