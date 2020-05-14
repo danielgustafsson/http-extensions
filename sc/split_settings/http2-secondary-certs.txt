@@ -5,10 +5,10 @@
 HTTP Working Group                                             M. Bishop
 Internet-Draft                                                    Akamai
 Intended status: Standards Track                             N. Sullivan
-Expires: October 16, 2020                                     Cloudflare
+Expires: November 15, 2020                                    Cloudflare
                                                               M. Thomson
                                                                  Mozilla
-                                                          April 14, 2020
+                                                            May 14, 2020
 
 
              Secondary Certificate Authentication in HTTP/2
@@ -46,16 +46,16 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on October 16, 2020.
+   This Internet-Draft will expire on November 15, 2020.
 
 
 
 
 
 
-Bishop, et al.          Expires October 16, 2020                [Page 1]
+Bishop, et al.          Expires November 15, 2020               [Page 1]
 
-Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
+Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
 
 
 Copyright Notice
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Bishop, et al.          Expires October 16, 2020                [Page 2]
+Bishop, et al.          Expires November 15, 2020               [Page 2]
 
-Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
+Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
 
 
    7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  22
@@ -165,9 +165,9 @@ Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
 
 
 
-Bishop, et al.          Expires October 16, 2020                [Page 3]
+Bishop, et al.          Expires November 15, 2020               [Page 3]
 
-Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
+Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
 
 
 1.1.  Server Certificate Authentication
@@ -221,9 +221,9 @@ Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
 
 
 
-Bishop, et al.          Expires October 16, 2020                [Page 4]
+Bishop, et al.          Expires November 15, 2020               [Page 4]
 
-Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
+Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
 
 
    The TLS 1.3 CertificateRequest can be used by servers to give clients
@@ -277,9 +277,9 @@ Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
 
 
 
-Bishop, et al.          Expires October 16, 2020                [Page 5]
+Bishop, et al.          Expires November 15, 2020               [Page 5]
 
-Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
+Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
 
 
    The server initiates TLS renegotiation by sending a TLS HelloRequest
@@ -333,9 +333,9 @@ Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
 
 
 
-Bishop, et al.          Expires October 16, 2020                [Page 6]
+Bishop, et al.          Expires November 15, 2020               [Page 6]
 
-Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
+Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
 
 
    Thus, the minimum necessary mechanism to support reactive certificate
@@ -389,9 +389,9 @@ Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
 
 
 
-Bishop, et al.          Expires October 16, 2020                [Page 7]
+Bishop, et al.          Expires November 15, 2020               [Page 7]
 
-Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
+Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
 
 
    Successfully verified Authenticators result in certificate chains,
@@ -445,9 +445,9 @@ Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
 
 
 
-Bishop, et al.          Expires October 16, 2020                [Page 8]
+Bishop, et al.          Expires November 15, 2020               [Page 8]
 
-Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
+Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
 
 
 2.1.  Indicating Support for HTTP-Layer Certificate Authentication
@@ -494,16 +494,16 @@ Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
 
    Each is converted to a setting value as:
 
-   (Exporter fragment & 0x3fffffff) | 0x80000000
+   Exporter fragment | 0x80000000
 
    That is, the most significant bit will always be set, regardless of
    the value of the exporter.  Each endpoint will compute the expected
 
 
 
-Bishop, et al.          Expires October 16, 2020                [Page 9]
+Bishop, et al.          Expires November 15, 2020               [Page 9]
 
-Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
+Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
 
 
    values from their peer.  If the setting is not received, or if the
@@ -557,9 +557,9 @@ Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
 
 
 
-Bishop, et al.          Expires October 16, 2020               [Page 10]
+Bishop, et al.          Expires November 15, 2020              [Page 10]
 
-Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
+Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
 
 
    blocked.  Clients MAY wait for a "CERTIFICATE_NEEDED" frame to assist
@@ -613,9 +613,9 @@ Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
 
 
 
-Bishop, et al.          Expires October 16, 2020               [Page 11]
+Bishop, et al.          Expires November 15, 2020              [Page 11]
 
-Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
+Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
 
 
 2.3.2.  Requiring Additional Client Certificates
@@ -669,9 +669,9 @@ Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
 
 
 
-Bishop, et al.          Expires October 16, 2020               [Page 12]
+Bishop, et al.          Expires November 15, 2020              [Page 12]
 
-Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
+Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
 
 
       +---------+           +---------+
@@ -725,9 +725,9 @@ Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
 
 
 
-Bishop, et al.          Expires October 16, 2020               [Page 13]
+Bishop, et al.          Expires November 15, 2020              [Page 13]
 
-Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
+Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
 
 
    certificates before authorizing a single request, each required
@@ -781,9 +781,9 @@ Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
 
 
 
-Bishop, et al.          Expires October 16, 2020               [Page 14]
+Bishop, et al.          Expires November 15, 2020              [Page 14]
 
-Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
+Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
 
 
    of the certificate the sender wishes to use.  This MUST be the ID of
@@ -837,9 +837,9 @@ Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
 
 
 
-Bishop, et al.          Expires October 16, 2020               [Page 15]
+Bishop, et al.          Expires November 15, 2020              [Page 15]
 
-Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
+Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
 
 
 3.3.  The CERTIFICATE_REQUEST Frame
@@ -893,9 +893,9 @@ Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
 
 
 
-Bishop, et al.          Expires October 16, 2020               [Page 16]
+Bishop, et al.          Expires November 15, 2020              [Page 16]
 
-Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
+Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
 
 
    The TLS library on the authenticating peer will provide mechanisms to
@@ -949,9 +949,9 @@ Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
 
 
 
-Bishop, et al.          Expires October 16, 2020               [Page 17]
+Bishop, et al.          Expires November 15, 2020              [Page 17]
 
-Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
+Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
 
 
    An exported authenticator is transported in zero or more
@@ -1005,9 +1005,9 @@ Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
 
 
 
-Bishop, et al.          Expires October 16, 2020               [Page 18]
+Bishop, et al.          Expires November 15, 2020              [Page 18]
 
-Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
+Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
 
 
    Once the authenticator is accepted, the endpoint can perform any
@@ -1061,9 +1061,9 @@ Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
 
 
 
-Bishop, et al.          Expires October 16, 2020               [Page 19]
+Bishop, et al.          Expires November 15, 2020              [Page 19]
 
-Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
+Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
 
 
    accepting the limited certificate over Secondary Certificate
@@ -1117,9 +1117,9 @@ Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
 
 
 
-Bishop, et al.          Expires October 16, 2020               [Page 20]
+Bishop, et al.          Expires November 15, 2020              [Page 20]
 
-Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
+Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
 
 
    As recommended in [RFC8336], clients opting not to consult DNS ought
@@ -1173,9 +1173,9 @@ Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
 
 
 
-Bishop, et al.          Expires October 16, 2020               [Page 21]
+Bishop, et al.          Expires November 15, 2020              [Page 21]
 
-Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
+Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
 
 
 6.3.  Denial of Service
@@ -1229,9 +1229,9 @@ Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
 
 
 
-Bishop, et al.          Expires October 16, 2020               [Page 22]
+Bishop, et al.          Expires November 15, 2020              [Page 22]
 
-Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
+Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
 
 
    The feature negotiation settings is registered in Section 7.1.  Four
@@ -1285,9 +1285,9 @@ Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
 
 
 
-Bishop, et al.          Expires October 16, 2020               [Page 23]
+Bishop, et al.          Expires November 15, 2020              [Page 23]
 
-Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
+Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
 
 
         +-------------------------+--------------+---------------+
@@ -1341,9 +1341,9 @@ Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
 
 
 
-Bishop, et al.          Expires October 16, 2020               [Page 24]
+Bishop, et al.          Expires November 15, 2020              [Page 24]
 
-Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
+Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
 
 
    [RFC6844]  Hallam-Baker, P. and R. Stradling, "DNS Certification
@@ -1397,9 +1397,9 @@ Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
 
 
 
-Bishop, et al.          Expires October 16, 2020               [Page 25]
+Bishop, et al.          Expires November 15, 2020              [Page 25]
 
-Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
+Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
 
 
 Appendix A.  Change Log
@@ -1453,9 +1453,9 @@ A.6.  Since draft-bishop-httpbis-http2-additional-certs-05:
 
 
 
-Bishop, et al.          Expires October 16, 2020               [Page 26]
+Bishop, et al.          Expires November 15, 2020              [Page 26]
 
-Internet-Draft        Secondary Cert Auth in HTTP/2           April 2020
+Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
 
 
 Acknowledgements
@@ -1509,4 +1509,4 @@ Authors' Addresses
 
 
 
-Bishop, et al.          Expires October 16, 2020               [Page 27]
+Bishop, et al.          Expires November 15, 2020              [Page 27]
