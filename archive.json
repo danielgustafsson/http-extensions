@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-05-06T13:12:46.868346+00:00",
+  "timestamp": "2020-05-14T18:56:15.131588+00:00",
   "repo": "httpwg/http-extensions",
   "labels": [
     {
@@ -27755,9 +27755,31 @@
       "labels": [],
       "body": "[Per mikewest](https://crbug.com/1075610#c5): \r\n\r\n> No, cross-site frames should not be able to access `SameSite=AnythingButNone` cookies via `document.cookie`. The spec doesn't make this clear (you have to read between the lines of bullet 5 of step 1 of https://tools.ietf.org/html/draft-ietf-httpbis-rfc6265bis-06#section-5.5), so we should change the spec.",
       "createdAt": "2020-04-28T18:55:56Z",
-      "updatedAt": "2020-04-28T18:55:56Z",
+      "updatedAt": "2020-05-13T16:44:25Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "bakulf",
+          "authorAssociation": "NONE",
+          "body": "I recently wrote this https://github.com/web-platform-tests/wpt/pull/23113 to cover the opposite of what you suggest but I'm happy to revert it as soon as we have consensus.\r\n\r\nIn particular, the reason why I wrote that PR is this:\r\n\r\n1. A.com as an anchor element pointing to B.com\r\n2. the user clicks on the link. The browser navigates to B.com\r\n3. B.com runs: `document.cookie = 'a=b; sameSite=strict'; console.log(document.cookie);`\r\n4. Should the console show 'a=b' or an empty string?\r\n\r\nIn theory, a=b should be shown only if the navigation is same-origin, but here we don't have navigation (document.cookie doesn't trigger navigation). And if we consider the document loading, this is not same-site (A.com -> B.com).\r\n\r\nChrome shows 'a=b'. Firefox before [bug 1627653](https://bugzilla.mozilla.org/show_bug.cgi?id=1627653) used to show an empty string.\r\n\r\nA way to cover this scenario and what you suggest is to not expose `sameSite=AnythingButNone` cookies to iframed cross-origin documents.",
+          "createdAt": "2020-05-12T09:33:07Z",
+          "updatedAt": "2020-05-12T09:33:07Z"
+        },
+        {
+          "author": "chlily1",
+          "authorAssociation": "NONE",
+          "body": "If I'm understanding correctly, the changes in https://bugzilla.mozilla.org/show_bug.cgi?id=1627653#c11 make it so that all SameSite cookies are exposed in `document.cookie` queries regardless of the ancestor frames' origins. The WPT change also seems to test this behavior. This is more permissive than just showing SameSite=Strict cookies in \"laxly same-site\" (i.e. all document ancestors are same-site) contexts regardless of navigation initiator, which is what Chrome does.",
+          "createdAt": "2020-05-12T16:37:53Z",
+          "updatedAt": "2020-05-12T16:37:53Z"
+        },
+        {
+          "author": "bakulf",
+          "authorAssociation": "NONE",
+          "body": "> If I'm understanding correctly, ...\r\n\r\nThis is correct. And reading the spec, the firefox implementation seems to be the correct one, even if I prefer to have something more restrictive.",
+          "createdAt": "2020-05-13T16:44:25Z",
+          "updatedAt": "2020-05-13T16:44:25Z"
+        }
+      ]
     },
     {
       "number": 1164,
@@ -27817,7 +27839,7 @@
       ],
       "body": "People using HTTP for non-browser cases seem to keep on assuming that redirects are 'sticky' -- i.e., that once I redirect a client, it will somehow magically know to redirect future requests (even with different URLs) to the updated server. We should clarify this specifically so there's text we can point these people to.\r\n\r\nOne could read the current specs as saying that a POST to URL A that permanently redirects to URL B should imply that future POSTs to URL A should automatically be sent to URL B. I think that's reasonable, but AFAICT it isn't implemented anywhere, so we should caution folks that it's only advisory and not widely implemented.",
       "createdAt": "2020-04-01T00:58:04Z",
-      "updatedAt": "2020-05-06T10:36:37Z",
+      "updatedAt": "2020-05-06T23:29:23Z",
       "closedAt": null,
       "comments": [
         {
@@ -27833,6 +27855,13 @@
           "body": "Is that related to the `ought`s I find in  https://httpwg.org/http-core/draft-ietf-httpbis-semantics-latest.html#status.301 ?",
           "createdAt": "2020-05-06T10:36:37Z",
           "updatedAt": "2020-05-06T10:36:37Z"
+        },
+        {
+          "author": "mnot",
+          "authorAssociation": "MEMBER",
+          "body": "Yes.",
+          "createdAt": "2020-05-06T23:29:23Z",
+          "updatedAt": "2020-05-06T23:29:23Z"
         }
       ]
     }
@@ -60342,19 +60371,19 @@
       ],
       "body": "Automatic use of client-proffered certificates was removed a while back; clients can indicate which certificate (if any) they want the server to consider by sending a `USE_CERTIFICATE` frame with the `UNSOLICITED` flag set.\r\n\r\nThere was text talking about automatic use of the server-proffered certificates, but there wasn't corresponding text disallowing that behavior for client certificates, simply the absence of permission.  This PR forbids considering \"available\" certificates until the client indicates which certificate to use.\r\n\r\nFixes #1090.",
       "createdAt": "2020-04-14T20:44:05Z",
-      "updatedAt": "2020-04-14T20:44:57Z",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "comments": [],
-      "reviews": [],
+      "updatedAt": "2020-05-14T18:54:53Z",
       "baseRepository": "httpwg/http-extensions",
       "baseRefName": "master",
       "baseRefOid": "29fff7f850ad9f4930d0cdd935523c5b7d190df6",
       "headRepository": "httpwg/http-extensions",
       "headRefName": "sc/confused_deputy",
-      "headRefOid": "36c952c47c691bd89078baf1acab68cde997d9f3",
-      "mergeCommit": null
+      "headRefOid": "d35f070c3795a0b88643c7064c45a96bab3a6754",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     },
     {
       "number": 1154,
@@ -60890,7 +60919,7 @@
       ],
       "body": "This attempts to address #1096 and #1079. It might help towards overcoming the headers vs frames debate.\r\n\r\nI made the call to restrict the PRIORITY_UPDATE frame to only be sent by clients.\r\n\r\nIt replaces ASCII art with new QUIC-style frame definitions.",
       "createdAt": "2020-04-30T13:45:24Z",
-      "updatedAt": "2020-05-06T13:11:55Z",
+      "updatedAt": "2020-05-14T14:56:10Z",
       "baseRepository": "httpwg/http-extensions",
       "baseRefName": "master",
       "baseRefOid": "f40438f4582d1fdb5b894f382ce341686e38e7c3",
@@ -60901,7 +60930,22 @@
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "LPardue",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> Wouldn't it be easier to just define h2's stream zero as the control stream for h2 (at top of document)? \r\n\r\nIn my head that's what I call it. However, @kazuho has been quite particular with correcting me back use stream zero terminology in the past. \r\n\r\n@kazuho WDYT about Roy's suggestion to define stream zero as `control` in this document?",
+          "createdAt": "2020-05-07T17:43:56Z",
+          "updatedAt": "2020-05-07T17:43:56Z"
+        },
+        {
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "@LPardue \r\n> WDYT about Roy's suggestion to define stream zero as control in this document?\r\n\r\nI'd be fine with that, assuming that we'd have the definition somewhere (as @royfielding suggests).",
+          "createdAt": "2020-05-14T01:14:39Z",
+          "updatedAt": "2020-05-14T01:14:39Z"
+        }
+      ],
       "reviews": [
         {
           "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDA2MDIwMzA0",
@@ -60966,6 +61010,171 @@
               "body": "Should be more like\r\n\r\n```\r\n  Therefore, a client cannot reprioritize a response by\r\n  sending additional metadata (e.g., trailer fields) on the request stream.\r\n  We avoid interoperability failure by restricting PRIORITY_UPDATE\r\n  frames to the control stream, with each such frame explicitly identifying\r\n  the stream to which the new priority applies.\r\n```",
               "createdAt": "2020-05-05T18:27:45Z",
               "updatedAt": "2020-05-06T13:11:55Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDA2NTk3OTEw",
+          "commit": {
+            "abbreviatedOid": "3b5c4e9"
+          },
+          "author": "LPardue",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-05-06T13:13:38Z",
+          "updatedAt": "2020-05-06T13:13:38Z",
+          "comments": [
+            {
+              "originalPosition": 45,
+              "body": "Thanks. I tweaked the suggestion slightly and made cbcdc60cf5a92. PTAL.",
+              "createdAt": "2020-05-06T13:13:38Z",
+              "updatedAt": "2020-05-06T13:13:38Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDA3NjY3ODky",
+          "commit": {
+            "abbreviatedOid": "3b5c4e9"
+          },
+          "author": "royfielding",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-05-07T17:05:05Z",
+          "updatedAt": "2020-05-07T17:05:05Z",
+          "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDExMzk2OTEy",
+          "commit": {
+            "abbreviatedOid": "3b5c4e9"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-05-14T01:00:08Z",
+          "updatedAt": "2020-05-14T01:11:16Z",
+          "comments": [
+            {
+              "originalPosition": 131,
+              "body": "0x10?",
+              "createdAt": "2020-05-14T01:00:08Z",
+              "updatedAt": "2020-05-14T01:11:16Z"
+            },
+            {
+              "originalPosition": 11,
+              "body": "How about stating that endpoints that do not want to expose an end-to-end signal MAY omit the header field, but send the PRIORITY_UPDATE frame at an early moment assuming that it would reach the server as early as the request headers? Would could go on to explain that in such case, all the responses that the server would send would have the priority in the frame being applied.\r\n\r\nThe benefit of phrasing that way is that we can get rid of the last paragraph of this section.",
+              "createdAt": "2020-05-14T01:04:23Z",
+              "updatedAt": "2020-05-14T01:11:16Z"
+            },
+            {
+              "originalPosition": 91,
+              "body": "Seeing the definition of the frame _headers_ for H2 was surprising to me, though I understand that it reflects the change to the HTTP/3 draft. Maybe I should ask if the change in HTTP/3 is a good thing.",
+              "createdAt": "2020-05-14T01:08:39Z",
+              "updatedAt": "2020-05-14T01:11:16Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDExNDAzNDIz",
+          "commit": {
+            "abbreviatedOid": "3b5c4e9"
+          },
+          "author": "LPardue",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-05-14T01:21:41Z",
+          "updatedAt": "2020-05-14T01:21:41Z",
+          "comments": [
+            {
+              "originalPosition": 91,
+              "body": "As a personal opinion I prefer to see the frame in whole because it avoids having to cross reference to the frame headers, which are defined in some other document. \r\n\r\nBut I can drop them if people want. I see that as an editorial change so perhaps we can avoid blocking this and fix up later if needs be.",
+              "createdAt": "2020-05-14T01:21:41Z",
+              "updatedAt": "2020-05-14T01:21:41Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDExNDA5NzI3",
+          "commit": {
+            "abbreviatedOid": "3b5c4e9"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-05-14T01:43:01Z",
+          "updatedAt": "2020-05-14T01:43:01Z",
+          "comments": [
+            {
+              "originalPosition": 91,
+              "body": "I agree that this is an editorial issue, and that we need to ask the WG to resolve (because it is about the convention covering all H2 extensions, not just this one).",
+              "createdAt": "2020-05-14T01:43:01Z",
+              "updatedAt": "2020-05-14T01:43:01Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDExODc0ODI4",
+          "commit": {
+            "abbreviatedOid": "3b5c4e9"
+          },
+          "author": "MikeBishop",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-05-14T14:41:04Z",
+          "updatedAt": "2020-05-14T14:41:05Z",
+          "comments": [
+            {
+              "originalPosition": 91,
+              "body": "FWIW, ALTSVC is the only extension to have reached RFC status previously.  It [does not include](https://tools.ietf.org/html/rfc7838#section-4) the frame header; only the payload.",
+              "createdAt": "2020-05-14T14:41:04Z",
+              "updatedAt": "2020-05-14T14:41:05Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDExODg2OTky",
+          "commit": {
+            "abbreviatedOid": "3b5c4e9"
+          },
+          "author": "LPardue",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-05-14T14:53:09Z",
+          "updatedAt": "2020-05-14T14:53:09Z",
+          "comments": [
+            {
+              "originalPosition": 91,
+              "body": "You forgot ORIGIN frame https://tools.ietf.org/html/rfc8336#section-2.1 which also specifies the frame payload.\r\n\r\nNow that H2 and H3 have different frame format definitions, I think extensions applicable to both will hit this problem. I'd like to figure what people think is the most acceptable way to present things.",
+              "createdAt": "2020-05-14T14:53:09Z",
+              "updatedAt": "2020-05-14T14:53:09Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDExODkwMjEy",
+          "commit": {
+            "abbreviatedOid": "3b5c4e9"
+          },
+          "author": "LPardue",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-05-14T14:56:09Z",
+          "updatedAt": "2020-05-14T14:56:10Z",
+          "comments": [
+            {
+              "originalPosition": 91,
+              "body": "One option would be to write documents that update RFC 7838 and RFC 8336 to use the new format and define the H3 frame at the same time...",
+              "createdAt": "2020-05-14T14:56:10Z",
+              "updatedAt": "2020-05-14T14:56:10Z"
             }
           ]
         }
@@ -61085,22 +61294,133 @@
       "author": "yoavweiss",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "client-hints"
+      ],
       "body": "",
       "createdAt": "2020-05-06T07:51:37Z",
-      "updatedAt": "2020-05-06T08:01:54Z",
+      "updatedAt": "2020-05-12T12:27:44Z",
       "baseRepository": "httpwg/http-extensions",
       "baseRefName": "master",
       "baseRefOid": "54c21f0cbf6a0cbfae51275e2a879033645f4450",
       "headRepository": "yoavweiss/http-extensions",
       "headRefName": "genart_review",
-      "headRefOid": "84b7eb5aab8dcca592206f45ec0f12e2a6d16c0c",
+      "headRefOid": "4eef7debf33cf343f94f39b7d80741e49ef8bc3e",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
-      "reviews": []
+      "comments": [
+        {
+          "author": "yoavweiss",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Friendly ping! :)",
+          "createdAt": "2020-05-07T23:05:52Z",
+          "updatedAt": "2020-05-07T23:05:52Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDA4OTMxOTky",
+          "commit": {
+            "abbreviatedOid": "b49ede6"
+          },
+          "author": "mnot",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-05-11T07:41:17Z",
+          "updatedAt": "2020-05-11T07:41:17Z",
+          "comments": [
+            {
+              "originalPosition": 40,
+              "body": "Here and elsewhere, markdown references are with {{ }} , not [ ] ",
+              "createdAt": "2020-05-11T07:41:17Z",
+              "updatedAt": "2020-05-12T12:27:44Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDA4OTM1MDM2",
+          "commit": {
+            "abbreviatedOid": "b49ede6"
+          },
+          "author": "mnot",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-05-11T07:45:55Z",
+          "updatedAt": "2020-05-11T07:45:55Z",
+          "comments": [
+            {
+              "originalPosition": 17,
+              "body": "Here and elsewhere, changing \"user agent\" to \"client\" implies that the scope of discussion -- including requirements -- includes intermediaries as well as UAs. Is that intentional?",
+              "createdAt": "2020-05-11T07:45:55Z",
+              "updatedAt": "2020-05-12T12:27:44Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDA4OTQ5Mjg0",
+          "commit": {
+            "abbreviatedOid": "4e04359"
+          },
+          "author": "yoavweiss",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-05-11T08:07:07Z",
+          "updatedAt": "2020-05-11T08:07:07Z",
+          "comments": [
+            {
+              "originalPosition": 17,
+              "body": "That's a good point, I haven't considered intermediaries. One of the points raised in the review was to align on either \"client\" or \"user agent\". I guess it'd be more appropriate to align on the latter.",
+              "createdAt": "2020-05-11T08:07:07Z",
+              "updatedAt": "2020-05-12T12:27:44Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDA4OTUwMDI5",
+          "commit": {
+            "abbreviatedOid": "4e04359"
+          },
+          "author": "yoavweiss",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-05-11T08:08:18Z",
+          "updatedAt": "2020-05-11T08:08:19Z",
+          "comments": [
+            {
+              "originalPosition": 40,
+              "body": "Changed",
+              "createdAt": "2020-05-11T08:08:19Z",
+              "updatedAt": "2020-05-12T12:27:44Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDA4OTU4NDA0",
+          "commit": {
+            "abbreviatedOid": "5c2cae3"
+          },
+          "author": "yoavweiss",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-05-11T08:20:23Z",
+          "updatedAt": "2020-05-11T08:20:23Z",
+          "comments": [
+            {
+              "originalPosition": 17,
+              "body": "Aligned on user agent. Let me know if that works",
+              "createdAt": "2020-05-11T08:20:23Z",
+              "updatedAt": "2020-05-12T12:27:44Z"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
