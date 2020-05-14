@@ -94,18 +94,18 @@ Table of Contents
      3.1.  The CERTIFICATE_NEEDED Frame  . . . . . . . . . . . . . .  13
      3.2.  The USE_CERTIFICATE Frame . . . . . . . . . . . . . . . .  14
      3.3.  The CERTIFICATE_REQUEST Frame . . . . . . . . . . . . . .  16
-       3.3.1.  Exported Authenticator Request Characteristics  . . .  16
+       3.3.1.  Exported Authenticator Request Characteristics  . . .  17
      3.4.  The CERTIFICATE Frame . . . . . . . . . . . . . . . . . .  17
        3.4.1.  Exported Authenticator Characteristics  . . . . . . .  18
    4.  Indicating Failures During HTTP-Layer Certificate
        Authentication  . . . . . . . . . . . . . . . . . . . . . . .  19
-   5.  Required Domain Certificate Extension . . . . . . . . . . . .  19
-   6.  Security Considerations . . . . . . . . . . . . . . . . . . .  20
-     6.1.  Impersonation . . . . . . . . . . . . . . . . . . . . . .  20
+     4.1.  Misbehavior . . . . . . . . . . . . . . . . . . . . . . .  19
+     4.2.  Invalid Certificates  . . . . . . . . . . . . . . . . . .  20
+   5.  Required Domain Certificate Extension . . . . . . . . . . . .  20
+   6.  Security Considerations . . . . . . . . . . . . . . . . . . .  21
+     6.1.  Impersonation . . . . . . . . . . . . . . . . . . . . . .  21
      6.2.  Fingerprinting  . . . . . . . . . . . . . . . . . . . . .  21
      6.3.  Denial of Service . . . . . . . . . . . . . . . . . . . .  22
-     6.4.  Persistence of Service  . . . . . . . . . . . . . . . . .  22
-     6.5.  Confusion About State . . . . . . . . . . . . . . . . . .  22
 
 
 
@@ -114,21 +114,23 @@ Bishop, et al.          Expires November 15, 2020               [Page 2]
 Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
 
 
-   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  22
+     6.4.  Persistence of Service  . . . . . . . . . . . . . . . . .  22
+     6.5.  Confusion About State . . . . . . . . . . . . . . . . . .  23
+   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  23
      7.1.  HTTP/2 Settings . . . . . . . . . . . . . . . . . . . . .  23
      7.2.  New HTTP/2 Frames . . . . . . . . . . . . . . . . . . . .  23
-     7.3.  New HTTP/2 Error Codes  . . . . . . . . . . . . . . . . .  23
+     7.3.  New HTTP/2 Error Codes  . . . . . . . . . . . . . . . . .  24
    8.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  24
      8.1.  Normative References  . . . . . . . . . . . . . . . . . .  24
      8.2.  Informative References  . . . . . . . . . . . . . . . . .  25
-     8.3.  URIs  . . . . . . . . . . . . . . . . . . . . . . . . . .  25
+     8.3.  URIs  . . . . . . . . . . . . . . . . . . . . . . . . . .  26
    Appendix A.  Change Log . . . . . . . . . . . . . . . . . . . . .  26
      A.1.  Since draft-ietf-httpbis-http2-secondary-certs-04:  . . .  26
      A.2.  Since draft-ietf-httpbis-http2-secondary-certs-03:  . . .  26
      A.3.  Since draft-ietf-httpbis-http2-secondary-certs-02:  . . .  26
      A.4.  Since draft-ietf-httpbis-http2-secondary-certs-01:  . . .  26
      A.5.  Since draft-ietf-httpbis-http2-secondary-certs-00:  . . .  26
-     A.6.  Since draft-bishop-httpbis-http2-additional-certs-05: . .  26
+     A.6.  Since draft-bishop-httpbis-http2-additional-certs-05: . .  27
    Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  27
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  27
 
@@ -157,8 +159,6 @@ Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
    the TLS handshake.  In many cases, servers choose to maintain
    separate certificates for different origins but still desire the
    benefits of a shared HTTP connection.
-
-
 
 
 
@@ -589,10 +589,14 @@ Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
    Empty Authenticator, as described in Section 5 of
    [I-D.ietf-tls-exported-authenticator], in a "CERTIFICATE" frame in
    response to the request, followed by a "USE_CERTIFICATE" frame for
-   stream zero which references the Empty Authenticator.  In this case,
-   or if the server has not advertised support for HTTP-layer
-   certificates, the client MUST NOT send any requests for resources in
-   that origin on the current connection.
+   stream zero which references the Empty Authenticator.
+
+   If a server has not advertised support for HTTP-layer certificates,
+   fails to provide a requested certificate, or provides a certificate
+   which is unacceptable to the client, the client MUST NOT send any
+   requests for resources in that origin on the current connection.  The
+   client MAY open a new connection in an effort to reach an
+   authoritative server.
 
    Client                                      Server
       <----------------------- (stream 0) ORIGIN --
@@ -605,11 +609,7 @@ Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
 
                   Figure 5: Client-requested certificate
 
-   If a client receives a "PUSH_PROMISE" referencing an origin for which
-   it has not yet received the server's certificate, this is a fatal
-   connection error (see section 8.2 of [RFC7540]).  To avoid this,
-   servers MUST supply the associated certificates before pushing
-   resources from a different origin.
+
 
 
 
@@ -617,6 +617,12 @@ Bishop, et al.          Expires November 15, 2020              [Page 11]
 
 Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
 
+
+   If a client receives a "PUSH_PROMISE" referencing an origin for which
+   it has not yet received the server's certificate, this is a stream
+   error (see section 8.2 of [RFC7540]).  To avoid this, servers MUST
+   supply the associated certificates before pushing resources from a
+   different origin.
 
 2.3.2.  Requiring Additional Client Certificates
 
@@ -642,11 +648,14 @@ Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
    an Empty Authenticator, as described in Section 5 of
    [I-D.ietf-tls-exported-authenticator], in a "CERTIFICATE" frame in
    response to the request, followed by a "USE_CERTIFICATE" frame which
-   references the Empty Authenticator.  In this case, or if the client
-   has not advertised support for HTTP-layer certificates, the server
-   processes the request based solely on the certificate provided during
-   the TLS handshake, if any.  This might result in an error response
-   via HTTP, such as a status code 403 (Not Authorized).
+   references the Empty Authenticator.
+
+   If the client has not advertised support for HTTP-layer certificates,
+   fails to provide a requested certificate, or provides a certificate
+   the server is unable to verify, the server processes the request
+   based solely on the certificate provided during the TLS handshake, if
+   any.  This might result in an error response via HTTP, such as a
+   status code 403 (Not Authorized).
 
 3.  Certificates Frames for HTTP/2
 
@@ -655,6 +664,15 @@ Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
    "CERTIFICATE_NEEDED" frames with the same "Request-ID" value MAY be
    sent for other streams where the sender is expecting a certificate
    with the same parameters.
+
+
+
+
+
+Bishop, et al.          Expires November 15, 2020              [Page 12]
+
+Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
+
 
    The "CERTIFICATE", and "USE_CERTIFICATE" frames are correlated by
    their "Cert-ID" field.  Subsequent "USE_CERTIFICATE" frames with the
@@ -666,13 +684,6 @@ Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
    are not responses to "CERTIFICATE_NEEDED" frames; otherwise, each
    "USE_CERTIFICATE" frame for a stream is considered to respond to a
    "CERTIFICATE_NEEDED" frame for the same stream in sequence.
-
-
-
-Bishop, et al.          Expires November 15, 2020              [Page 12]
-
-Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
-
 
       +---------+           +---------+
       | REQUEST |           |   CERT  |
@@ -712,6 +723,13 @@ Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
 
                 Figure 8: CERTIFICATE_NEEDED frame payload
 
+
+
+Bishop, et al.          Expires November 15, 2020              [Page 13]
+
+Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
+
+
    The "CERTIFICATE_NEEDED" frame contains 6 octets.  The first four
    octets indicate the Stream ID of the affected stream.  The following
    two octets are the authentication request identifier, "Request-ID".
@@ -722,14 +740,6 @@ Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
 
    A server MAY send multiple "CERTIFICATE_NEEDED" frames for the same
    stream.  If a server requires that a client provide multiple
-
-
-
-Bishop, et al.          Expires November 15, 2020              [Page 13]
-
-Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
-
-
    certificates before authorizing a single request, each required
    certificate MUST be indicated with a separate "CERTIFICATE_NEEDED"
    frame, each of which MUST have a different request identifier
@@ -745,7 +755,9 @@ Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
    The "CERTIFICATE_NEEDED" frame MUST NOT be sent to a client which has
    not advertised the "SETTINGS_HTTP_CLIENT_CERT_AUTH", or to a server
    which has not advertised the "SETTINGS_HTTP_SERVER_CERT_AUTH"
-   setting.
+   setting.  An endpoint which receives a "CERTIFICATE_NEEDED" frame but
+   did not advertise support MAY treat this as a connection error of
+   type "CERTIFICATE_WITHOUT_CONSENT".
 
    The "CERTIFICATE_NEEDED" frame MUST NOT reference a stream in the
    "half-closed (local)" or "closed" states [RFC7540].  A client that
@@ -766,6 +778,14 @@ Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
 
    The payload of the "USE_CERTIFICATE" frame is as follows:
 
+
+
+
+Bishop, et al.          Expires November 15, 2020              [Page 14]
+
+Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
+
+
      0                   1                   2                   3
      0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
     +---------------------------------------------------------------+
@@ -778,14 +798,6 @@ Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
 
    The first four octets indicate the Stream ID of the affected stream.
    The following two octets, if present, contain the two-octet "Cert-ID"
-
-
-
-Bishop, et al.          Expires November 15, 2020              [Page 14]
-
-Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
-
-
    of the certificate the sender wishes to use.  This MUST be the ID of
    a certificate for which proof of possession has been presented in a
    "CERTIFICATE" frame.  Recipients of a "USE_CERTIFICATE" frame of any
@@ -821,6 +833,15 @@ Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
    Receipt of a "USE_CERTIFICATE" frame with an unknown "Cert-ID" MUST
    result in a stream error of type "PROTOCOL_ERROR".
 
+
+
+
+
+Bishop, et al.          Expires November 15, 2020              [Page 15]
+
+Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
+
+
    The referenced certificate chain needs to conform to the requirements
    expressed in the "CERTIFICATE_REQUEST" to the best of the sender's
    ability, or the recipient is likely to reject it as unsuitable
@@ -830,17 +851,6 @@ Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
    error [RFC7540] on any stream where the certificate is used.
    Section 4 defines certificate-related error codes which might be
    applicable.
-
-
-
-
-
-
-
-Bishop, et al.          Expires November 15, 2020              [Page 15]
-
-Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
-
 
 3.3.  The CERTIFICATE_REQUEST Frame
 
@@ -876,6 +886,18 @@ Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
       "request" API described in [I-D.ietf-tls-exported-authenticator].
       See Section 3.4.1 for more details on the input to this API.
 
+
+
+
+
+
+
+
+Bishop, et al.          Expires November 15, 2020              [Page 16]
+
+Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
+
+
 3.3.1.  Exported Authenticator Request Characteristics
 
    The Exported Authenticator "request" API defined in
@@ -890,13 +912,6 @@ Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
    verify that the first two octets of the authenticator's
    "certificate_request_context" matches the Request-ID presented in the
    frame.
-
-
-
-Bishop, et al.          Expires November 15, 2020              [Page 16]
-
-Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
-
 
    The TLS library on the authenticating peer will provide mechanisms to
    select an appropriate certificate to respond to the transported
@@ -932,6 +947,13 @@ Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
 
    The frame contains the following fields:
 
+
+
+Bishop, et al.          Expires November 15, 2020              [Page 17]
+
+Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
+
+
    Cert-ID:  "Cert-ID" is a 16-bit opaque identifier used to correlate
       other certificate- related frames with this exported authenticator
       fragment.
@@ -944,15 +966,6 @@ Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
    Authenticator Fragment:  A portion of the opaque data returned from
       the TLS connection exported authenticator "authenticate" API.  See
       Section 3.4.1 for more details on the input to this API.
-
-
-
-
-
-Bishop, et al.          Expires November 15, 2020              [Page 17]
-
-Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
-
 
    An exported authenticator is transported in zero or more
    "CERTIFICATE" frames with the "TO_BE_CONTINUED" flag set, followed by
@@ -990,6 +1003,13 @@ Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
    Upon receipt of a "CERTIFICATE" frame, an endpoint MUST perform the
    following steps to validate the token it contains:
 
+
+
+Bishop, et al.          Expires November 15, 2020              [Page 18]
+
+Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
+
+
    o  Verify that either the "UNSOLICITED" flag is set (clients only) or
       that the Request-ID field contains the Request-ID of a previously-
       sent "CERTIFICATE_REQUEST" frame.
@@ -1002,13 +1022,8 @@ Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
    o  Use the "validate" API to confirm the validity of the
       authenticator with regard to the generated request (if any).
 
-
-
-
-Bishop, et al.          Expires November 15, 2020              [Page 18]
-
-Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
-
+   If the authenticator cannot be validated, this SHOULD be treated as a
+   connection error of type "CERTIFICATE_UNREADABLE".
 
    Once the authenticator is accepted, the endpoint can perform any
    other checks for the acceptability of the certificate itself.
@@ -1021,42 +1036,27 @@ Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
    Because this draft permits certificates to be exchanged at the HTTP
    framing layer instead of the TLS layer, several certificate-related
    errors which are defined at the TLS layer might now occur at the HTTP
-   framing layer.  In this section, those errors are restated and added
-   to the HTTP/2 error code registry.
+   framing layer.
 
-   BAD_CERTIFICATE (0xERROR-TBD1):  A certificate was corrupt, contained
-      signatures that did not verify correctly, etc.
+   There are two classes of errors which might be encountered, and they
+   are handled differently.
 
-   UNSUPPORTED_CERTIFICATE (0xERROR-TBD2):  A certificate was of an
-      unsupported type or did not contain required extensions
+4.1.  Misbehavior
 
-   CERTIFICATE_REVOKED (0xERROR-TBD3):  A certificate was revoked by its
-      signer
+   This category of errors could indicate a peer failing to follow
+   restrictions in this document, or might indicate that the connection
+   is not fully secure.  These errors are fatal to stream or connection,
+   as appropriate.
 
-   CERTIFICATE_EXPIRED (0xERROR-TBD4):  A certificate has expired or is
-      not currently valid
-
-   CERTIFICATE_GENERAL (0xERROR-TBD5):  Any other certificate-related
-      error
-
-   CERTIFICATE_OVERUSED (0xERROR-TBD6):  More certificates were used on
+   CERTIFICATE_OVERUSED (0xERROR-TBD1):  More certificates were used on
       a request than were requested
 
-   As described in [RFC7540], implementations MAY choose to treat a
-   stream error as a connection error at any time.  Of particular note,
-   a stream error cannot occur on stream 0, which means that
-   implementations cannot send non-session errors in response to
-   "CERTIFICATE_REQUEST", and "CERTIFICATE" frames.  Implementations
-   which do not wish to terminate the connection MAY either send
-   relevant errors on any stream which references the failing
-   certificate in question or process the requests as unauthenticated
-   and provide error information at the HTTP semantic layer.
+   CERTIFICATE_WITHOUT_CONSENT (0xERROR-TBD2):  A CERTIFICATE_NEEDED
+      frame was received by a peer which did not indicate support for
+      this extension.
 
-5.  Required Domain Certificate Extension
-
-   The Required Domain extension allows certificates to limit their use
-   with Secondary Certificate Authentication.  A client MUST verify that
-   the server has proven ownership of the indicated identity before
+   CERTIFICATE_UNREADABLE (0xERROR-TBD3):  An exported authenticator
+      could not be validated.
 
 
 
@@ -1066,6 +1066,21 @@ Bishop, et al.          Expires November 15, 2020              [Page 19]
 Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
 
 
+4.2.  Invalid Certificates
+
+   Unacceptable certificates (expired, revoked, or insufficient to
+   satisfy the request) are not treated as stream or connection errors.
+   This is typically not an indication of a protocol failure.  Servers
+   SHOULD process requests with the indicated certificate, likely
+   resulting in a "4XX"-series status code in the response.  Clients
+   SHOULD establish a new connection in an attempt to reach an
+   authoritative server.
+
+5.  Required Domain Certificate Extension
+
+   The Required Domain extension allows certificates to limit their use
+   with Secondary Certificate Authentication.  A client MUST verify that
+   the server has proven ownership of the indicated identity before
    accepting the limited certificate over Secondary Certificate
    Authentication.
 
@@ -1096,6 +1111,17 @@ Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
 
    RequiredDomain ::= GeneralName
 
+
+
+
+
+
+
+Bishop, et al.          Expires November 15, 2020              [Page 20]
+
+Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
+
+
 6.  Security Considerations
 
    This mechanism defines an alternate way to obtain server and client
@@ -1114,13 +1140,6 @@ Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
    hostnames presented in secondary certificates if they would have done
    so for the same hostname if it were present in the primary
    certificate.
-
-
-
-Bishop, et al.          Expires November 15, 2020              [Page 20]
-
-Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
-
 
    As recommended in [RFC8336], clients opting not to consult DNS ought
    to employ some alternative means to increase confidence that the
@@ -1150,6 +1169,15 @@ Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
    This draft defines a mechanism which could be used to probe servers
    for origins they support, but opens no new attack versus making
    repeat TLS connections with different SNI values.  Servers SHOULD
+
+
+
+
+Bishop, et al.          Expires November 15, 2020              [Page 21]
+
+Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
+
+
    impose similar denial-of-service mitigations (e.g. request rate
    limits) to "CERTIFICATE_REQUEST" frames as to new TLS connections.
 
@@ -1165,18 +1193,6 @@ Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
    mechanism.  The hostnames a user agent finds interesting and
    retrieves certificates for might indicate origins the user has
    previously accessed.
-
-
-
-
-
-
-
-
-Bishop, et al.          Expires November 15, 2020              [Page 21]
-
-Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
-
 
 6.3.  Denial of Service
 
@@ -1211,6 +1227,13 @@ Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
    something about which third-party providers SHOULD educate their
    customers before using the features described in this document.
 
+
+
+Bishop, et al.          Expires November 15, 2020              [Page 22]
+
+Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
+
+
 6.5.  Confusion About State
 
    Implementations need to be aware of the potential for confusion about
@@ -1224,15 +1247,6 @@ Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
 7.  IANA Considerations
 
    This draft adds entries in three registries.
-
-
-
-
-
-Bishop, et al.          Expires November 15, 2020              [Page 22]
-
-Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
-
 
    The feature negotiation settings is registered in Section 7.1.  Four
    frame types are registered in Section 7.2.  Six error codes are
@@ -1259,6 +1273,23 @@ Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
    registry established in [RFC7540].  The entries in the following
    table are registered by this document.
 
+
+
+
+
+
+
+
+
+
+
+
+
+Bishop, et al.          Expires November 15, 2020              [Page 23]
+
+Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
+
+
           +---------------------+--------------+---------------+
           | Frame Type          | Code         | Specification |
           +---------------------+--------------+---------------+
@@ -1277,34 +1308,15 @@ Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
    registry established in [RFC7540].  The entries in the following
    table are registered by this document.
 
-
-
-
-
-
-
-
-
-Bishop, et al.          Expires November 15, 2020              [Page 23]
-
-Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
-
-
-        +-------------------------+--------------+---------------+
-        | Name                    | Code         | Specification |
-        +-------------------------+--------------+---------------+
-        | BAD_CERTIFICATE         | 0xERROR-TBD1 | Section 4     |
-        |                         |              |               |
-        | UNSUPPORTED_CERTIFICATE | 0xERROR-TBD2 | Section 4     |
-        |                         |              |               |
-        | CERTIFICATE_REVOKED     | 0xERROR-TBD3 | Section 4     |
-        |                         |              |               |
-        | CERTIFICATE_EXPIRED     | 0xERROR-TBD4 | Section 4     |
-        |                         |              |               |
-        | CERTIFICATE_GENERAL     | 0xERROR-TBD5 | Section 4     |
-        |                         |              |               |
-        | CERTIFICATE_OVERUSED    | 0xERROR-TBD6 | Section 4     |
-        +-------------------------+--------------+---------------+
+      +-----------------------------+--------------+---------------+
+      | Name                        | Code         | Specification |
+      +-----------------------------+--------------+---------------+
+      | CERTIFICATE_OVERUSED        | 0xERROR-TBD1 | Section 4     |
+      |                             |              |               |
+      | CERTIFICATE_WITHOUT_CONSENT | 0xERROR-TBD2 | Section 4     |
+      |                             |              |               |
+      | CERTIFICATE_UNREADABLE      | 0xERROR-TBD3 | Section 4     |
+      +-----------------------------+--------------+---------------+
 
 8.  References
 
@@ -1325,6 +1337,15 @@ Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
               DOI 10.17487/RFC5246, August 2008,
               <https://www.rfc-editor.org/info/rfc5246>.
 
+
+
+
+
+Bishop, et al.          Expires November 15, 2020              [Page 24]
+
+Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
+
+
    [RFC5280]  Cooper, D., Santesson, S., Farrell, S., Boeyen, S.,
               Housley, R., and W. Polk, "Internet X.509 Public Key
               Infrastructure Certificate and Certificate Revocation List
@@ -1335,16 +1356,6 @@ Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
               Extensions: Extension Definitions", RFC 6066,
               DOI 10.17487/RFC6066, January 2011,
               <https://www.rfc-editor.org/info/rfc6066>.
-
-
-
-
-
-
-Bishop, et al.          Expires November 15, 2020              [Page 24]
-
-Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
-
 
    [RFC6844]  Hallam-Baker, P. and R. Stradling, "DNS Certification
               Authority Authorization (CAA) Resource Record", RFC 6844,
@@ -1383,17 +1394,6 @@ Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
               RFC 8336, DOI 10.17487/RFC8336, March 2018,
               <https://www.rfc-editor.org/info/rfc8336>.
 
-8.3.  URIs
-
-   [1] https://lists.w3.org/Archives/Public/ietf-http-wg/
-
-   [2] http://httpwg.github.io/
-
-   [3] https://github.com/httpwg/http-extensions/labels/secondary-certs
-
-
-
-
 
 
 
@@ -1401,6 +1401,14 @@ Bishop, et al.          Expires November 15, 2020              [Page 25]
 
 Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
 
+
+8.3.  URIs
+
+   [1] https://lists.w3.org/Archives/Public/ietf-http-wg/
+
+   [2] http://httpwg.github.io/
+
+   [3] https://github.com/httpwg/http-extensions/labels/secondary-certs
 
 Appendix A.  Change Log
 
@@ -1440,14 +1448,6 @@ A.5.  Since draft-ietf-httpbis-http2-secondary-certs-00:
    o  All frames sent on stream zero; replaced "AUTOMATIC_USE" on
       "CERTIFICATE" with "UNSOLICITED" on "USE_CERTIFICATE". (#482,#566)
 
-   o  Use Exported Requests from the TLS Exported Authenticators draft;
-      eliminate facilities for expressing certificate requirements in
-      "CERTIFICATE_REQUEST" frame. (#481)
-
-A.6.  Since draft-bishop-httpbis-http2-additional-certs-05:
-
-   o  Adopted as draft-ietf-httpbis-http2-secondary-certs
-
 
 
 
@@ -1457,6 +1457,14 @@ Bishop, et al.          Expires November 15, 2020              [Page 26]
 
 Internet-Draft        Secondary Cert Auth in HTTP/2             May 2020
 
+
+   o  Use Exported Requests from the TLS Exported Authenticators draft;
+      eliminate facilities for expressing certificate requirements in
+      "CERTIFICATE_REQUEST" frame. (#481)
+
+A.6.  Since draft-bishop-httpbis-http2-additional-certs-05:
+
+   o  Adopted as draft-ietf-httpbis-http2-secondary-certs
 
 Acknowledgements
 
@@ -1484,14 +1492,6 @@ Authors' Addresses
    Mozilla
 
    Email: martin.thomson@gmail.com
-
-
-
-
-
-
-
-
 
 
 
