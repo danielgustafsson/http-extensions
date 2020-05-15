@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-05-14T18:56:15.131588+00:00",
+  "timestamp": "2020-05-15T11:52:10.125423+00:00",
   "repo": "httpwg/http-extensions",
   "labels": [
     {
@@ -26954,7 +26954,7 @@
       "id": "MDU6SXNzdWU1NzQ5MzIzNDU=",
       "title": "Split secondary certs SETTINGS advertisement in two",
       "url": "https://github.com/httpwg/http-extensions/issues/1087",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "davidben",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
@@ -26963,8 +26963,8 @@
       ],
       "body": "The current advertisement scheme does not allow for a client to decide it is willing to implement secondary server certificates but not client certificates or vice versa.\r\n\r\nIt may be worth having two SETTINGS values, one for whether you're willing to do either of the two flows.",
       "createdAt": "2020-03-03T20:47:45Z",
-      "updatedAt": "2020-03-03T20:47:45Z",
-      "closedAt": null,
+      "updatedAt": "2020-05-14T19:05:06Z",
+      "closedAt": "2020-05-14T19:05:06Z",
       "comments": []
     },
     {
@@ -26972,7 +26972,7 @@
       "id": "MDU6SXNzdWU1NzQ5MzI1MDg=",
       "title": "Handling of invalid secondary server certificates is unclear",
       "url": "https://github.com/httpwg/http-extensions/issues/1088",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "davidben",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
@@ -26981,8 +26981,8 @@
       ],
       "body": "It is very unclear from the draft how exactly the client should handle a secondary server certificate it rejects. Presumably a bad secondary certificate should not be fatal to streams which don't use it. The draft seems to handwaive at this (though not very clearly, which means uncertainty for the server) in section 4.\r\n\r\nAt the same time, the draft says:\r\n\r\n>   If a client receives a \"PUSH_PROMISE\" referencing an origin for which\r\n>   it has not yet received the server's certificate, this is a fatal\r\n>   connection error (see section 8.2 of [RFC7540]).  To avoid this,\r\n>   servers MUST supply the associated certificates before pushing\r\n>   resources from a different origin.\r\n\r\nThis is inconsistent with that idea. Suppose the server pushes some CERTIFICATE frame along with some resources it thinks the client would want. If the client rejects that certificate, this text implies the client must tear down the entire connection, interrupting unrelated requests.\r\n\r\nA useful heuristic for reasoning through all this would be to consider a client which blindly rejects every secondary certificate. This is especially relevant if the draft does not act on #1087.",
       "createdAt": "2020-03-03T20:48:00Z",
-      "updatedAt": "2020-04-14T19:37:21Z",
-      "closedAt": null,
+      "updatedAt": "2020-05-14T19:14:08Z",
+      "closedAt": "2020-05-14T19:14:08Z",
       "comments": [
         {
           "author": "MikeBishop",
@@ -27016,7 +27016,7 @@
       "id": "MDU6SXNzdWU1NzQ5MzI1Nzg=",
       "title": "Semantics of secondary client certificates are unclear",
       "url": "https://github.com/httpwg/http-extensions/issues/1090",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "davidben",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
@@ -27025,8 +27025,8 @@
       ],
       "body": "The secondary certificates draft leaves the authentication state of exchanges like the following unclear:\r\n\r\n```\r\n   Client                                      Server\r\n      -- (stream 1) GET /a --------------->\r\n      <---------- (stream 0) CERTIFICATE_REQUEST --\r\n      <----- (stream 0) CERTIFICATE_NEEDED (S=1) --\r\n      -- (stream 0) CERTIFICATE A ------------------>\r\n      -- (stream 0) USE_CERTIFICATE (S=1) -------->\r\n      <----------------------- (stream 1) 200 OK --\r\n\r\n      -- (stream 3) GET /b --------------->\r\n      <----------------------- (stream 3) 200 OK --\r\n```\r\n\r\nIn stream 1, the client is unambiguously using certificate A in the request to `/a`. Is it also using it for `/b`? If the client believes the answer is no, while the server believes the answer is yes, secondary certificates introduces a [confused deputy problem](https://en.wikipedia.org/wiki/Confused_deputy_problem). Some examples to consider:\r\n\r\n* HTTP/2 cross-name pooling means one connection may service multiple origins. The client may choose to use a client certificate with some origins but not others.\r\n* The web platform makes both anonymous and credentialed requests (see CORS). Keeping those straight is critical to avoid CSRF attacks. For now, browsers do not pool them due to various problematic connection-level auth mechanisms in HTTP/1.1, but there is discussion on relaxing this for the vast majority of connections that don't use these. This puts a heavier dependency on protocols getting these kinds of details right.\r\n\r\nThis is especially important to make unambiguous because the original renegotiation-based hack for reactive client auth *did* rely on ambient authority. Once you renegotiated with a certificate, the unwritten interpretation was that all subsequent requests on this connection pick up the certificate. A server implementation may then be tempted to apply a similar logic to client certificates. The spec needs a MUST-level requirement not to do this, and make it clear that this is a server security vulnerability. Instead, client wishing to approximate the original renegotiation-based hack would send proactive `USE_CERTIFICATE` frames on subsequent credentialed requests.\r\n\r\nThis is especially important for HTTP/2, where there is both larger scope of pooling from cross-name bits and where multiplexing means we requests overlap temporally.",
       "createdAt": "2020-03-03T20:48:10Z",
-      "updatedAt": "2020-03-03T20:48:10Z",
-      "closedAt": null,
+      "updatedAt": "2020-05-14T19:21:58Z",
+      "closedAt": "2020-05-14T19:21:58Z",
       "comments": []
     },
     {
@@ -60306,7 +60306,7 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NDAzMzgzMzMw",
       "title": "Split setting into client and server values",
       "url": "https://github.com/httpwg/http-extensions/pull/1151",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "MikeBishop",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
@@ -60315,26 +60315,28 @@
       ],
       "body": "Fixes #1087.  Instead of a four-byte exporter, uses an eight-byte exporter and splits into two values.  Support for exchanging server certificates and client certificates is now indicated separately.",
       "createdAt": "2020-04-14T19:55:30Z",
-      "updatedAt": "2020-04-14T20:33:55Z",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "comments": [],
-      "reviews": [],
+      "updatedAt": "2020-05-14T19:05:08Z",
       "baseRepository": "httpwg/http-extensions",
       "baseRefName": "master",
       "baseRefOid": "29fff7f850ad9f4930d0cdd935523c5b7d190df6",
       "headRepository": "httpwg/http-extensions",
       "headRefName": "sc/split_settings",
-      "headRefOid": "2d0f39323c3c90751c95fbf4fbc0b9c1ded6d326",
-      "mergeCommit": null
+      "headRefOid": "808d1f6d9c1862100193c78f4e8e4097cfc90355",
+      "closedAt": "2020-05-14T19:05:06Z",
+      "mergedAt": "2020-05-14T19:05:06Z",
+      "mergedBy": "MikeBishop",
+      "mergeCommit": {
+        "oid": "d70c57fc564c87e4dd297609d078fb452a04ec77"
+      },
+      "comments": [],
+      "reviews": []
     },
     {
       "number": 1152,
       "id": "MDExOlB1bGxSZXF1ZXN0NDAzNDAwMDg1",
       "title": "Secondary Cert error handling",
       "url": "https://github.com/httpwg/http-extensions/pull/1152",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "MikeBishop",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
@@ -60343,26 +60345,28 @@
       ],
       "body": "Fixes #1088, though I'm not sure it's yet precise enough.  There are three general classes of errors:\r\n\r\n- The peer **did something wrong**.  There are relatively few of these possible -- indicating more certificates to use than were requested, or more than one unsolicited certificate; sending CERTIFICATE_NEEDED to a peer that didn't indicate support for this extension.\r\n- The **authenticator is corrupt**.  This might indicate a problem with the TLS connection.\r\n- The **certificate isn't acceptable**.  There are lots of reasons this might happen.\r\n\r\nThe first two should be at least stream and possibly connection errors.  The latter should be handled at the HTTP layer, but previously had error codes defined for them.  This PR removes several error codes and recommends handling at the HTTP layer if the certificate isn't accepted.",
       "createdAt": "2020-04-14T20:33:30Z",
-      "updatedAt": "2020-04-14T20:36:01Z",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "comments": [],
-      "reviews": [],
+      "updatedAt": "2020-05-14T19:14:09Z",
       "baseRepository": "httpwg/http-extensions",
       "baseRefName": "master",
-      "baseRefOid": "29fff7f850ad9f4930d0cdd935523c5b7d190df6",
+      "baseRefOid": "d70c57fc564c87e4dd297609d078fb452a04ec77",
       "headRepository": "httpwg/http-extensions",
       "headRefName": "sc/non-nuclear",
-      "headRefOid": "5711ab7cf39489773df752ffa1e3df2dcf5003f4",
-      "mergeCommit": null
+      "headRefOid": "399d4b41386c4e7cd48dd6842b8694faf6de7640",
+      "closedAt": "2020-05-14T19:14:08Z",
+      "mergedAt": "2020-05-14T19:14:08Z",
+      "mergedBy": "MikeBishop",
+      "mergeCommit": {
+        "oid": "db2a8b0432ff11276e3f5460a614c1c696a46f1f"
+      },
+      "comments": [],
+      "reviews": []
     },
     {
       "number": 1153,
       "id": "MDExOlB1bGxSZXF1ZXN0NDAzNDA0NjIx",
       "title": "Confused deputy should be clear",
       "url": "https://github.com/httpwg/http-extensions/pull/1153",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "MikeBishop",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
@@ -60371,17 +60375,19 @@
       ],
       "body": "Automatic use of client-proffered certificates was removed a while back; clients can indicate which certificate (if any) they want the server to consider by sending a `USE_CERTIFICATE` frame with the `UNSOLICITED` flag set.\r\n\r\nThere was text talking about automatic use of the server-proffered certificates, but there wasn't corresponding text disallowing that behavior for client certificates, simply the absence of permission.  This PR forbids considering \"available\" certificates until the client indicates which certificate to use.\r\n\r\nFixes #1090.",
       "createdAt": "2020-04-14T20:44:05Z",
-      "updatedAt": "2020-05-14T18:54:53Z",
+      "updatedAt": "2020-05-14T19:21:59Z",
       "baseRepository": "httpwg/http-extensions",
       "baseRefName": "master",
       "baseRefOid": "29fff7f850ad9f4930d0cdd935523c5b7d190df6",
       "headRepository": "httpwg/http-extensions",
       "headRefName": "sc/confused_deputy",
       "headRefOid": "d35f070c3795a0b88643c7064c45a96bab3a6754",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2020-05-14T19:21:58Z",
+      "mergedAt": "2020-05-14T19:21:58Z",
+      "mergedBy": "MikeBishop",
+      "mergeCommit": {
+        "oid": "062680fee8235cee9aa1fd1bdbd960d614932a88"
+      },
       "comments": [],
       "reviews": []
     },
@@ -60919,13 +60925,13 @@
       ],
       "body": "This attempts to address #1096 and #1079. It might help towards overcoming the headers vs frames debate.\r\n\r\nI made the call to restrict the PRIORITY_UPDATE frame to only be sent by clients.\r\n\r\nIt replaces ASCII art with new QUIC-style frame definitions.",
       "createdAt": "2020-04-30T13:45:24Z",
-      "updatedAt": "2020-05-14T14:56:10Z",
+      "updatedAt": "2020-05-15T11:51:26Z",
       "baseRepository": "httpwg/http-extensions",
       "baseRefName": "master",
       "baseRefOid": "f40438f4582d1fdb5b894f382ce341686e38e7c3",
       "headRepository": "httpwg/http-extensions",
       "headRefName": "priority-update-frames",
-      "headRefOid": "3b5c4e9e047060875f7c6590400e141c8072a71b",
+      "headRefOid": "31afbf593acc297a4d434f0b4bb7efce314648d6",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -60963,13 +60969,13 @@
               "originalPosition": 21,
               "body": "```suggestion\r\nHaving two mechanisms to carry the initial priority signal brings the dilemma of\r\n```",
               "createdAt": "2020-05-05T17:50:00Z",
-              "updatedAt": "2020-05-06T13:11:55Z"
+              "updatedAt": "2020-05-15T11:51:26Z"
             },
             {
               "originalPosition": 61,
               "body": "```suggestion\r\nof any other value MUST be treated as a connection error of type PROTOCOL_ERROR.\r\n```",
               "createdAt": "2020-05-05T17:51:18Z",
-              "updatedAt": "2020-05-06T13:11:55Z"
+              "updatedAt": "2020-05-15T11:51:26Z"
             }
           ]
         },
@@ -60989,7 +60995,7 @@
               "originalPosition": 21,
               "body": "+1",
               "createdAt": "2020-05-05T18:05:45Z",
-              "updatedAt": "2020-05-06T13:11:55Z"
+              "updatedAt": "2020-05-15T11:51:26Z"
             }
           ]
         },
@@ -61009,7 +61015,7 @@
               "originalPosition": 45,
               "body": "Should be more like\r\n\r\n```\r\n  Therefore, a client cannot reprioritize a response by\r\n  sending additional metadata (e.g., trailer fields) on the request stream.\r\n  We avoid interoperability failure by restricting PRIORITY_UPDATE\r\n  frames to the control stream, with each such frame explicitly identifying\r\n  the stream to which the new priority applies.\r\n```",
               "createdAt": "2020-05-05T18:27:45Z",
-              "updatedAt": "2020-05-06T13:11:55Z"
+              "updatedAt": "2020-05-15T11:51:26Z"
             }
           ]
         },
@@ -61029,7 +61035,7 @@
               "originalPosition": 45,
               "body": "Thanks. I tweaked the suggestion slightly and made cbcdc60cf5a92. PTAL.",
               "createdAt": "2020-05-06T13:13:38Z",
-              "updatedAt": "2020-05-06T13:13:38Z"
+              "updatedAt": "2020-05-15T11:51:26Z"
             }
           ]
         },
@@ -61062,19 +61068,19 @@
               "originalPosition": 131,
               "body": "0x10?",
               "createdAt": "2020-05-14T01:00:08Z",
-              "updatedAt": "2020-05-14T01:11:16Z"
+              "updatedAt": "2020-05-15T11:51:26Z"
             },
             {
               "originalPosition": 11,
               "body": "How about stating that endpoints that do not want to expose an end-to-end signal MAY omit the header field, but send the PRIORITY_UPDATE frame at an early moment assuming that it would reach the server as early as the request headers? Would could go on to explain that in such case, all the responses that the server would send would have the priority in the frame being applied.\r\n\r\nThe benefit of phrasing that way is that we can get rid of the last paragraph of this section.",
               "createdAt": "2020-05-14T01:04:23Z",
-              "updatedAt": "2020-05-14T01:11:16Z"
+              "updatedAt": "2020-05-15T11:51:26Z"
             },
             {
               "originalPosition": 91,
               "body": "Seeing the definition of the frame _headers_ for H2 was surprising to me, though I understand that it reflects the change to the HTTP/3 draft. Maybe I should ask if the change in HTTP/3 is a good thing.",
               "createdAt": "2020-05-14T01:08:39Z",
-              "updatedAt": "2020-05-14T01:11:16Z"
+              "updatedAt": "2020-05-15T11:51:26Z"
             }
           ]
         },
@@ -61094,7 +61100,7 @@
               "originalPosition": 91,
               "body": "As a personal opinion I prefer to see the frame in whole because it avoids having to cross reference to the frame headers, which are defined in some other document. \r\n\r\nBut I can drop them if people want. I see that as an editorial change so perhaps we can avoid blocking this and fix up later if needs be.",
               "createdAt": "2020-05-14T01:21:41Z",
-              "updatedAt": "2020-05-14T01:21:41Z"
+              "updatedAt": "2020-05-15T11:51:26Z"
             }
           ]
         },
@@ -61114,7 +61120,7 @@
               "originalPosition": 91,
               "body": "I agree that this is an editorial issue, and that we need to ask the WG to resolve (because it is about the convention covering all H2 extensions, not just this one).",
               "createdAt": "2020-05-14T01:43:01Z",
-              "updatedAt": "2020-05-14T01:43:01Z"
+              "updatedAt": "2020-05-15T11:51:26Z"
             }
           ]
         },
@@ -61134,7 +61140,7 @@
               "originalPosition": 91,
               "body": "FWIW, ALTSVC is the only extension to have reached RFC status previously.  It [does not include](https://tools.ietf.org/html/rfc7838#section-4) the frame header; only the payload.",
               "createdAt": "2020-05-14T14:41:04Z",
-              "updatedAt": "2020-05-14T14:41:05Z"
+              "updatedAt": "2020-05-15T11:51:26Z"
             }
           ]
         },
@@ -61154,7 +61160,7 @@
               "originalPosition": 91,
               "body": "You forgot ORIGIN frame https://tools.ietf.org/html/rfc8336#section-2.1 which also specifies the frame payload.\r\n\r\nNow that H2 and H3 have different frame format definitions, I think extensions applicable to both will hit this problem. I'd like to figure what people think is the most acceptable way to present things.",
               "createdAt": "2020-05-14T14:53:09Z",
-              "updatedAt": "2020-05-14T14:53:09Z"
+              "updatedAt": "2020-05-15T11:51:26Z"
             }
           ]
         },
@@ -61174,7 +61180,7 @@
               "originalPosition": 91,
               "body": "One option would be to write documents that update RFC 7838 and RFC 8336 to use the new format and define the H3 frame at the same time...",
               "createdAt": "2020-05-14T14:56:10Z",
-              "updatedAt": "2020-05-14T14:56:10Z"
+              "updatedAt": "2020-05-15T11:51:26Z"
             }
           ]
         }
