@@ -362,7 +362,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
    appropriate.  Likewise, they can refer its field value as a
    "structured header value", "structured trailer value" or "structured
    field value" as necessary.  Field definitions are encouraged to use
-   the ABNF rules beginning with "sh-" defined in this specification;
+   the ABNF rules beginning with "sf-" defined in this specification;
    other rules in this specification are not intended for their use.
 
    For example, a fictitious Foo-Example header field might be specified
@@ -403,7 +403,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
    Foo-Example is a Item Structured Header [RFCxxxx]. Its value MUST be
    an Integer (Section Y.Y of [RFCxxxx]). Its ABNF is:
 
-     Foo-Example = sh-integer
+     Foo-Example = sf-integer
 
    Its value indicates the amount of Foo in the message, and MUST
    be between 0 and 10, inclusive; other values MUST cause
@@ -458,8 +458,8 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
    The ABNF for Lists in HTTP fields is:
 
-   sh-list       = list-member *( *SP "," *SP list-member )
-   list-member   = sh-item / inner-list
+   sf-list       = list-member *( *SP "," *SP list-member )
+   list-member   = sf-item / inner-list
 
    Each member is separated by a comma and optional whitespace.  For
    example, a field whose value is defined as a List of Strings could
@@ -495,7 +495,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
    The ABNF for Inner Lists is:
 
-   inner-list    = "(" *SP [ sh-item *( 1*SP sh-item ) *SP ] ")"
+   inner-list    = "(" *SP [ sf-item *( 1*SP sf-item ) *SP ] ")"
                    parameters
 
 
@@ -585,10 +585,10 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
    The ABNF for Dictionaries is:
 
-   sh-dictionary  = dict-member *( *SP "," *SP dict-member )
+   sf-dictionary  = dict-member *( *SP "," *SP dict-member )
    dict-member    = member-name [ "=" member-value ]
    member-name    = key
-   member-value   = sh-item / inner-list
+   member-value   = sf-item / inner-list
 
    Members are separated by a comma with optional whitespace, while
    names and values are separated by "=" (without whitespace).  For
@@ -660,9 +660,9 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
    The ABNF for Items is:
 
-   sh-item   = bare-item parameters
-   bare-item = sh-integer / sh-decimal / sh-string / sh-token
-               / sh-binary / sh-boolean
+   sf-item   = bare-item parameters
+   bare-item = sf-integer / sf-decimal / sf-string / sf-token
+               / sf-binary / sf-boolean
 
    For example, a header field that is defined to be an Item that is an
    Integer might look like:
@@ -688,7 +688,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
    The ABNF for Integers is:
 
-   sh-integer = ["-"] 1*15DIGIT
+   sf-integer = ["-"] 1*15DIGIT
 
    For example:
 
@@ -705,7 +705,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
    The ABNF for decimals is:
 
-   sh-decimal  = ["-"] 1*12DIGIT "." 1*3DIGIT
+   sf-decimal  = ["-"] 1*12DIGIT "." 1*3DIGIT
 
    For example, a header whose value is defined as a Decimal could look
    like:
@@ -732,7 +732,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
    The ABNF for Strings is:
 
-   sh-string = DQUOTE *(chr) DQUOTE
+   sf-string = DQUOTE *(chr) DQUOTE
    chr       = unescaped / escaped
    unescaped = %x20-21 / %x23-5B / %x5D-7E
    escaped   = "\" ( DQUOTE / "\" )
@@ -764,7 +764,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
    The ABNF for Tokens is:
 
-   sh-token = ( ALPHA / "*" ) *( tchar / ":" / "/" )
+   sf-token = ( ALPHA / "*" ) *( tchar / ":" / "/" )
 
    For example:
 
@@ -792,7 +792,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
    The ABNF for a Byte Sequence is:
 
-   sh-binary = ":" *(base64) ":"
+   sf-binary = ":" *(base64) ":"
    base64    = ALPHA / DIGIT / "+" / "/" / "="
 
    A Byte Sequence is delimited with colons and encoded using base64
@@ -809,7 +809,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
    The ABNF for a Boolean is:
 
-   sh-boolean = "?" boolean
+   sf-boolean = "?" boolean
    boolean    = "0" / "1"
 
    A Boolean is indicated with a leading "?" character followed by a "1"
@@ -1978,6 +1978,8 @@ Appendix C.  Changes
 
 C.1.  Since draft-ietf-httpbis-header-structure-18
 
+   o  Use "sf-" prefix for ABNF, not "sh-".
+
    o  Fix indentation in Dictionary serialisation (#1164).
 
    o  Add example for Token; tweak example field names (#1147).
@@ -2008,8 +2010,6 @@ C.4.  Since draft-ietf-httpbis-header-structure-15
 
    o  String length requirements apply to decoded strings (#1051).
 
-   o  Correctly round decimals in serialisation (#1043).
-
 
 
 
@@ -2017,6 +2017,8 @@ Nottingham & Kamp       Expires November 19, 2020              [Page 36]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
+
+   o  Correctly round decimals in serialisation (#1043).
 
    o  Clarify input to serialisation algorithms (#1055).
 
@@ -2064,8 +2066,6 @@ C.6.  Since draft-ietf-httpbis-header-structure-13
 
    o  Corrected text about valid characters in strings (#931).
 
-   o  Removed most instances of the word "textual", as it was redundant
-      (#915).
 
 
 
@@ -2073,6 +2073,9 @@ Nottingham & Kamp       Expires November 19, 2020              [Page 37]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
+
+   o  Removed most instances of the word "textual", as it was redundant
+      (#915).
 
    o  Allowed parameters on Items and Inner Lists (#907).
 
@@ -2120,15 +2123,14 @@ C.10.  Since draft-ietf-httpbis-header-structure-09
 
    o  Parameters are now ordered maps (#765).
 
-   o  Clamp integers to 15 digits (#737).
-
-
 
 
 Nottingham & Kamp       Expires November 19, 2020              [Page 38]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
+
+   o  Clamp integers to 15 digits (#737).
 
 C.11.  Since draft-ietf-httpbis-header-structure-08
 
@@ -2173,8 +2175,6 @@ C.12.  Since draft-ietf-httpbis-header-structure-07
 
    o  Explain the consequences of splitting a string across multiple
       headers (#686).
-
-
 
 
 
