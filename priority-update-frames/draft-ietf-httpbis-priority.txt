@@ -508,7 +508,7 @@ Internet-Draft               HTTP Priorities                    May 2020
 
    HTTP/2 PRIORITY_UPDATE Frame {
      Length (24),
-     Type (8) = 0x10,
+     Type (8) = 0xF,
      Flags (8),
      Reserved (1),
      Stream Identifier (31),
