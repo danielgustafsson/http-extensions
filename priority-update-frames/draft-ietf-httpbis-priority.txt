@@ -580,7 +580,7 @@ Internet-Draft               HTTP Priorities                    May 2020
    treated as a connection error of type H3_FRAME_UNEXPECTED.
 
    HTTP/3 PRIORITY_UPDATE Frame {
-     Type (i) = 0x1CCB8BBF1F0700..0x1CCB8BBF1F071,
+     Type (i) = 0x1CCB8BBF1F0700..0x1CCB8BBF1F0701,
      Length (i),
      Prioritized Element ID (i),
      Priority Field Value (..),
