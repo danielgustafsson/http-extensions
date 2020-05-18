@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-05-15T11:52:10.125423+00:00",
+  "timestamp": "2020-05-18T05:31:32.526083+00:00",
   "repo": "httpwg/http-extensions",
   "labels": [
     {
@@ -60925,13 +60925,13 @@
       ],
       "body": "This attempts to address #1096 and #1079. It might help towards overcoming the headers vs frames debate.\r\n\r\nI made the call to restrict the PRIORITY_UPDATE frame to only be sent by clients.\r\n\r\nIt replaces ASCII art with new QUIC-style frame definitions.",
       "createdAt": "2020-04-30T13:45:24Z",
-      "updatedAt": "2020-05-15T11:51:26Z",
+      "updatedAt": "2020-05-15T20:22:59Z",
       "baseRepository": "httpwg/http-extensions",
       "baseRefName": "master",
       "baseRefOid": "f40438f4582d1fdb5b894f382ce341686e38e7c3",
       "headRepository": "httpwg/http-extensions",
       "headRefName": "priority-update-frames",
-      "headRefOid": "31afbf593acc297a4d434f0b4bb7efce314648d6",
+      "headRefOid": "127f1490fb0654c4676d43f7eda76d084a02466b",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -60950,6 +60950,55 @@
           "body": "@LPardue \r\n> WDYT about Roy's suggestion to define stream zero as control in this document?\r\n\r\nI'd be fine with that, assuming that we'd have the definition somewhere (as @royfielding suggests).",
           "createdAt": "2020-05-14T01:14:39Z",
           "updatedAt": "2020-05-14T01:14:39Z"
+        },
+        {
+          "author": "LPardue",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "This PR changes the HTTP/3 frame format in a breaking way, which is unfortunate because we don't have strong versioning in the extension. It's feasible that interop between endpoints that expect the frame could suffer because they parse them differently. \r\n\r\nOne idea is to link the priorities draft version to the HTTP/3 draft version. For example, agree that priorities-01 would be used with h3-28. However, the drafts will progress at different rates and we might get stuck.\r\n\r\n@Kazuho made a suggestion that would avoid this problem. We we pick a large frame type ID that  we change for each version of the priorities draft. The final draft that is ready for RFC can then switch back the \"nice\" lower values. I'll make a commit that actions this proposal in order to get review feedback.",
+          "createdAt": "2020-05-15T12:03:19Z",
+          "updatedAt": "2020-05-15T12:03:19Z"
+        },
+        {
+          "author": "LPardue",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "https://github.com/httpwg/http-extensions/pull/1167/commits/127f1490fb0654c4676d43f7eda76d084a02466b adds \"big numbers\" for the H3 frame types but leaves the H2 frame as `0xF`, mainly because H2's space is only 8 bit and I don't want to pollute it. Maybe others also want an experimental value there but IMO we can progress without it.",
+          "createdAt": "2020-05-15T12:35:19Z",
+          "updatedAt": "2020-05-15T12:35:19Z"
+        },
+        {
+          "author": "ianswett",
+          "authorAssociation": "NONE",
+          "body": "FWIW, I'm ok with changing the frame type value, but in our code it's just as easy(or easier) to switch by draft version.",
+          "createdAt": "2020-05-15T13:26:49Z",
+          "updatedAt": "2020-05-15T13:26:49Z"
+        },
+        {
+          "author": "LPardue",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> FWIW, I'm ok with changing the frame type value, but in our code it's just as easy(or easier) to switch by draft version.\r\n\r\nMy concern is that we'll see an uncoordinated staggered rollout of new HTTP/3 endpoints, and that clients talk something different than the server expects, causing the frame parsing to fail and generating a connection error.",
+          "createdAt": "2020-05-15T13:33:08Z",
+          "updatedAt": "2020-05-15T13:33:08Z"
+        },
+        {
+          "author": "ianswett",
+          "authorAssociation": "NONE",
+          "body": "Our servers will likely support draft 25, 27 and 28 at once.\r\n\r\nIs the concern that servers will support multiple drafts at once, and clients will typically only support a single version, but server connections won't be aware of what version they're speaking?\r\n\r\nI suspect this is a case of different implementations having very different ways of supporting multiple versions of QUIC at once?",
+          "createdAt": "2020-05-15T18:00:31Z",
+          "updatedAt": "2020-05-15T18:00:31Z"
+        },
+        {
+          "author": "LPardue",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I hope implementation know what draft they are speaking! I'm more worried about needed to rev the priority draft version multiple times; if we couple to draft 28 we get stuck unless there is a draft 29. I anticipate priorities could iterate more quickly than the specification and more quickly than people might be able to deploy different versions.\r\n\r\nUsing a unique big number for frame type would even allow implementations to retrofit it to draft 27, which might be more feasible to implement and test in the short term.",
+          "createdAt": "2020-05-15T18:09:49Z",
+          "updatedAt": "2020-05-15T18:09:49Z"
+        },
+        {
+          "author": "ianswett",
+          "authorAssociation": "NONE",
+          "body": "Thanks for clarifying @LPardue, that makes sense.  I was a bit confused about how one might not know what version they're speaking.",
+          "createdAt": "2020-05-15T18:14:03Z",
+          "updatedAt": "2020-05-15T18:14:03Z"
         }
       ],
       "reviews": [
@@ -60969,13 +61018,13 @@
               "originalPosition": 21,
               "body": "```suggestion\r\nHaving two mechanisms to carry the initial priority signal brings the dilemma of\r\n```",
               "createdAt": "2020-05-05T17:50:00Z",
-              "updatedAt": "2020-05-15T11:51:26Z"
+              "updatedAt": "2020-05-15T12:32:31Z"
             },
             {
               "originalPosition": 61,
               "body": "```suggestion\r\nof any other value MUST be treated as a connection error of type PROTOCOL_ERROR.\r\n```",
               "createdAt": "2020-05-05T17:51:18Z",
-              "updatedAt": "2020-05-15T11:51:26Z"
+              "updatedAt": "2020-05-15T12:32:31Z"
             }
           ]
         },
@@ -60995,7 +61044,7 @@
               "originalPosition": 21,
               "body": "+1",
               "createdAt": "2020-05-05T18:05:45Z",
-              "updatedAt": "2020-05-15T11:51:26Z"
+              "updatedAt": "2020-05-15T12:32:31Z"
             }
           ]
         },
@@ -61015,7 +61064,7 @@
               "originalPosition": 45,
               "body": "Should be more like\r\n\r\n```\r\n  Therefore, a client cannot reprioritize a response by\r\n  sending additional metadata (e.g., trailer fields) on the request stream.\r\n  We avoid interoperability failure by restricting PRIORITY_UPDATE\r\n  frames to the control stream, with each such frame explicitly identifying\r\n  the stream to which the new priority applies.\r\n```",
               "createdAt": "2020-05-05T18:27:45Z",
-              "updatedAt": "2020-05-15T11:51:26Z"
+              "updatedAt": "2020-05-15T12:32:31Z"
             }
           ]
         },
@@ -61035,7 +61084,7 @@
               "originalPosition": 45,
               "body": "Thanks. I tweaked the suggestion slightly and made cbcdc60cf5a92. PTAL.",
               "createdAt": "2020-05-06T13:13:38Z",
-              "updatedAt": "2020-05-15T11:51:26Z"
+              "updatedAt": "2020-05-15T12:32:31Z"
             }
           ]
         },
@@ -61068,19 +61117,19 @@
               "originalPosition": 131,
               "body": "0x10?",
               "createdAt": "2020-05-14T01:00:08Z",
-              "updatedAt": "2020-05-15T11:51:26Z"
+              "updatedAt": "2020-05-15T12:32:31Z"
             },
             {
               "originalPosition": 11,
               "body": "How about stating that endpoints that do not want to expose an end-to-end signal MAY omit the header field, but send the PRIORITY_UPDATE frame at an early moment assuming that it would reach the server as early as the request headers? Would could go on to explain that in such case, all the responses that the server would send would have the priority in the frame being applied.\r\n\r\nThe benefit of phrasing that way is that we can get rid of the last paragraph of this section.",
               "createdAt": "2020-05-14T01:04:23Z",
-              "updatedAt": "2020-05-15T11:51:26Z"
+              "updatedAt": "2020-05-15T12:32:31Z"
             },
             {
               "originalPosition": 91,
               "body": "Seeing the definition of the frame _headers_ for H2 was surprising to me, though I understand that it reflects the change to the HTTP/3 draft. Maybe I should ask if the change in HTTP/3 is a good thing.",
               "createdAt": "2020-05-14T01:08:39Z",
-              "updatedAt": "2020-05-15T11:51:26Z"
+              "updatedAt": "2020-05-15T12:32:31Z"
             }
           ]
         },
@@ -61100,7 +61149,7 @@
               "originalPosition": 91,
               "body": "As a personal opinion I prefer to see the frame in whole because it avoids having to cross reference to the frame headers, which are defined in some other document. \r\n\r\nBut I can drop them if people want. I see that as an editorial change so perhaps we can avoid blocking this and fix up later if needs be.",
               "createdAt": "2020-05-14T01:21:41Z",
-              "updatedAt": "2020-05-15T11:51:26Z"
+              "updatedAt": "2020-05-15T12:32:31Z"
             }
           ]
         },
@@ -61120,7 +61169,7 @@
               "originalPosition": 91,
               "body": "I agree that this is an editorial issue, and that we need to ask the WG to resolve (because it is about the convention covering all H2 extensions, not just this one).",
               "createdAt": "2020-05-14T01:43:01Z",
-              "updatedAt": "2020-05-15T11:51:26Z"
+              "updatedAt": "2020-05-15T12:32:31Z"
             }
           ]
         },
@@ -61140,7 +61189,7 @@
               "originalPosition": 91,
               "body": "FWIW, ALTSVC is the only extension to have reached RFC status previously.  It [does not include](https://tools.ietf.org/html/rfc7838#section-4) the frame header; only the payload.",
               "createdAt": "2020-05-14T14:41:04Z",
-              "updatedAt": "2020-05-15T11:51:26Z"
+              "updatedAt": "2020-05-15T12:32:31Z"
             }
           ]
         },
@@ -61160,7 +61209,7 @@
               "originalPosition": 91,
               "body": "You forgot ORIGIN frame https://tools.ietf.org/html/rfc8336#section-2.1 which also specifies the frame payload.\r\n\r\nNow that H2 and H3 have different frame format definitions, I think extensions applicable to both will hit this problem. I'd like to figure what people think is the most acceptable way to present things.",
               "createdAt": "2020-05-14T14:53:09Z",
-              "updatedAt": "2020-05-15T11:51:26Z"
+              "updatedAt": "2020-05-15T12:32:31Z"
             }
           ]
         },
@@ -61180,7 +61229,67 @@
               "originalPosition": 91,
               "body": "One option would be to write documents that update RFC 7838 and RFC 8336 to use the new format and define the H3 frame at the same time...",
               "createdAt": "2020-05-14T14:56:10Z",
-              "updatedAt": "2020-05-15T11:51:26Z"
+              "updatedAt": "2020-05-15T12:32:31Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDEyNTc5NDYw",
+          "commit": {
+            "abbreviatedOid": "31afbf5"
+          },
+          "author": "LPardue",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-05-15T11:53:22Z",
+          "updatedAt": "2020-05-15T11:53:22Z",
+          "comments": [
+            {
+              "originalPosition": 11,
+              "body": "I've tried to incorporate this suggestion in https://github.com/httpwg/http-extensions/pull/1167/commits/f5ac92a045a3074e503c93d304a90799e387ab07 but found it trickier to write than I first thought it would be, so it ended up a little different in the end. Please take a look and add some further suggestions if I'm not hitting your mark.",
+              "createdAt": "2020-05-15T11:53:22Z",
+              "updatedAt": "2020-05-15T12:32:31Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDEyODY2NTQ2",
+          "commit": {
+            "abbreviatedOid": "127f149"
+          },
+          "author": "MikeBishop",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-05-15T18:15:38Z",
+          "updatedAt": "2020-05-15T18:15:39Z",
+          "comments": [
+            {
+              "originalPosition": 91,
+              "body": "True, I try to block that one out.\r\n\r\nThey have different frame format definitions, sure; the question is whether the payload needs to vary between H2/H3.  I think the real things you need to specify are:\r\n\r\n- What stream it's on (part of the header in H2, intrinsic property in H3)\r\n  - Control stream vs. stream zero language plays into this\r\n- Flags if used in H2; since H3 doesn't have flags, this might lead to a payload difference\r\n- Payload\r\n\r\nThe simplest path for dual-version extensions is not to use flags and only define the payload.",
+              "createdAt": "2020-05-15T18:15:38Z",
+              "updatedAt": "2020-05-15T18:15:39Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDEyOTQwNTQy",
+          "commit": {
+            "abbreviatedOid": "127f149"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "Thank you for the changes. Looks good modulo one point below.",
+          "createdAt": "2020-05-15T20:17:34Z",
+          "updatedAt": "2020-05-15T20:22:59Z",
+          "comments": [
+            {
+              "originalPosition": 32,
+              "body": "How about changing the last sentence to something like: _The signal carried by a PRIORITY_UPDATE frame overrides that carried by the header, even when the frame was received before the request headers._\r\n\r\nNote that this PR recommends such a behavior; it states that a server SHOULD buffer and apply the content of PRIORITY_UPDATE frame that precedes the header field. For good reasons.\r\n\r\nConsider the case of an H3 client sending a HTTP request with a Priority header field, then changing its mind and sending a PRIORITY_UPDATE frame. As H3 does not guarantee delivery order across streams, the server might receive the frame before the header. I'd assume that we'd want servers to apply the value carried by the frame. Even when the protocol is H2, I am not sure if all the H2 stacks have the guarantee that the information across multiple streams are sent in the order they are issued, or that they are provided to the application in the order they are received.",
+              "createdAt": "2020-05-15T20:17:34Z",
+              "updatedAt": "2020-05-15T20:22:59Z"
             }
           ]
         }
