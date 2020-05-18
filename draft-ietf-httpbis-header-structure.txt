@@ -1262,11 +1262,11 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
    8.  Otherwise, return output.
 
-   When generating input_bytes, parsers MUST combine all lines in the
-   same section (header or trailer) that case-insensitively match the
-   field name into one comma-separated field-value, as per [RFC7230],
-   Section 3.2.2; this assures that the entire field value is processed
-   correctly.
+   When generating input_bytes, parsers MUST combine all field lines in
+   the same section (header or trailer) that case-insensitively match
+   the field name into one comma-separated field-value, as per
+   [RFC7230], Section 3.2.2; this assures that the entire field value is
+   processed correctly.
 
    For Lists and Dictionaries, this has the effect of correctly
    concatenating all of the field's lines, as long as individual members
