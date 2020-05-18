@@ -568,8 +568,8 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
    Parsers MUST support at least 256 parameters on an Item or Inner
    List, and support parameter keys with at least 64 characters.  Field
-   specifications can constrain the types and cardinality of individual
-   parameter names and values as they require.
+   specifications can constrain the order of individual Parameters, as
+   well as their values' types as required.
 
 3.2.  Dictionaries
 
@@ -647,7 +647,9 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
    between lines; see Section 4.2 for details.
 
    Parsers MUST support Dictionaries containing at least 1024 name/value
-   pairs, and names with at least 64 characters.
+   pairs, and names with at least 64 characters.  Field specifications
+   can constrain the order of individual Dictionary members, as well as
+   their values' types as required.
 
 3.3.  Items
 
@@ -665,14 +667,14 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
    For example, a header field that is defined to be an Item that is an
    Integer might look like:
 
-   Example-IntItemHeader: 5
-
 
 
 Nottingham & Kamp       Expires November 19, 2020              [Page 12]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
+
+   Example-IntItemHeader: 5
 
    or with Parameters:
 
@@ -721,14 +723,14 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
    the range %x20 to %x7E).  Note that this excludes tabs, newlines,
    carriage returns, etc.
 
-   The ABNF for Strings is:
-
 
 
 Nottingham & Kamp       Expires November 19, 2020              [Page 13]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
+
+   The ABNF for Strings is:
 
    sh-string = DQUOTE *(chr) DQUOTE
    chr       = unescaped / escaped
@@ -774,8 +776,6 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
    defined in [RFC7230], with the exceptions that the first character is
    required to be either ALPHA or "*", and ":" and "/" are also allowed
    in subsequent characters.
-
-
 
 
 
@@ -1986,6 +1986,9 @@ C.1.  Since draft-ietf-httpbis-header-structure-18
 
    o  Note that exceeding implementation limits implies failure.
 
+   o  Talk about specifying order of Dictionary members and Parameters,
+      not cardinality.
+
 C.2.  Since draft-ietf-httpbis-header-structure-17
 
    o  Editorial improvements.
@@ -2007,9 +2010,6 @@ C.4.  Since draft-ietf-httpbis-header-structure-15
 
    o  Correctly round decimals in serialisation (#1043).
 
-   o  Clarify input to serialisation algorithms (#1055).
-
-   o  Omitted True dictionary value can have parameters (#1083).
 
 
 
@@ -2017,6 +2017,10 @@ Nottingham & Kamp       Expires November 19, 2020              [Page 36]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
+
+   o  Clarify input to serialisation algorithms (#1055).
+
+   o  Omitted True dictionary value can have parameters (#1083).
 
    o  Keys can now start with '*' (#1068).
 
@@ -2063,16 +2067,16 @@ C.6.  Since draft-ietf-httpbis-header-structure-13
    o  Removed most instances of the word "textual", as it was redundant
       (#915).
 
-   o  Allowed parameters on Items and Inner Lists (#907).
-
-   o  Expand the range of characters in token (#961).
-
 
 
 Nottingham & Kamp       Expires November 19, 2020              [Page 37]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
+
+   o  Allowed parameters on Items and Inner Lists (#907).
+
+   o  Expand the range of characters in token (#961).
 
    o  Disallow OWS before ";" delimiter in parameters (#961).
 
@@ -2117,10 +2121,6 @@ C.10.  Since draft-ietf-httpbis-header-structure-09
    o  Parameters are now ordered maps (#765).
 
    o  Clamp integers to 15 digits (#737).
-
-
-
-
 
 
 
