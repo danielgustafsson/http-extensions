@@ -226,7 +226,7 @@ Nottingham & Kamp       Expires November 19, 2020               [Page 4]
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
 
-   "helpful" by being more tolerant of input would make interoperability
+   helpful by being more tolerant of input would make interoperability
    worse, since that would create pressure on other implementations to
    implement similar (but likely subtly different) workarounds.
 
