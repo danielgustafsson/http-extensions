@@ -5,8 +5,8 @@
 HTTP Working Group                                         M. Nottingham
 Internet-Draft                                                    Fastly
 Intended status: Standards Track                               P-H. Kamp
-Expires: November 15, 2020                     The Varnish Cache Project
-                                                            May 14, 2020
+Expires: November 19, 2020                     The Varnish Cache Project
+                                                            May 18, 2020
 
 
                     Structured Field Values for HTTP
@@ -53,7 +53,7 @@ Status of This Memo
 
 
 
-Nottingham & Kamp       Expires November 15, 2020               [Page 1]
+Nottingham & Kamp       Expires November 19, 2020               [Page 1]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
@@ -63,7 +63,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on November 15, 2020.
+   This Internet-Draft will expire on November 19, 2020.
 
 Copyright Notice
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Nottingham & Kamp       Expires November 15, 2020               [Page 2]
+Nottingham & Kamp       Expires November 19, 2020               [Page 2]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
@@ -146,14 +146,14 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
      C.8.  Since draft-ietf-httpbis-header-structure-11  . . . . . .  38
      C.9.  Since draft-ietf-httpbis-header-structure-10  . . . . . .  38
      C.10. Since draft-ietf-httpbis-header-structure-09  . . . . . .  38
-     C.11. Since draft-ietf-httpbis-header-structure-08  . . . . . .  38
+     C.11. Since draft-ietf-httpbis-header-structure-08  . . . . . .  39
      C.12. Since draft-ietf-httpbis-header-structure-07  . . . . . .  39
-     C.13. Since draft-ietf-httpbis-header-structure-06  . . . . . .  39
+     C.13. Since draft-ietf-httpbis-header-structure-06  . . . . . .  40
      C.14. Since draft-ietf-httpbis-header-structure-05  . . . . . .  40
      C.15. Since draft-ietf-httpbis-header-structure-04  . . . . . .  40
      C.16. Since draft-ietf-httpbis-header-structure-03  . . . . . .  40
      C.17. Since draft-ietf-httpbis-header-structure-02  . . . . . .  40
-     C.18. Since draft-ietf-httpbis-header-structure-01  . . . . . .  40
+     C.18. Since draft-ietf-httpbis-header-structure-01  . . . . . .  41
      C.19. Since draft-ietf-httpbis-header-structure-00  . . . . . .  41
    Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  41
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  41
@@ -165,7 +165,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
 
 
-Nottingham & Kamp       Expires November 15, 2020               [Page 3]
+Nottingham & Kamp       Expires November 19, 2020               [Page 3]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
@@ -221,7 +221,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
 
 
-Nottingham & Kamp       Expires November 15, 2020               [Page 4]
+Nottingham & Kamp       Expires November 19, 2020               [Page 4]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
@@ -277,7 +277,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
 
 
-Nottingham & Kamp       Expires November 15, 2020               [Page 5]
+Nottingham & Kamp       Expires November 19, 2020               [Page 5]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
@@ -333,7 +333,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
 
 
-Nottingham & Kamp       Expires November 15, 2020               [Page 6]
+Nottingham & Kamp       Expires November 19, 2020               [Page 6]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
@@ -389,7 +389,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
 
 
-Nottingham & Kamp       Expires November 15, 2020               [Page 7]
+Nottingham & Kamp       Expires November 19, 2020               [Page 7]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
@@ -445,7 +445,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
 
 
-Nottingham & Kamp       Expires November 15, 2020               [Page 8]
+Nottingham & Kamp       Expires November 19, 2020               [Page 8]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
@@ -501,7 +501,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
 
 
-Nottingham & Kamp       Expires November 15, 2020               [Page 9]
+Nottingham & Kamp       Expires November 19, 2020               [Page 9]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
@@ -547,20 +547,24 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
    Example-ParamList: abc;a=1;b=2; cde_456, (ghi;jk=4 l);q="9";r=w
 
    Parameters whose value is Boolean (see Section 3.3.6) true MUST omit
-   that value when serialized.  For example:
+   that value when serialized.  For example, the "a" parameter here is
+   true, while the "b" parameter is false:
 
    Example-Int: 1; a; b=?0
+
+
+
+
+
+
+Nottingham & Kamp       Expires November 19, 2020              [Page 10]
+
+Internet-Draft      Structured Field Values for HTTP            May 2020
+
 
    Note that this requirement is only on serialization; parsers are
    still required to correctly handle the true value when it appears in
    a parameter.
-
-
-
-Nottingham & Kamp       Expires November 15, 2020              [Page 10]
-
-Internet-Draft      Structured Field Values for HTTP            May 2020
-
 
    Parsers MUST support at least 256 parameters on an Item or Inner
    List, and support parameter keys with at least 64 characters.  Field
@@ -606,17 +610,18 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
    Example-DictList: rating=1.5, feelings=(joy sadness)
 
+
+
+
+Nottingham & Kamp       Expires November 19, 2020              [Page 11]
+
+Internet-Draft      Structured Field Values for HTTP            May 2020
+
+
    A Dictionary with a mix of singular and list values, some with
    Parameters:
 
    Example-MixDict: a=(1 2), b=3, c=4;aa=bb, d=(5 6);valid
-
-
-
-Nottingham & Kamp       Expires November 15, 2020              [Page 11]
-
-Internet-Draft      Structured Field Values for HTTP            May 2020
-
 
    As with lists, an empty Dictionary is represented by omitting the
    entire field.
@@ -662,17 +667,16 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
    Example-IntItemHeader: 5
 
-   or with Parameters:
-
-   Example-IntItem: 5; foo=bar
 
 
-
-
-Nottingham & Kamp       Expires November 15, 2020              [Page 12]
+Nottingham & Kamp       Expires November 19, 2020              [Page 12]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
+
+   or with Parameters:
+
+   Example-IntItem: 5; foo=bar
 
 3.3.1.  Integers
 
@@ -721,11 +725,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
 
 
-
-
-
-
-Nottingham & Kamp       Expires November 15, 2020              [Page 13]
+Nottingham & Kamp       Expires November 19, 2020              [Page 13]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
@@ -781,7 +781,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
 
 
-Nottingham & Kamp       Expires November 15, 2020              [Page 14]
+Nottingham & Kamp       Expires November 19, 2020              [Page 14]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
@@ -821,7 +821,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
    This section defines how to serialize and parse Structured Fields in
    field values, and protocols compatible with them (e.g., in HTTP/2
-   [RFC7540] before HPACK [RFC7541] is applied).
+   [RFC7540] before compression with HPACK [RFC7541]).
 
 4.1.  Serializing Structured Fields
 
@@ -837,7 +837,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
 
 
-Nottingham & Kamp       Expires November 15, 2020              [Page 15]
+Nottingham & Kamp       Expires November 19, 2020              [Page 15]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
@@ -893,7 +893,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
 
 
-Nottingham & Kamp       Expires November 15, 2020              [Page 16]
+Nottingham & Kamp       Expires November 19, 2020              [Page 16]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
@@ -949,7 +949,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
 
 
-Nottingham & Kamp       Expires November 15, 2020              [Page 17]
+Nottingham & Kamp       Expires November 19, 2020              [Page 17]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
@@ -1005,7 +1005,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
 
 
-Nottingham & Kamp       Expires November 15, 2020              [Page 18]
+Nottingham & Kamp       Expires November 19, 2020              [Page 18]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
@@ -1061,7 +1061,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
 
 
-Nottingham & Kamp       Expires November 15, 2020              [Page 19]
+Nottingham & Kamp       Expires November 19, 2020              [Page 19]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
@@ -1117,7 +1117,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
 
 
-Nottingham & Kamp       Expires November 15, 2020              [Page 20]
+Nottingham & Kamp       Expires November 19, 2020              [Page 20]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
@@ -1173,7 +1173,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
 
 
-Nottingham & Kamp       Expires November 15, 2020              [Page 21]
+Nottingham & Kamp       Expires November 19, 2020              [Page 21]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
@@ -1229,7 +1229,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
 
 
-Nottingham & Kamp       Expires November 15, 2020              [Page 22]
+Nottingham & Kamp       Expires November 19, 2020              [Page 22]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
@@ -1285,7 +1285,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
 
 
-Nottingham & Kamp       Expires November 15, 2020              [Page 23]
+Nottingham & Kamp       Expires November 19, 2020              [Page 23]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
@@ -1298,8 +1298,8 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
    Note that this requirement does not apply to an implementation that
    is not parsing the field; for example, an intermediary is not
-   required to strip a failing header field from a message before
-   forwarding it.
+   required to strip a failing field from a message before forwarding
+   it.
 
 4.2.1.  Parsing a List
 
@@ -1341,7 +1341,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
 
 
-Nottingham & Kamp       Expires November 15, 2020              [Page 24]
+Nottingham & Kamp       Expires November 19, 2020              [Page 24]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
@@ -1397,7 +1397,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
 
 
-Nottingham & Kamp       Expires November 15, 2020              [Page 25]
+Nottingham & Kamp       Expires November 19, 2020              [Page 25]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
@@ -1453,7 +1453,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
 
 
-Nottingham & Kamp       Expires November 15, 2020              [Page 26]
+Nottingham & Kamp       Expires November 19, 2020              [Page 26]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
@@ -1509,7 +1509,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
 
 
-Nottingham & Kamp       Expires November 15, 2020              [Page 27]
+Nottingham & Kamp       Expires November 19, 2020              [Page 27]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
@@ -1565,7 +1565,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
 
 
-Nottingham & Kamp       Expires November 15, 2020              [Page 28]
+Nottingham & Kamp       Expires November 19, 2020              [Page 28]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
@@ -1621,7 +1621,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
 
 
-Nottingham & Kamp       Expires November 15, 2020              [Page 29]
+Nottingham & Kamp       Expires November 19, 2020              [Page 29]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
@@ -1677,7 +1677,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
 
 
-Nottingham & Kamp       Expires November 15, 2020              [Page 30]
+Nottingham & Kamp       Expires November 19, 2020              [Page 30]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
@@ -1733,7 +1733,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
 
 
-Nottingham & Kamp       Expires November 15, 2020              [Page 31]
+Nottingham & Kamp       Expires November 19, 2020              [Page 31]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
@@ -1789,7 +1789,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
 
 
-Nottingham & Kamp       Expires November 15, 2020              [Page 32]
+Nottingham & Kamp       Expires November 19, 2020              [Page 32]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
@@ -1845,7 +1845,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
 
 
-Nottingham & Kamp       Expires November 15, 2020              [Page 33]
+Nottingham & Kamp       Expires November 19, 2020              [Page 33]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
@@ -1901,7 +1901,7 @@ A.1.  Why not JSON?
 
 
 
-Nottingham & Kamp       Expires November 15, 2020              [Page 34]
+Nottingham & Kamp       Expires November 19, 2020              [Page 34]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
@@ -1957,7 +1957,7 @@ Appendix B.  Implementation Notes
 
 
 
-Nottingham & Kamp       Expires November 15, 2020              [Page 35]
+Nottingham & Kamp       Expires November 19, 2020              [Page 35]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
@@ -1966,6 +1966,11 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
    strictly limited to the data types defined in Section 3 in every
    case.  For example, Decimals are designed to take broader input and
    round to allowed values.
+
+   Implementations are allowed to limit the allowed size of different
+   structures, subject to the minimums defined for each type.  When a
+   structure exceeds an implementation limit, that structure fails
+   parsing or serialisation.
 
 Appendix C.  Changes
 
@@ -1978,6 +1983,8 @@ C.1.  Since draft-ietf-httpbis-header-structure-18
    o  Add example for Token; tweak example field names (#1147).
 
    o  Editorial improvements.
+
+   o  Note that exceeding implementation limits implies failure.
 
 C.2.  Since draft-ietf-httpbis-header-structure-17
 
@@ -2004,19 +2011,14 @@ C.4.  Since draft-ietf-httpbis-header-structure-15
 
    o  Omitted True dictionary value can have parameters (#1083).
 
-   o  Keys can now start with '*' (#1068).
 
 
-
-
-
-
-
-
-Nottingham & Kamp       Expires November 15, 2020              [Page 36]
+Nottingham & Kamp       Expires November 19, 2020              [Page 36]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
+
+   o  Keys can now start with '*' (#1068).
 
 C.5.  Since draft-ietf-httpbis-header-structure-14
 
@@ -2065,14 +2067,14 @@ C.6.  Since draft-ietf-httpbis-header-structure-13
 
    o  Expand the range of characters in token (#961).
 
-   o  Disallow OWS before ";" delimiter in parameters (#961).
 
 
-
-Nottingham & Kamp       Expires November 15, 2020              [Page 37]
+Nottingham & Kamp       Expires November 19, 2020              [Page 37]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
+
+   o  Disallow OWS before ";" delimiter in parameters (#961).
 
 C.7.  Since draft-ietf-httpbis-header-structure-12
 
@@ -2116,19 +2118,21 @@ C.10.  Since draft-ietf-httpbis-header-structure-09
 
    o  Clamp integers to 15 digits (#737).
 
-C.11.  Since draft-ietf-httpbis-header-structure-08
-
-   o  Disallow whitespace before items properly (#703).
 
 
 
 
 
 
-Nottingham & Kamp       Expires November 15, 2020              [Page 38]
+
+Nottingham & Kamp       Expires November 19, 2020              [Page 38]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
+
+C.11.  Since draft-ietf-httpbis-header-structure-08
+
+   o  Disallow whitespace before items properly (#703).
 
    o  Created "key" for use in dictionaries and parameters, rather than
       relying on identifier (#702).  Identifiers have a separate minimum
@@ -2170,6 +2174,18 @@ C.12.  Since draft-ietf-httpbis-header-structure-07
    o  Explain the consequences of splitting a string across multiple
       headers (#686).
 
+
+
+
+
+
+
+
+Nottingham & Kamp       Expires November 19, 2020              [Page 39]
+
+Internet-Draft      Structured Field Values for HTTP            May 2020
+
+
 C.13.  Since draft-ietf-httpbis-header-structure-06
 
    o  Add a FAQ.
@@ -2177,14 +2193,6 @@ C.13.  Since draft-ietf-httpbis-header-structure-06
    o  Allow non-zero pad bits.
 
    o  Explicitly check for integers that violate constraints.
-
-
-
-
-Nottingham & Kamp       Expires November 15, 2020              [Page 39]
-
-Internet-Draft      Structured Field Values for HTTP            May 2020
-
 
 C.14.  Since draft-ietf-httpbis-header-structure-05
 
@@ -2227,20 +2235,18 @@ C.17.  Since draft-ietf-httpbis-header-structure-02
 
    o  Require parsers to combine header fields before processing.
 
+
+
+Nottingham & Kamp       Expires November 19, 2020              [Page 40]
+
+Internet-Draft      Structured Field Values for HTTP            May 2020
+
+
    o  Throw an error on trailing garbage.
 
 C.18.  Since draft-ietf-httpbis-header-structure-01
 
    o  Replaced with draft-nottingham-structured-headers.
-
-
-
-
-
-Nottingham & Kamp       Expires November 15, 2020              [Page 40]
-
-Internet-Draft      Structured Field Values for HTTP            May 2020
-
 
 C.19.  Since draft-ietf-httpbis-header-structure-00
 
@@ -2287,10 +2293,4 @@ Authors' Addresses
 
 
 
-
-
-
-
-
-
-Nottingham & Kamp       Expires November 15, 2020              [Page 41]
+Nottingham & Kamp       Expires November 19, 2020              [Page 41]
