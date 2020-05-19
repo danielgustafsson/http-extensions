@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-05-18T05:31:32.526083+00:00",
+  "timestamp": "2020-05-19T04:53:00.063014+00:00",
   "repo": "httpwg/http-extensions",
   "labels": [
     {
@@ -26446,7 +26446,7 @@
       ],
       "body": "The answer depends on if reprioritization should be part of the spec (i.e. resolution of #1021), and if browsers would use it.\r\n\r\nFor more context, see [this thread](https://github.com/httpwg/http-extensions/pull/1048#discussion_r376009024).",
       "createdAt": "2020-02-10T02:41:48Z",
-      "updatedAt": "2020-03-02T18:54:10Z",
+      "updatedAt": "2020-05-18T20:24:54Z",
       "closedAt": null,
       "comments": [
         {
@@ -26490,6 +26490,34 @@
           "body": "> It's a fair point that push should primarily utilize idle connection time, and from that standpoint, it doesn't matter what priority it's assigned.\r\n\r\nThe default priority doesn't matter in case 2, I agree with that, but it matters in cases 1 and 3.\r\n\r\nFor cases 1 and 3, it's not enough to simply state that push should not have been used. While I mostly agree with that in theory, in practice it's very difficult to know which case you'll end up in a priori. Suppose the user requests A and the server considers pushing B. The server cannot predict which case it will end up in unless it precisely knows (a) how long it will take to generate the responses for A and B (to know if there will be idle time before sending the first byte of A); (b) the sizes of A and B (see Lucas' response); and (c) the effective BDP of the connection (possible to estimate in theory but this assumes the server push code has access to the current cwnd).\r\n\r\nIn practice, even well-meaning servers are going to use push in cases 1 and 3. This implies that the default priority will be important in practice, and even \"one priority below the parent request\" has problems as Lucas points out.",
           "createdAt": "2020-03-02T18:54:10Z",
           "updatedAt": "2020-03-02T18:54:10Z"
+        },
+        {
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Revisiting this issue, I am starting to wonder if we need to provide _one_ advice. As others have noted, how a pushed resource should be prioritized depends on each use-case. And for the case of an H3 terminator not having the knowledge of how to prioritize a pushed response, the priority response header from the upstream server can provide an answer.\r\n\r\nTo summarize, maybe saying something like: _When pushing a response, it is the responsibility of the server to correctly prioritize that response against other responses. When making that decision, an HTTP server can take into consideration the value of the priority response header field of the pushed response._",
+          "createdAt": "2020-05-18T11:56:36Z",
+          "updatedAt": "2020-05-18T11:56:48Z"
+        },
+        {
+          "author": "LPardue",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I've lost some context here. Looking back through the threads, in https://github.com/kazuho/draft-kazuho-httpbis-priority/issues/91#issuecomment-555416246  you (Kazuho) said:\r\n\r\n> When push is used, both the request and response headers are created by the server. If either of the two contains a priority header field, the value of that header field should be used.\r\n> The question is what to do when there is no hint.\r\n\r\nThis seems to conflict with your proposed advice.\r\n\r\n",
+          "createdAt": "2020-05-18T16:25:21Z",
+          "updatedAt": "2020-05-18T16:25:21Z"
+        },
+        {
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "@LPardue Thank you for resurrecting my old comment.\r\n\r\nI think I am consistent in arguing that a server _can_<sup>1</sup> use a hint provided by upstream, if such hint is provided.\r\n\r\nWhat I am arguing now is that we should encourage servers determine the priority of the pushed request, rather than trying to find a default. As we have discussed, one default does not fit all.\r\n\r\nWhen a server is the initiator of a pushed request, it would definitely know why it initiated that push. As it knows the reason, it would be possible to determine the correct urgency. When a server is obeying to an instruction from an upstream server (e.g., link rel=preload), the upstream server can provide a hint by using the priority header field in the pushed response, or make a guess based on other properties (e.g., type of the pushed resource, the fact that link rel=preload is being used, etc.).\r\n\r\nThese hints could work better than a hard-coded default in the spec. Assuming that is the case, my point is that we should encourage the use of such hints, and that maybe doing just that is enough.\r\n\r\n[1] Using \"can\" rather than \"SHOULD\", as we've reduced the guidance (see #1026).",
+          "createdAt": "2020-05-18T20:11:45Z",
+          "updatedAt": "2020-05-18T20:12:07Z"
+        },
+        {
+          "author": "LPardue",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Encouraging signals is good and I agree that without them bets are off. I think there is ultimately no \"good\" guidance to provide, so maybe all we can do is highlight the pitfalls.\r\n\r\nWriting this I realise a pitfall I'll need to confirm. Right now, the quiche implementation factors in the stream ID into scheduling choices. This might break down if the request and push stream IDs start to diverge or progress at different phases. This is a manifestation of my earlier comment about considering request order for scheduling.",
+          "createdAt": "2020-05-18T20:24:54Z",
+          "updatedAt": "2020-05-18T20:24:54Z"
         }
       ]
     },
@@ -60925,13 +60953,13 @@
       ],
       "body": "This attempts to address #1096 and #1079. It might help towards overcoming the headers vs frames debate.\r\n\r\nI made the call to restrict the PRIORITY_UPDATE frame to only be sent by clients.\r\n\r\nIt replaces ASCII art with new QUIC-style frame definitions.",
       "createdAt": "2020-04-30T13:45:24Z",
-      "updatedAt": "2020-05-15T20:22:59Z",
+      "updatedAt": "2020-05-18T11:11:55Z",
       "baseRepository": "httpwg/http-extensions",
       "baseRefName": "master",
       "baseRefOid": "f40438f4582d1fdb5b894f382ce341686e38e7c3",
       "headRepository": "httpwg/http-extensions",
       "headRefName": "priority-update-frames",
-      "headRefOid": "127f1490fb0654c4676d43f7eda76d084a02466b",
+      "headRefOid": "a2579e70046b868386a2a7ebf217031bddd5cc8f",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -61018,13 +61046,13 @@
               "originalPosition": 21,
               "body": "```suggestion\r\nHaving two mechanisms to carry the initial priority signal brings the dilemma of\r\n```",
               "createdAt": "2020-05-05T17:50:00Z",
-              "updatedAt": "2020-05-15T12:32:31Z"
+              "updatedAt": "2020-05-18T11:11:55Z"
             },
             {
               "originalPosition": 61,
               "body": "```suggestion\r\nof any other value MUST be treated as a connection error of type PROTOCOL_ERROR.\r\n```",
               "createdAt": "2020-05-05T17:51:18Z",
-              "updatedAt": "2020-05-15T12:32:31Z"
+              "updatedAt": "2020-05-18T11:11:55Z"
             }
           ]
         },
@@ -61044,7 +61072,7 @@
               "originalPosition": 21,
               "body": "+1",
               "createdAt": "2020-05-05T18:05:45Z",
-              "updatedAt": "2020-05-15T12:32:31Z"
+              "updatedAt": "2020-05-18T11:11:55Z"
             }
           ]
         },
@@ -61064,7 +61092,7 @@
               "originalPosition": 45,
               "body": "Should be more like\r\n\r\n```\r\n  Therefore, a client cannot reprioritize a response by\r\n  sending additional metadata (e.g., trailer fields) on the request stream.\r\n  We avoid interoperability failure by restricting PRIORITY_UPDATE\r\n  frames to the control stream, with each such frame explicitly identifying\r\n  the stream to which the new priority applies.\r\n```",
               "createdAt": "2020-05-05T18:27:45Z",
-              "updatedAt": "2020-05-15T12:32:31Z"
+              "updatedAt": "2020-05-18T11:11:55Z"
             }
           ]
         },
@@ -61084,7 +61112,7 @@
               "originalPosition": 45,
               "body": "Thanks. I tweaked the suggestion slightly and made cbcdc60cf5a92. PTAL.",
               "createdAt": "2020-05-06T13:13:38Z",
-              "updatedAt": "2020-05-15T12:32:31Z"
+              "updatedAt": "2020-05-18T11:11:55Z"
             }
           ]
         },
@@ -61117,19 +61145,19 @@
               "originalPosition": 131,
               "body": "0x10?",
               "createdAt": "2020-05-14T01:00:08Z",
-              "updatedAt": "2020-05-15T12:32:31Z"
+              "updatedAt": "2020-05-18T11:11:55Z"
             },
             {
               "originalPosition": 11,
               "body": "How about stating that endpoints that do not want to expose an end-to-end signal MAY omit the header field, but send the PRIORITY_UPDATE frame at an early moment assuming that it would reach the server as early as the request headers? Would could go on to explain that in such case, all the responses that the server would send would have the priority in the frame being applied.\r\n\r\nThe benefit of phrasing that way is that we can get rid of the last paragraph of this section.",
               "createdAt": "2020-05-14T01:04:23Z",
-              "updatedAt": "2020-05-15T12:32:31Z"
+              "updatedAt": "2020-05-18T11:11:55Z"
             },
             {
               "originalPosition": 91,
               "body": "Seeing the definition of the frame _headers_ for H2 was surprising to me, though I understand that it reflects the change to the HTTP/3 draft. Maybe I should ask if the change in HTTP/3 is a good thing.",
               "createdAt": "2020-05-14T01:08:39Z",
-              "updatedAt": "2020-05-15T12:32:31Z"
+              "updatedAt": "2020-05-18T11:11:55Z"
             }
           ]
         },
@@ -61149,7 +61177,7 @@
               "originalPosition": 91,
               "body": "As a personal opinion I prefer to see the frame in whole because it avoids having to cross reference to the frame headers, which are defined in some other document. \r\n\r\nBut I can drop them if people want. I see that as an editorial change so perhaps we can avoid blocking this and fix up later if needs be.",
               "createdAt": "2020-05-14T01:21:41Z",
-              "updatedAt": "2020-05-15T12:32:31Z"
+              "updatedAt": "2020-05-18T11:11:55Z"
             }
           ]
         },
@@ -61169,7 +61197,7 @@
               "originalPosition": 91,
               "body": "I agree that this is an editorial issue, and that we need to ask the WG to resolve (because it is about the convention covering all H2 extensions, not just this one).",
               "createdAt": "2020-05-14T01:43:01Z",
-              "updatedAt": "2020-05-15T12:32:31Z"
+              "updatedAt": "2020-05-18T11:11:55Z"
             }
           ]
         },
@@ -61189,7 +61217,7 @@
               "originalPosition": 91,
               "body": "FWIW, ALTSVC is the only extension to have reached RFC status previously.  It [does not include](https://tools.ietf.org/html/rfc7838#section-4) the frame header; only the payload.",
               "createdAt": "2020-05-14T14:41:04Z",
-              "updatedAt": "2020-05-15T12:32:31Z"
+              "updatedAt": "2020-05-18T11:11:55Z"
             }
           ]
         },
@@ -61209,7 +61237,7 @@
               "originalPosition": 91,
               "body": "You forgot ORIGIN frame https://tools.ietf.org/html/rfc8336#section-2.1 which also specifies the frame payload.\r\n\r\nNow that H2 and H3 have different frame format definitions, I think extensions applicable to both will hit this problem. I'd like to figure what people think is the most acceptable way to present things.",
               "createdAt": "2020-05-14T14:53:09Z",
-              "updatedAt": "2020-05-15T12:32:31Z"
+              "updatedAt": "2020-05-18T11:11:55Z"
             }
           ]
         },
@@ -61229,7 +61257,7 @@
               "originalPosition": 91,
               "body": "One option would be to write documents that update RFC 7838 and RFC 8336 to use the new format and define the H3 frame at the same time...",
               "createdAt": "2020-05-14T14:56:10Z",
-              "updatedAt": "2020-05-15T12:32:31Z"
+              "updatedAt": "2020-05-18T11:11:55Z"
             }
           ]
         },
@@ -61249,7 +61277,7 @@
               "originalPosition": 11,
               "body": "I've tried to incorporate this suggestion in https://github.com/httpwg/http-extensions/pull/1167/commits/f5ac92a045a3074e503c93d304a90799e387ab07 but found it trickier to write than I first thought it would be, so it ended up a little different in the end. Please take a look and add some further suggestions if I'm not hitting your mark.",
               "createdAt": "2020-05-15T11:53:22Z",
-              "updatedAt": "2020-05-15T12:32:31Z"
+              "updatedAt": "2020-05-18T11:11:55Z"
             }
           ]
         },
@@ -61269,7 +61297,7 @@
               "originalPosition": 91,
               "body": "True, I try to block that one out.\r\n\r\nThey have different frame format definitions, sure; the question is whether the payload needs to vary between H2/H3.  I think the real things you need to specify are:\r\n\r\n- What stream it's on (part of the header in H2, intrinsic property in H3)\r\n  - Control stream vs. stream zero language plays into this\r\n- Flags if used in H2; since H3 doesn't have flags, this might lead to a payload difference\r\n- Payload\r\n\r\nThe simplest path for dual-version extensions is not to use flags and only define the payload.",
               "createdAt": "2020-05-15T18:15:38Z",
-              "updatedAt": "2020-05-15T18:15:39Z"
+              "updatedAt": "2020-05-18T11:11:55Z"
             }
           ]
         },
@@ -61289,7 +61317,7 @@
               "originalPosition": 32,
               "body": "How about changing the last sentence to something like: _The signal carried by a PRIORITY_UPDATE frame overrides that carried by the header, even when the frame was received before the request headers._\r\n\r\nNote that this PR recommends such a behavior; it states that a server SHOULD buffer and apply the content of PRIORITY_UPDATE frame that precedes the header field. For good reasons.\r\n\r\nConsider the case of an H3 client sending a HTTP request with a Priority header field, then changing its mind and sending a PRIORITY_UPDATE frame. As H3 does not guarantee delivery order across streams, the server might receive the frame before the header. I'd assume that we'd want servers to apply the value carried by the frame. Even when the protocol is H2, I am not sure if all the H2 stacks have the guarantee that the information across multiple streams are sent in the order they are issued, or that they are provided to the application in the order they are received.",
               "createdAt": "2020-05-15T20:17:34Z",
-              "updatedAt": "2020-05-15T20:22:59Z"
+              "updatedAt": "2020-05-18T11:11:55Z"
             }
           ]
         }
@@ -61405,7 +61433,7 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NDEzOTMzODY3",
       "title": "[Client Hints] Address Genart review comments",
       "url": "https://github.com/httpwg/http-extensions/pull/1171",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "yoavweiss",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
@@ -61414,17 +61442,19 @@
       ],
       "body": "",
       "createdAt": "2020-05-06T07:51:37Z",
-      "updatedAt": "2020-05-12T12:27:44Z",
+      "updatedAt": "2020-05-18T07:16:32Z",
       "baseRepository": "httpwg/http-extensions",
       "baseRefName": "master",
       "baseRefOid": "54c21f0cbf6a0cbfae51275e2a879033645f4450",
       "headRepository": "yoavweiss/http-extensions",
       "headRefName": "genart_review",
       "headRefOid": "4eef7debf33cf343f94f39b7d80741e49ef8bc3e",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2020-05-18T07:16:20Z",
+      "mergedAt": "2020-05-18T07:16:20Z",
+      "mergedBy": "yoavweiss",
+      "mergeCommit": {
+        "oid": "883e104baf00080b244ce9a192bad56084e430a4"
+      },
       "comments": [
         {
           "author": "yoavweiss",
@@ -61432,6 +61462,27 @@
           "body": "Friendly ping! :)",
           "createdAt": "2020-05-07T23:05:52Z",
           "updatedAt": "2020-05-07T23:05:52Z"
+        },
+        {
+          "author": "yoavweiss",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Friendly ping! :) PTAL?",
+          "createdAt": "2020-05-18T05:44:33Z",
+          "updatedAt": "2020-05-18T05:44:33Z"
+        },
+        {
+          "author": "mnot",
+          "authorAssociation": "MEMBER",
+          "body": "LGTM",
+          "createdAt": "2020-05-18T07:04:56Z",
+          "updatedAt": "2020-05-18T07:04:56Z"
+        },
+        {
+          "author": "yoavweiss",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Thanks for reviewing!! :)",
+          "createdAt": "2020-05-18T07:16:29Z",
+          "updatedAt": "2020-05-18T07:16:29Z"
         }
       ],
       "reviews": [
@@ -61534,6 +61585,58 @@
               "updatedAt": "2020-05-12T12:27:44Z"
             }
           ]
+        }
+      ]
+    },
+    {
+      "number": 1172,
+      "id": "MDExOlB1bGxSZXF1ZXN0NDE5NDQ5MjIw",
+      "title": "Default urgency is 3",
+      "url": "https://github.com/httpwg/http-extensions/pull/1172",
+      "state": "MERGED",
+      "author": "LPardue",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [
+        "priorities"
+      ],
+      "body": "When we discussed removing the semantics of urgency levels, we also\r\nthought it would be a good idea to change the default from 1 to 3.\r\n\r\nWe agreed to do this and landed a change that removed the semantic\r\ntext but unfortunately forgot to also change the default.\r\n\r\nThis change simple fixes the oversight.",
+      "createdAt": "2020-05-18T11:50:00Z",
+      "updatedAt": "2020-05-18T12:01:00Z",
+      "baseRepository": "httpwg/http-extensions",
+      "baseRefName": "master",
+      "baseRefOid": "7710d3caf643b8d1a54eb7fc0938a2c33ac392d2",
+      "headRepository": "httpwg/http-extensions",
+      "headRefName": "priority-default-is-3",
+      "headRefOid": "3aaeda952f626f00e931064f68fea750c644177e",
+      "closedAt": "2020-05-18T12:00:59Z",
+      "mergedAt": "2020-05-18T12:00:59Z",
+      "mergedBy": "LPardue",
+      "mergeCommit": {
+        "oid": "6a03eea1a43b32e19058ff618dd57477f23d2c0e"
+      },
+      "comments": [
+        {
+          "author": "LPardue",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "See https://github.com/httpwg/http-extensions/issues/1026#issuecomment-582776695 for background",
+          "createdAt": "2020-05-18T11:51:08Z",
+          "updatedAt": "2020-05-18T11:51:08Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDEzNTIzODky",
+          "commit": {
+            "abbreviatedOid": "3aaeda9"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Thank you for the fix!",
+          "createdAt": "2020-05-18T11:57:53Z",
+          "updatedAt": "2020-05-18T11:57:53Z",
+          "comments": []
         }
       ]
     }
