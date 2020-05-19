@@ -99,7 +99,7 @@ Table of Contents
        3.3.5.  Byte Sequences  . . . . . . . . . . . . . . . . . . .  15
        3.3.6.  Booleans  . . . . . . . . . . . . . . . . . . . . . .  15
    4.  Working With Structured Fields in HTTP  . . . . . . . . . . .  15
-     4.1.  Serializing Structured Fields . . . . . . . . . . . . . .  15
+     4.1.  Serializing Structured Fields . . . . . . . . . . . . . .  16
        4.1.1.  Serializing a List  . . . . . . . . . . . . . . . . .  16
        4.1.2.  Serializing a Dictionary  . . . . . . . . . . . . . .  18
        4.1.3.  Serializing an Item . . . . . . . . . . . . . . . . .  19
@@ -697,6 +697,11 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
    Example-Integer: 42
 
+   Integers larger than 15 digits can be supported in a variety of ways;
+   for example, by using a String (Section 3.3.3), Byte Sequence
+   (Section 3.3.5), or a parameter on an Integer that acts as a scaling
+   factor.
+
    Note that commas in Integers are used in this section's prose only
    for readability; they are not valid in the wire format.
 
@@ -717,11 +722,6 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
    Note that the serialisation algorithm (Section 4.1.5) rounds input
    with more than three digits of precision in the fractional component.
-   If an alternative rounding strategy is desired, this should be
-   specified by the header definition to occur before serialisation.
-
-
-
 
 
 
@@ -729,6 +729,9 @@ Nottingham & Kamp       Expires November 20, 2020              [Page 13]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
+
+   If an alternative rounding strategy is desired, this should be
+   specified by the header definition to occur before serialisation.
 
 3.3.3.  Strings
 
@@ -776,15 +779,14 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
    Example-Token: foo123/456
 
-   Parsers MUST support Tokens with at least 512 characters.
-
-
 
 
 Nottingham & Kamp       Expires November 20, 2020              [Page 14]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
+
+   Parsers MUST support Tokens with at least 512 characters.
 
    Note that Token allows the same characters as the "token" ABNF rule
    defined in [RFC7230], with the exceptions that the first character is
@@ -828,10 +830,8 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
    textual HTTP field values and other encodings compatible with them
    (e.g., in HTTP/2 [RFC7540] before compression with HPACK [RFC7541]).
 
-4.1.  Serializing Structured Fields
 
-   Given a structure defined in this specification, return an ASCII
-   string suitable for use in a HTTP field value.
+
 
 
 
@@ -841,6 +841,11 @@ Nottingham & Kamp       Expires November 20, 2020              [Page 15]
 
 Internet-Draft      Structured Field Values for HTTP            May 2020
 
+
+4.1.  Serializing Structured Fields
+
+   Given a structure defined in this specification, return an ASCII
+   string suitable for use in a HTTP field value.
 
    1.  If the structure is a Dictionary or List and its value is empty
        (i.e., it has no members), do not serialize the field at all
@@ -885,11 +890,6 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
            2.  Append a single SP to output.
 
    3.  Return output.
-
-
-
-
-
 
 
 
