@@ -252,7 +252,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
    behaviors, and the Augmented Backus-Naur Form (ABNF) notation of
    [RFC5234] to illustrate expected syntax in HTTP header fields.  In
    doing so, it uses the VCHAR, SP, DIGIT, ALPHA and DQUOTE rules from
-   [RFC5234].  It also includes the tchar rule from [RFC7230].
+   [RFC5234].  It also includes the tchar and OWS rules from [RFC7230].
 
    When parsing from HTTP fields, implementations MUST have behavior
    that is indistinguishable from following the algorithms.  If there is
@@ -458,7 +458,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
    The ABNF for Lists in HTTP fields is:
 
-   sf-list       = list-member *( *SP "," *SP list-member )
+   sf-list       = list-member *( OWS "," OWS list-member )
    list-member   = sf-item / inner-list
 
    Each member is separated by a comma and optional whitespace.  For
@@ -585,7 +585,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
    The ABNF for Dictionaries is:
 
-   sf-dictionary  = dict-member *( *SP "," *SP dict-member )
+   sf-dictionary  = dict-member *( OWS "," OWS dict-member )
    dict-member    = member-name [ "=" member-value ]
    member-name    = key
    member-value   = sf-item / inner-list
@@ -1254,7 +1254,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
    1.  Convert input_bytes into an ASCII string input_string; if
        conversion fails, fail parsing.
 
-   2.  Discard any leading SP characters from input_string.
+   2.  Discard any leading OWS characters from input_string.
 
    3.  If field_type is "list", let output be the result of running
        Parsing a List (Section 4.2.1) with input_string.
@@ -1265,7 +1265,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
    5.  If field_type is "item", let output be the result of running
        Parsing an Item (Section 4.2.3) with input_string.
 
-   6.  Discard any leading SP characters from input_string.
+   6.  Discard any leading OWS characters from input_string.
 
    7.  If input_string is not empty, fail parsing.
 
@@ -1334,7 +1334,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
        1.  Append the result of running Parsing an Item or Inner List
            (Section 4.2.1.1) with input_string to members.
 
-       2.  Discard any leading SP characters from input_string.
+       2.  Discard any leading OWS characters from input_string.
 
        3.  If input_string is empty, return members.
 
@@ -1349,7 +1349,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
        4.  Consume the first character of input_string; if it is not
            ",", fail parsing.
 
-       5.  Discard any leading SP characters from input_string.
+       5.  Discard any leading OWS characters from input_string.
 
        6.  If input_string is empty, there is a trailing comma; fail
            parsing.
@@ -1445,7 +1445,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
            dictionary already contains a name this_key (comparing
            character-for-character), overwrite its value.
 
-       5.  Discard any leading SP characters from input_string.
+       5.  Discard any leading OWS characters from input_string.
 
        6.  If input_string is empty, return dictionary.
 
@@ -1461,7 +1461,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
        7.  Consume the first character of input_string; if it is not
            ",", fail parsing.
 
-       8.  Discard any leading SP characters from input_string.
+       8.  Discard any leading OWS characters from input_string.
 
        9.  If input_string is empty, there is a trailing comma; fail
            parsing.
@@ -2036,6 +2036,9 @@ C.1.  Since draft-ietf-httpbis-header-structure-18
    o  Allow (but don't require) parsers to fail when a single field line
       isn't valid.
 
+   o  Allow Lists and Dictionaries to be delimited by OWS, rather than
+      *SP, to make parsing more robust.
+
 C.2.  Since draft-ietf-httpbis-header-structure-17
 
    o  Editorial improvements.
@@ -2062,9 +2065,6 @@ C.4.  Since draft-ietf-httpbis-header-structure-15
    o  Omitted True dictionary value can have parameters (#1083).
 
    o  Keys can now start with '*' (#1068).
-
-
-
 
 
 
