@@ -574,8 +574,8 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 3.2.  Dictionaries
 
    Dictionaries are ordered maps of name-value pairs, where the names
-   are short textual strings and the values are items (Section 3.3) or
-   arrays of items, both of which can be Parameterized (Section 3.1.2).
+   are short textual strings and the values are Items (Section 3.3) or
+   arrays of Items, both of which can be Parameterized (Section 3.1.2).
    There can be zero or more members, and their names are unique in the
    scope of the Dictionary they occur within.
 
@@ -609,7 +609,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
    still required to correctly handle the true Boolean value when it
    appears in Dictionary values.
 
-   A Dictionary with a member whose value is an Inner List of tokens:
+   A Dictionary with a member whose value is an Inner List of Tokens:
 
 
 
@@ -620,7 +620,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
 
    Example-DictList: rating=1.5, feelings=(joy sadness)
 
-   A Dictionary with a mix of singular and list values, some with
+   A Dictionary with a mix of Items and Inner Lists, some with
    Parameters:
 
    Example-MixDict: a=(1 2), b=3, c=4;aa=bb, d=(5 6);valid
@@ -636,7 +636,7 @@ Internet-Draft      Structured Field Values for HTTP            May 2020
    unknown, unless the field's specification specifically disallows
    them.
 
-   Note that dictionaries can have their members split across multiple
+   Note that Dictionaries can have their members split across multiple
    lines inside a header or trailer section; for example, the following
    are equivalent:
 
