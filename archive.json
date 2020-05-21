@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-05-21T05:33:40.624037+00:00",
+  "timestamp": "2020-05-21T23:33:18.827933+00:00",
   "repo": "httpwg/http-extensions",
   "labels": [
     {
@@ -27890,6 +27890,32 @@
           "body": "Yes.",
           "createdAt": "2020-05-06T23:29:23Z",
           "updatedAt": "2020-05-06T23:29:23Z"
+        }
+      ]
+    },
+    {
+      "number": 1174,
+      "id": "MDU6SXNzdWU2MjI3NDM5MjA=",
+      "title": "[Client-Hints] Impact assessment requested",
+      "url": "https://github.com/httpwg/http-extensions/issues/1174",
+      "state": "CLOSED",
+      "author": "jwrosewell",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [
+        "client-hints"
+      ],
+      "body": "The current draft does a good job of explaining the implementation of HTTP Client Hints in engineering terms. It is a shame the [reservations expressed in the W3C](https://github.com/w3ctag/design-reviews/issues/467) relating to HTTP Client Hints do not appear to have surfaced in the debate or have not been considered worthy of a acknowledgement in the final draft.\r\n\r\nThe document does not recognise the wide adoption of HTTP User-Agent header value optimisations, the benefits they provide or the reliability of the techniques used. The justification for the existence of HTTP Client Hints is framed almost entirely from the singular position of privacy. The justification concerning improving performance is at best weak.\r\n\r\nThe document does not consider use cases that would be removed by adoption in practice, the impact to the open web of such removal, societal harms, or the competition issues that would result from web browser vendor implementations when considered alongside related proposals such as privacy budget.\r\n\r\nUses cases that will be removed include performance optimisation, the detection of fraud, and problem diagnosis as a few examples. \r\n\r\nOther use cases associated with knowledge of the user\u2019s agent are tacitly acknowledged by a [browser vendor that implements the X-Client-Data](https://9to5google.com/2020/02/06/google-chrome-x-client-data-tracking/) specifically for the purpose of receiving such information on first request. The implementation of X-Client-Data limits this information to services operated by the browser vendor, happens by default and without user consent or knowledge. For the same browser vendor to support a proposal that seeks to remove such information from others is disingenuous.\r\n\r\nWhere mitigations have been suggested they would in practice depend on a related proposal concerning privacy budget. Whoever controls the privacy budget and the default settings will therefore control the realisation of such use cases.\r\n\r\nWhere existing standards for interoperability are used to deliver vital content to people the provider of such services will need to modify their service to support HTTP Client Hints. This will be the case for millions of websites currently utilising accurate information contained in the User-Agent HTTP header value. This will consume untold developer effort running two parallel solutions and will take them away from more productive activity. The problem will be particularly acute in societies where mobile devices dominate access to information and will be a particular concern for people whose only method of accessing information is via a mobile device.\r\n\r\nAssuming it is not the role of this body to pick winners and losers I urge participants to consider a further review to engage a wide range of stakeholders to better understand fully the implications before progressing.",
+      "createdAt": "2020-05-21T19:55:37Z",
+      "updatedAt": "2020-05-21T23:12:08Z",
+      "closedAt": "2020-05-21T23:12:08Z",
+      "comments": [
+        {
+          "author": "mnot",
+          "authorAssociation": "MEMBER",
+          "body": "Spec already shipped, so this is too late.\r\n\r\nBeyond that, the issue you reference and what you raise here is about migrating form UA to clint hints, which is not part of this document. ",
+          "createdAt": "2020-05-21T23:12:08Z",
+          "updatedAt": "2020-05-21T23:12:08Z"
         }
       ]
     }
@@ -60953,7 +60979,7 @@
       ],
       "body": "This attempts to address #1096 and #1079. It might help towards overcoming the headers vs frames debate.\r\n\r\nI made the call to restrict the PRIORITY_UPDATE frame to only be sent by clients.\r\n\r\nIt replaces ASCII art with new QUIC-style frame definitions.",
       "createdAt": "2020-04-30T13:45:24Z",
-      "updatedAt": "2020-05-18T11:11:55Z",
+      "updatedAt": "2020-05-21T14:54:27Z",
       "baseRepository": "httpwg/http-extensions",
       "baseRefName": "master",
       "baseRefOid": "f40438f4582d1fdb5b894f382ce341686e38e7c3",
@@ -61320,6 +61346,19 @@
               "updatedAt": "2020-05-18T11:11:55Z"
             }
           ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDE2MjIwNTk3",
+          "commit": {
+            "abbreviatedOid": "a2579e7"
+          },
+          "author": "bencebeky",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-05-21T14:54:27Z",
+          "updatedAt": "2020-05-21T14:54:27Z",
+          "comments": []
         }
       ]
     },
@@ -61645,24 +61684,26 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NDIxMTU5MjMz",
       "title": "Allow Lists and Dictionaries to be delimited by OWS",
       "url": "https://github.com/httpwg/http-extensions/pull/1173",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "mnot",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "From Magnus's feedback",
       "createdAt": "2020-05-21T05:32:58Z",
-      "updatedAt": "2020-05-21T05:33:10Z",
+      "updatedAt": "2020-05-21T23:32:05Z",
       "baseRepository": "httpwg/http-extensions",
       "baseRefName": "master",
       "baseRefOid": "c23df1c8fa5e0eb09070d5a8d43b00678f4c0c2f",
       "headRepository": "httpwg/http-extensions",
       "headRefName": "mnot-sf-tablists",
       "headRefOid": "d2b407f8eda0e1ac69e4196b0a429b57fe62f754",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2020-05-21T23:32:04Z",
+      "mergedAt": "2020-05-21T23:32:04Z",
+      "mergedBy": "mnot",
+      "mergeCommit": {
+        "oid": "aebe6eac02b909b9ffba3771cbbef1b534dddc28"
+      },
       "comments": [
         {
           "author": "mnot",
@@ -61670,9 +61711,104 @@
           "body": "also @clelland PTAL",
           "createdAt": "2020-05-21T05:33:10Z",
           "updatedAt": "2020-05-21T05:33:10Z"
+        },
+        {
+          "author": "kaduk",
+          "authorAssociation": "NONE",
+          "body": "This does not instill much of a panicked reaction in me, which is probably a good sign.\r\nI trust it is intentional to not apply a similar treatment to inner lists (which also has a prose description I had commented on previously) on the grounds of them not resembling existing top-level header field structures?  That's certainly defensible, though I have to wonder whether someone will simply assume that it must be the same (not that we have much hope of changing such a person's behavior).",
+          "createdAt": "2020-05-21T05:50:05Z",
+          "updatedAt": "2020-05-21T05:50:05Z"
+        },
+        {
+          "author": "phluid61",
+          "authorAssociation": "COLLABORATOR",
+          "body": "How does this vibe with #998? I know we spent a bit of time on it, but it's long enough ago that I can't recall detail.",
+          "createdAt": "2020-05-21T06:03:13Z",
+          "updatedAt": "2020-05-21T06:03:13Z"
+        },
+        {
+          "author": "phluid61",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Ah, right, I think I remember. Doing it this way means inner-list is different:\r\n\r\n~~~\r\ninner-list = \"(\" *SP [ sf-item *( 1*SP sf-item ) *SP ] \")\"\r\n             *parameter\r\n~~~\r\n\r\nThe original motivation to remove tabs was because the above was going to be\r\n\r\n~~~\r\n  \"(\" OWS [ sf-item *( RWS sf-item ) OWS ] \")\"\r\n~~~\r\n\r\nbut there was consternation about RWS. Most of the discussion is in #983 ",
+          "createdAt": "2020-05-21T06:12:51Z",
+          "updatedAt": "2020-05-21T06:12:51Z"
+        },
+        {
+          "author": "mnot",
+          "authorAssociation": "MEMBER",
+          "body": "@phluid61 #988 was where my mind went first too, but that seems to be just about in inner lists (which makes sense). I think this is separate; intermediaries that don't know about the semantics and syntactic limitations of a given field shouldn't be meddling inside it (which inner list delimitation is).",
+          "createdAt": "2020-05-21T07:45:26Z",
+          "updatedAt": "2020-05-21T07:45:26Z"
+        },
+        {
+          "author": "clelland",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "@reschke, I think so -- that's the only reason to allow this. Existing servers may already legitimately be using TAB when combining multiple field lines. And I suppose it makes sense, given the recent discussion about not breaking up individual list or dictionary members over multiple lines, that we don't need to replace *SP with OWS everywhere.\r\n\r\nI'm okay with this change -- does it warrant a note in the prose somewhere that this special case only exists to accommodate field concatenation?\r\n\r\n> Note that it says \"comma an optional whitespace\", not \"OWS\". Depending on how you read it, it might include other whitespace characters. I believe this needs to be fixed in the Semantics spec.\r\n\r\nLet's hope we don't need to add VTAB or FF to this, too :)\r\n\r\n",
+          "createdAt": "2020-05-21T13:30:42Z",
+          "updatedAt": "2020-05-21T13:30:42Z"
+        },
+        {
+          "author": "mnot",
+          "authorAssociation": "MEMBER",
+          "body": "@reschke I don't know that that's necessary; we already [define whitespace](https://httpwg.org/http-core/draft-ietf-httpbis-semantics-latest.html#whitespace) pretty clearly.\r\n\r\nIn SF, I looked at changing \"whitespace\", but in each case the ABNF and algorithms make it clear what we're talking about, so I don't see a strong need to disambiguate.",
+          "createdAt": "2020-05-21T23:30:36Z",
+          "updatedAt": "2020-05-21T23:30:36Z"
         }
       ],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDE1OTAyMzIy",
+          "commit": {
+            "abbreviatedOid": "d2b407f"
+          },
+          "author": "bsdphk",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "I dont think I ever saw a TAB in a HTTP header in real life, but I am OK with this.",
+          "createdAt": "2020-05-21T06:13:00Z",
+          "updatedAt": "2020-05-21T06:13:00Z",
+          "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDE1OTM0MTc1",
+          "commit": {
+            "abbreviatedOid": "d2b407f"
+          },
+          "author": "reschke",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-05-21T07:26:09Z",
+          "updatedAt": "2020-05-21T07:26:09Z",
+          "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDE1OTQ5MDI5",
+          "commit": {
+            "abbreviatedOid": "d2b407f"
+          },
+          "author": "phluid61",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-05-21T07:54:42Z",
+          "updatedAt": "2020-05-21T07:54:42Z",
+          "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDE2MDgxNDE0",
+          "commit": {
+            "abbreviatedOid": "d2b407f"
+          },
+          "author": "reschke",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "This is so that field line combination as per the Semantics spec can happen, right?\r\n\r\nI note that <https://greenbytes.de/tech/webdav/draft-ietf-httpbis-semantics-latest.html#field.order> currently says:\r\n\r\n> A recipient MAY combine multiple field lines with the same field name into one field line, without changing the semantics of the message, by appending each subsequent field line value to the initial field line value in order, separated by a comma and optional whitespace. For consistency, use comma SP.\r\n\r\nNote that it says \"comma an optional whitespace\", not \"OWS\". Depending on how you read it, it might include other whitespace characters. I *believe* this needs to be fixed in the Semantics spec.",
+          "createdAt": "2020-05-21T11:46:06Z",
+          "updatedAt": "2020-05-21T11:46:06Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
