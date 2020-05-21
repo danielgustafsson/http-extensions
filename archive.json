@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-05-19T04:53:00.063014+00:00",
+  "timestamp": "2020-05-21T05:33:40.624037+00:00",
   "repo": "httpwg/http-extensions",
   "labels": [
     {
@@ -61639,6 +61639,40 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 1173,
+      "id": "MDExOlB1bGxSZXF1ZXN0NDIxMTU5MjMz",
+      "title": "Allow Lists and Dictionaries to be delimited by OWS",
+      "url": "https://github.com/httpwg/http-extensions/pull/1173",
+      "state": "OPEN",
+      "author": "mnot",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "From Magnus's feedback",
+      "createdAt": "2020-05-21T05:32:58Z",
+      "updatedAt": "2020-05-21T05:33:10Z",
+      "baseRepository": "httpwg/http-extensions",
+      "baseRefName": "master",
+      "baseRefOid": "c23df1c8fa5e0eb09070d5a8d43b00678f4c0c2f",
+      "headRepository": "httpwg/http-extensions",
+      "headRefName": "mnot-sf-tablists",
+      "headRefOid": "d2b407f8eda0e1ac69e4196b0a429b57fe62f754",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "mnot",
+          "authorAssociation": "MEMBER",
+          "body": "also @clelland PTAL",
+          "createdAt": "2020-05-21T05:33:10Z",
+          "updatedAt": "2020-05-21T05:33:10Z"
+        }
+      ],
+      "reviews": []
     }
   ]
 }
