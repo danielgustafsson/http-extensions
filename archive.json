@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-05-21T23:33:18.827933+00:00",
+  "timestamp": "2020-05-22T13:53:06.186954+00:00",
   "repo": "httpwg/http-extensions",
   "labels": [
     {
@@ -60979,13 +60979,13 @@
       ],
       "body": "This attempts to address #1096 and #1079. It might help towards overcoming the headers vs frames debate.\r\n\r\nI made the call to restrict the PRIORITY_UPDATE frame to only be sent by clients.\r\n\r\nIt replaces ASCII art with new QUIC-style frame definitions.",
       "createdAt": "2020-04-30T13:45:24Z",
-      "updatedAt": "2020-05-21T14:54:27Z",
+      "updatedAt": "2020-05-22T13:52:03Z",
       "baseRepository": "httpwg/http-extensions",
       "baseRefName": "master",
       "baseRefOid": "f40438f4582d1fdb5b894f382ce341686e38e7c3",
       "headRepository": "httpwg/http-extensions",
       "headRefName": "priority-update-frames",
-      "headRefOid": "a2579e70046b868386a2a7ebf217031bddd5cc8f",
+      "headRefOid": "ffae0f251f7b0902a35ad691d8ced3f835acd2a2",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -61072,13 +61072,13 @@
               "originalPosition": 21,
               "body": "```suggestion\r\nHaving two mechanisms to carry the initial priority signal brings the dilemma of\r\n```",
               "createdAt": "2020-05-05T17:50:00Z",
-              "updatedAt": "2020-05-18T11:11:55Z"
+              "updatedAt": "2020-05-22T13:52:03Z"
             },
             {
               "originalPosition": 61,
               "body": "```suggestion\r\nof any other value MUST be treated as a connection error of type PROTOCOL_ERROR.\r\n```",
               "createdAt": "2020-05-05T17:51:18Z",
-              "updatedAt": "2020-05-18T11:11:55Z"
+              "updatedAt": "2020-05-22T13:52:03Z"
             }
           ]
         },
@@ -61098,7 +61098,7 @@
               "originalPosition": 21,
               "body": "+1",
               "createdAt": "2020-05-05T18:05:45Z",
-              "updatedAt": "2020-05-18T11:11:55Z"
+              "updatedAt": "2020-05-22T13:52:03Z"
             }
           ]
         },
@@ -61118,7 +61118,7 @@
               "originalPosition": 45,
               "body": "Should be more like\r\n\r\n```\r\n  Therefore, a client cannot reprioritize a response by\r\n  sending additional metadata (e.g., trailer fields) on the request stream.\r\n  We avoid interoperability failure by restricting PRIORITY_UPDATE\r\n  frames to the control stream, with each such frame explicitly identifying\r\n  the stream to which the new priority applies.\r\n```",
               "createdAt": "2020-05-05T18:27:45Z",
-              "updatedAt": "2020-05-18T11:11:55Z"
+              "updatedAt": "2020-05-22T13:52:03Z"
             }
           ]
         },
@@ -61138,7 +61138,7 @@
               "originalPosition": 45,
               "body": "Thanks. I tweaked the suggestion slightly and made cbcdc60cf5a92. PTAL.",
               "createdAt": "2020-05-06T13:13:38Z",
-              "updatedAt": "2020-05-18T11:11:55Z"
+              "updatedAt": "2020-05-22T13:52:03Z"
             }
           ]
         },
@@ -61171,19 +61171,19 @@
               "originalPosition": 131,
               "body": "0x10?",
               "createdAt": "2020-05-14T01:00:08Z",
-              "updatedAt": "2020-05-18T11:11:55Z"
+              "updatedAt": "2020-05-22T13:52:03Z"
             },
             {
               "originalPosition": 11,
               "body": "How about stating that endpoints that do not want to expose an end-to-end signal MAY omit the header field, but send the PRIORITY_UPDATE frame at an early moment assuming that it would reach the server as early as the request headers? Would could go on to explain that in such case, all the responses that the server would send would have the priority in the frame being applied.\r\n\r\nThe benefit of phrasing that way is that we can get rid of the last paragraph of this section.",
               "createdAt": "2020-05-14T01:04:23Z",
-              "updatedAt": "2020-05-18T11:11:55Z"
+              "updatedAt": "2020-05-22T13:52:03Z"
             },
             {
               "originalPosition": 91,
               "body": "Seeing the definition of the frame _headers_ for H2 was surprising to me, though I understand that it reflects the change to the HTTP/3 draft. Maybe I should ask if the change in HTTP/3 is a good thing.",
               "createdAt": "2020-05-14T01:08:39Z",
-              "updatedAt": "2020-05-18T11:11:55Z"
+              "updatedAt": "2020-05-22T13:52:03Z"
             }
           ]
         },
@@ -61203,7 +61203,7 @@
               "originalPosition": 91,
               "body": "As a personal opinion I prefer to see the frame in whole because it avoids having to cross reference to the frame headers, which are defined in some other document. \r\n\r\nBut I can drop them if people want. I see that as an editorial change so perhaps we can avoid blocking this and fix up later if needs be.",
               "createdAt": "2020-05-14T01:21:41Z",
-              "updatedAt": "2020-05-18T11:11:55Z"
+              "updatedAt": "2020-05-22T13:52:03Z"
             }
           ]
         },
@@ -61223,7 +61223,7 @@
               "originalPosition": 91,
               "body": "I agree that this is an editorial issue, and that we need to ask the WG to resolve (because it is about the convention covering all H2 extensions, not just this one).",
               "createdAt": "2020-05-14T01:43:01Z",
-              "updatedAt": "2020-05-18T11:11:55Z"
+              "updatedAt": "2020-05-22T13:52:03Z"
             }
           ]
         },
@@ -61243,7 +61243,7 @@
               "originalPosition": 91,
               "body": "FWIW, ALTSVC is the only extension to have reached RFC status previously.  It [does not include](https://tools.ietf.org/html/rfc7838#section-4) the frame header; only the payload.",
               "createdAt": "2020-05-14T14:41:04Z",
-              "updatedAt": "2020-05-18T11:11:55Z"
+              "updatedAt": "2020-05-22T13:52:03Z"
             }
           ]
         },
@@ -61263,7 +61263,7 @@
               "originalPosition": 91,
               "body": "You forgot ORIGIN frame https://tools.ietf.org/html/rfc8336#section-2.1 which also specifies the frame payload.\r\n\r\nNow that H2 and H3 have different frame format definitions, I think extensions applicable to both will hit this problem. I'd like to figure what people think is the most acceptable way to present things.",
               "createdAt": "2020-05-14T14:53:09Z",
-              "updatedAt": "2020-05-18T11:11:55Z"
+              "updatedAt": "2020-05-22T13:52:03Z"
             }
           ]
         },
@@ -61283,7 +61283,7 @@
               "originalPosition": 91,
               "body": "One option would be to write documents that update RFC 7838 and RFC 8336 to use the new format and define the H3 frame at the same time...",
               "createdAt": "2020-05-14T14:56:10Z",
-              "updatedAt": "2020-05-18T11:11:55Z"
+              "updatedAt": "2020-05-22T13:52:03Z"
             }
           ]
         },
@@ -61303,7 +61303,7 @@
               "originalPosition": 11,
               "body": "I've tried to incorporate this suggestion in https://github.com/httpwg/http-extensions/pull/1167/commits/f5ac92a045a3074e503c93d304a90799e387ab07 but found it trickier to write than I first thought it would be, so it ended up a little different in the end. Please take a look and add some further suggestions if I'm not hitting your mark.",
               "createdAt": "2020-05-15T11:53:22Z",
-              "updatedAt": "2020-05-18T11:11:55Z"
+              "updatedAt": "2020-05-22T13:52:03Z"
             }
           ]
         },
@@ -61323,7 +61323,7 @@
               "originalPosition": 91,
               "body": "True, I try to block that one out.\r\n\r\nThey have different frame format definitions, sure; the question is whether the payload needs to vary between H2/H3.  I think the real things you need to specify are:\r\n\r\n- What stream it's on (part of the header in H2, intrinsic property in H3)\r\n  - Control stream vs. stream zero language plays into this\r\n- Flags if used in H2; since H3 doesn't have flags, this might lead to a payload difference\r\n- Payload\r\n\r\nThe simplest path for dual-version extensions is not to use flags and only define the payload.",
               "createdAt": "2020-05-15T18:15:38Z",
-              "updatedAt": "2020-05-18T11:11:55Z"
+              "updatedAt": "2020-05-22T13:52:03Z"
             }
           ]
         },
@@ -61343,7 +61343,7 @@
               "originalPosition": 32,
               "body": "How about changing the last sentence to something like: _The signal carried by a PRIORITY_UPDATE frame overrides that carried by the header, even when the frame was received before the request headers._\r\n\r\nNote that this PR recommends such a behavior; it states that a server SHOULD buffer and apply the content of PRIORITY_UPDATE frame that precedes the header field. For good reasons.\r\n\r\nConsider the case of an H3 client sending a HTTP request with a Priority header field, then changing its mind and sending a PRIORITY_UPDATE frame. As H3 does not guarantee delivery order across streams, the server might receive the frame before the header. I'd assume that we'd want servers to apply the value carried by the frame. Even when the protocol is H2, I am not sure if all the H2 stacks have the guarantee that the information across multiple streams are sent in the order they are issued, or that they are provided to the application in the order they are received.",
               "createdAt": "2020-05-15T20:17:34Z",
-              "updatedAt": "2020-05-18T11:11:55Z"
+              "updatedAt": "2020-05-22T13:52:03Z"
             }
           ]
         },
@@ -61359,6 +61359,68 @@
           "createdAt": "2020-05-21T14:54:27Z",
           "updatedAt": "2020-05-21T14:54:27Z",
           "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDE2NjIxOTk2",
+          "commit": {
+            "abbreviatedOid": "a2579e7"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-05-22T03:13:28Z",
+          "updatedAt": "2020-05-22T03:20:21Z",
+          "comments": [
+            {
+              "originalPosition": 30,
+              "body": "The important \"when\" here is \"before prioritization information is not useful to the server\".  That might be later than when the server receives the request.",
+              "createdAt": "2020-05-22T03:13:28Z",
+              "updatedAt": "2020-05-22T13:52:03Z"
+            },
+            {
+              "originalPosition": 112,
+              "body": "SHOULD.  I don't think that I could guarantee that this could be enforced.\r\n\r\n```suggestion\r\nthis SHOULD be treated as a connection error of type PROTOCOL_ERROR.\r\n```\r\n\r\nWell, I guess that this is the h2 variant, but still.",
+              "createdAt": "2020-05-22T03:14:24Z",
+              "updatedAt": "2020-05-22T13:52:03Z"
+            },
+            {
+              "originalPosition": 202,
+              "body": "This needs to be qualified; if the frame contains a Push ID, then this doesn't apply.",
+              "createdAt": "2020-05-22T03:16:46Z",
+              "updatedAt": "2020-05-22T13:52:03Z"
+            },
+            {
+              "originalPosition": 203,
+              "body": "```suggestion\r\nID that is beyond the stream limits, this SHOULD be treated as a connection error\r\n```",
+              "createdAt": "2020-05-22T03:16:55Z",
+              "updatedAt": "2020-05-22T13:52:03Z"
+            },
+            {
+              "originalPosition": 213,
+              "body": "This one could be a MUST.",
+              "createdAt": "2020-05-22T03:17:17Z",
+              "updatedAt": "2020-05-22T13:52:03Z"
+            },
+            {
+              "originalPosition": 231,
+              "body": "I would skip a number here and let people use the low bit of the type as a flag if they want.  Otherwise, this is a tiny bit more awkward.",
+              "createdAt": "2020-05-22T03:18:10Z",
+              "updatedAt": "2020-05-22T13:52:03Z"
+            },
+            {
+              "originalPosition": 91,
+              "body": "```suggestion\r\n  Stream Identifier (31) = 0,\r\n```",
+              "createdAt": "2020-05-22T03:18:52Z",
+              "updatedAt": "2020-05-22T13:52:03Z"
+            },
+            {
+              "originalPosition": 28,
+              "body": "I just have to say that this \"do not want\" statement assumes a great deal without a whole lot of support.",
+              "createdAt": "2020-05-22T03:20:04Z",
+              "updatedAt": "2020-05-22T13:52:03Z"
+            }
+          ]
         }
       ]
     },
@@ -61691,7 +61753,7 @@
       "labels": [],
       "body": "From Magnus's feedback",
       "createdAt": "2020-05-21T05:32:58Z",
-      "updatedAt": "2020-05-21T23:32:05Z",
+      "updatedAt": "2020-05-22T03:02:30Z",
       "baseRepository": "httpwg/http-extensions",
       "baseRefName": "master",
       "baseRefOid": "c23df1c8fa5e0eb09070d5a8d43b00678f4c0c2f",
@@ -61753,6 +61815,13 @@
           "body": "@reschke I don't know that that's necessary; we already [define whitespace](https://httpwg.org/http-core/draft-ietf-httpbis-semantics-latest.html#whitespace) pretty clearly.\r\n\r\nIn SF, I looked at changing \"whitespace\", but in each case the ABNF and algorithms make it clear what we're talking about, so I don't see a strong need to disambiguate.",
           "createdAt": "2020-05-21T23:30:36Z",
           "updatedAt": "2020-05-21T23:30:36Z"
+        },
+        {
+          "author": "reschke",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I'm ok with the change over here; that said, the Semantics spec could be clearer. Opened https://github.com/httpwg/http-core/issues/370.",
+          "createdAt": "2020-05-22T03:02:29Z",
+          "updatedAt": "2020-05-22T03:02:29Z"
         }
       ],
       "reviews": [
