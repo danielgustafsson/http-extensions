@@ -866,7 +866,7 @@ Internet-Draft               Digest Headers                     May 2020
    (see Section 6).
 
    The representation enclosed in the response refers to the resource
-   identified by "Content-Location" (see [SEMANTICS] Section 6.3.2).
+   identified by "Content-Location" (see [SEMANTICS], Section 6.3.2).
 
    "Digest" is thus computed on the enclosed representation.
 
