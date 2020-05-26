@@ -814,7 +814,7 @@ A `Digest` header field using NOT RECOMMENDED digest-algorithms SHOULD NOT be us
 
 ## Relation with validators
 
-`Digest` field-value may be cached by intermediaries.
+`Digest` field-value can be cached by intermediaries.
 
 `Validators` like `Last-Modified` and `ETag`
 or other caching header fields
