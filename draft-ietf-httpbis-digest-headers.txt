@@ -1602,14 +1602,29 @@ Appendix A.  Resource Representation and Representation-Data
    When the payload body contains non-printable characters (eg. when it
    is compressed) it is shown as base64-encoded string.
 
-   A request with a json object without any content coding &#65532;
-   Request: &#65532; ~~~ PUT /entries/1234 HTTP/1.1 Content-Type:
-   application/json Content-Encoding: identity
-
-   {"hello": "world"} ~~~ &#65532; Here is a gzip-compressed json object
-   using a content coding
+   A request with a json object without any content coding.
 
    Request:
+
+   PUT /entries/1234 HTTP/1.1
+   Content-Type: application/json
+   Content-Encoding: identity
+
+   {"hello": "world"}
+
+   Here is a gzip-compressed json object using a content coding.
+
+   Request:
+
+
+
+
+
+
+Polli & Pardue          Expires November 27, 2020              [Page 29]
+
+Internet-Draft               Digest Headers                     May 2020
+
 
    PUT /entries/1234 HTTP/1.1
    Content-Type: application/json
@@ -1618,13 +1633,6 @@ Appendix A.  Resource Representation and Representation-Data
    H4sIAItWyFwC/6tWSlSyUlAypANQqgUAREcqfG0AAAA=
 
    Now the same payload body conveys a malformed json object.
-
-
-
-Polli & Pardue          Expires November 27, 2020              [Page 29]
-
-Internet-Draft               Digest Headers                     May 2020
-
 
    Request:
 
@@ -1667,6 +1675,13 @@ Internet-Draft               Digest Headers                     May 2020
    Content-Encoding: gzip
 
 
+
+
+Polli & Pardue          Expires November 27, 2020              [Page 30]
+
+Internet-Draft               Digest Headers                     May 2020
+
+
    Finally the semantics of an HTTP response might decouple the
    effective request URI from the enclosed representation.  In the
    example response below, the "Content-Location" header field indicates
@@ -1674,13 +1689,6 @@ Internet-Draft               Digest Headers                     May 2020
    "/authors/123".
 
    Request:
-
-
-
-Polli & Pardue          Expires November 27, 2020              [Page 30]
-
-Internet-Draft               Digest Headers                     May 2020
-
 
    POST /authors/ HTTP/1.1
    Accept: application/json
@@ -1723,20 +1731,17 @@ Appendix B.  FAQ
 
    5.  Why remove references to Digest Authentication?
 
-       This RFC seems to me completely unrelated to Digest
-       Authentication but for the word "Digest".
-
-   6.  What changes in "Want-Digest"?
-
-
-
-
 
 
 Polli & Pardue          Expires November 27, 2020              [Page 31]
 
 Internet-Draft               Digest Headers                     May 2020
 
+
+       This RFC seems to me completely unrelated to Digest
+       Authentication but for the word "Digest".
+
+   6.  What changes in "Want-Digest"?
 
        We allow to use the "Want-Digest" in responses to advertise the
        supported digest-algorithms and the inability to accept requests
@@ -1779,11 +1784,6 @@ Code Samples
    these are formatted as base64.  This function could be adapted to
    other algorithms and should take into account their specific
    formatting rules.
-
-
-
-
-
 
 
 
