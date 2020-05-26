@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-05-22T13:53:06.186954+00:00",
+  "timestamp": "2020-05-26T10:54:09.131021+00:00",
   "repo": "httpwg/http-extensions",
   "labels": [
     {
@@ -27918,6 +27918,428 @@
           "updatedAt": "2020-05-21T23:12:08Z"
         }
       ]
+    },
+    {
+      "number": 1176,
+      "id": "MDU6SXNzdWU2MjQ0OTc0MTQ=",
+      "title": "Confusing guidance on algorithm and key identification",
+      "url": "https://github.com/httpwg/http-extensions/issues/1176",
+      "state": "OPEN",
+      "author": "richanna",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [
+        "signatures"
+      ],
+      "body": "The current draft encourages determining the Algorithm metadata property from the `keyId` field, both in the guidance for the use of `algorithm` and `keyId`, and the definition for the `hs2019` algorithm and deprecation of the other algorithms in the registry.  The current state arose from concern that a malicious party could change the value of the `algorithm` parameter, potentially tricking the verifier into accepting a signature that would not have been verified under the actual parameter.\r\n\r\nPunting algorithm identification into `keyId` hurts interoperability, since we aren't defining the syntax or semantics of `keyId`.  It actually goes against that claim, as we are dictating that the signing algorithm must be specified by `keyId` or derivable from it.  It also renders the algorithm registry essentially useless.  Instead of this approach, we can protect against manipulation of the Signature header field by adding support for (and possibly mandating) including Signature metadata within the Signature Input.",
+      "createdAt": "2020-05-25T21:49:55Z",
+      "updatedAt": "2020-05-25T23:15:27Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 1177,
+      "id": "MDU6SXNzdWU2MjQ0OTgxNTU=",
+      "title": "Lack of definition of keyId hurts interoperability",
+      "url": "https://github.com/httpwg/http-extensions/issues/1177",
+      "state": "OPEN",
+      "author": "richanna",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [
+        "signatures"
+      ],
+      "body": "The current text leaves the format and semantics of `keyId` completely up to the implementation.  This is primarily due to the fact that most implementers of Cavage have extensive investment in key distribution and management, and just need to plug an identifier into the header.  We should support those cases, but we also need to provide guidance for the developer that doesn't have that and just wants to know how to identify a key.  It may be enough to punt this to profiling specs, but this needs to be explored more.",
+      "createdAt": "2020-05-25T21:53:10Z",
+      "updatedAt": "2020-05-25T23:15:28Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 1178,
+      "id": "MDU6SXNzdWU2MjQ0OTgyOTY=",
+      "title": "Algorithm Registry duplicates work of JWA",
+      "url": "https://github.com/httpwg/http-extensions/issues/1178",
+      "state": "OPEN",
+      "author": "richanna",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [
+        "signatures"
+      ],
+      "body": "RFC7518 already defines an IANA registry for cryptographic algorithms.  This wasn't used by Cavage out of concerns about complexity of JOSE, and issues with JWE and JWS being too flexible, leading to insecure combinations of options.  Using JWA's definitions does not need to mean we're using JOSE, however. We should look at if/how we can leverage JWA's work without introducing too many sharp edges for implementers.\r\n\r\nIn any use of JWS algorithms, this spec would define a way to create the JWS Signing Input string to be applied to the algorithm.  It should be noted that this is incompatible with JWS itself, which requires the inclusion of a structured header in the signature input.\r\n\r\nA possible approach is to incorporate all elements of the JWA signature algorithm registry into this spec using a prefix or other marker, such as `jws-RS256` for the RSA 256 JSON Web Signature algorithm.",
+      "createdAt": "2020-05-25T21:53:44Z",
+      "updatedAt": "2020-05-25T23:15:28Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 1179,
+      "id": "MDU6SXNzdWU2MjQ0OTg3MzU=",
+      "title": "Algorithm Registry should not be initialized with deprecated entries",
+      "url": "https://github.com/httpwg/http-extensions/issues/1179",
+      "state": "OPEN",
+      "author": "richanna",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [
+        "signatures"
+      ],
+      "body": "The initial entries in this document reflect those in Cavage.  The ones that are marked deprecated were done so because of the issue explained in #1176, with the possible exception of `rsa-sha1`.  We should probably just remove that one.\r\n\r\n",
+      "createdAt": "2020-05-25T21:55:29Z",
+      "updatedAt": "2020-05-25T23:15:28Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 1180,
+      "id": "MDU6SXNzdWU2MjQ0OTkwMzI=",
+      "title": "No percent-encoding normalization of path/query",
+      "url": "https://github.com/httpwg/http-extensions/issues/1180",
+      "state": "OPEN",
+      "author": "richanna",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [
+        "signatures"
+      ],
+      "body": "The canonicalization rules for `(request-target)` do not perform handle minor, semantically meaningless differences in percent-encoding, such that verification could fail if an intermediary normalizes the effective request URI prior to forwarding the message.  \r\n\r\nAt a minimum, they should be case and percent-encoding normalized as described in sections 6.2.2.1 and 6.2.2.2 of RFC3986.\r\n\r\nSee: [issue #26 in old Cavage repo](https://github.com/w3c-dvcg/http-signatures/issues/26)",
+      "createdAt": "2020-05-25T21:56:48Z",
+      "updatedAt": "2020-05-25T23:15:28Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 1181,
+      "id": "MDU6SXNzdWU2MjQ0OTkxMjQ=",
+      "title": "Misleading name for headers parameter",
+      "url": "https://github.com/httpwg/http-extensions/issues/1181",
+      "state": "OPEN",
+      "author": "richanna",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [
+        "signatures"
+      ],
+      "body": "The Covered Content list contains identifiers for more than just headers, so the `header` parameter name is no longer appropriate.  Some alternatives: \"content\", \"signed-content\", \"covered-content\".",
+      "createdAt": "2020-05-25T21:57:10Z",
+      "updatedAt": "2020-05-25T23:15:29Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 1182,
+      "id": "MDU6SXNzdWU2MjQ0OTkyNjY=",
+      "title": "Changes to whitespace in header field values break verification",
+      "url": "https://github.com/httpwg/http-extensions/issues/1182",
+      "state": "OPEN",
+      "author": "richanna",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [
+        "signatures"
+      ],
+      "body": "Some header field values contain RWS, OWS, and/or BWS.  Since the header field value canonicalization rules do not address whitespace, changes to it (e.g., removing OWS or BWS or replacing strings of RWS with a single space) can cause verification to fail.",
+      "createdAt": "2020-05-25T21:57:40Z",
+      "updatedAt": "2020-05-25T23:15:29Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 1183,
+      "id": "MDU6SXNzdWU2MjQ0OTkzNTQ=",
+      "title": "Multiple Set-Cookie headers are not well supported",
+      "url": "https://github.com/httpwg/http-extensions/issues/1183",
+      "state": "OPEN",
+      "author": "richanna",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [
+        "signatures"
+      ],
+      "body": "The Set-Cookie header can occur multiple times but does not adhere to the list syntax, and thus is not well supported by the header field value concatenation rules.",
+      "createdAt": "2020-05-25T21:58:03Z",
+      "updatedAt": "2020-05-25T23:15:29Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 1184,
+      "id": "MDU6SXNzdWU2MjQ0OTk0MDM=",
+      "title": "Signature parameters are not signed",
+      "url": "https://github.com/httpwg/http-extensions/issues/1184",
+      "state": "OPEN",
+      "author": "richanna",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [
+        "signatures"
+      ],
+      "body": "The Covered Content list, Algorithm, and Verification Key identifier should all be part of the Signature Input, to protect against malicious changes.",
+      "createdAt": "2020-05-25T21:58:18Z",
+      "updatedAt": "2020-05-25T23:15:29Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 1185,
+      "id": "MDU6SXNzdWU2MjQ0OTk3MjM=",
+      "title": "Max values, precision for Integer String and Decimal String not defined",
+      "url": "https://github.com/httpwg/http-extensions/issues/1185",
+      "state": "OPEN",
+      "author": "richanna",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [
+        "signatures"
+      ],
+      "body": "The definitions for Integer String and Decimal String do not specify a maximum value.  The definition for Decimal String (used to provide sub-second precision for Expiration Time) does not define minimum or maximum precision requirements.  It should set a reasonable requirement here (e.g., MUST support up to 3 decimal places and no more).\r\n\r\nBetter yet, are there existing definitions we can reference?",
+      "createdAt": "2020-05-25T21:59:42Z",
+      "updatedAt": "2020-05-25T23:15:30Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 1186,
+      "id": "MDU6SXNzdWU2MjQ0OTk3OTg=",
+      "title": "keyId parameter value could break list syntax",
+      "url": "https://github.com/httpwg/http-extensions/issues/1186",
+      "state": "OPEN",
+      "author": "richanna",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [
+        "signatures"
+      ],
+      "body": "The `keyId` parameter value needs to be constrained so as to not break list syntax (e.g., by containing a comma).",
+      "createdAt": "2020-05-25T22:00:02Z",
+      "updatedAt": "2020-05-25T23:15:30Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 1187,
+      "id": "MDU6SXNzdWU2MjQ1MDAzMzY=",
+      "title": "Creation Time and Expiration Time do not allow for clock skew",
+      "url": "https://github.com/httpwg/http-extensions/issues/1187",
+      "state": "OPEN",
+      "author": "richanna",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [
+        "signatures"
+      ],
+      "body": "The processing instructions for Creation Time and Expiration Time imply that verifiers are not permitted to account for clock skew during signature verification.",
+      "createdAt": "2020-05-25T22:01:15Z",
+      "updatedAt": "2020-05-26T09:26:51Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "ioggstream",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "This can safely be fixed adding a `nbf`-like claim, so that the signer remains in control of the signature validity. This is especially important if the signature is created with the signer's private key.\r\n\r\nimho this kind of document should not define a clock-skew tolerance threshold, and implementors shoud be suggested to fix their clocks.\r\n\r\nThere may be corner cases (eg. IoT/disconnected devices ) that we should address properly ",
+          "createdAt": "2020-05-26T09:26:51Z",
+          "updatedAt": "2020-05-26T09:26:51Z"
+        }
+      ]
+    },
+    {
+      "number": 1188,
+      "id": "MDU6SXNzdWU2MjQ1MDA1NDU=",
+      "title": "Require lowercased header field names as identifiers",
+      "url": "https://github.com/httpwg/http-extensions/issues/1188",
+      "state": "OPEN",
+      "author": "richanna",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [
+        "signatures"
+      ],
+      "body": "The current text allows mixed-case header field names when they are being used as content identifiers. This is unnecessary \u2013 header field names are case-insensitive \u2013 and creates opportunity for incompatibility.  Instead, content identifiers should always be lowercase.",
+      "createdAt": "2020-05-25T22:02:09Z",
+      "updatedAt": "2020-05-25T23:15:30Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 1189,
+      "id": "MDU6SXNzdWU2MjQ1MDA2MjY=",
+      "title": "Reconcile Date header and Creation Time",
+      "url": "https://github.com/httpwg/http-extensions/issues/1189",
+      "state": "OPEN",
+      "author": "richanna",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [
+        "signatures"
+      ],
+      "body": "The draft is missing guidance on if/how the Date header relates to signature Creation Time.  There are cases where they may be different, such as if a signature was pre-created.  Should Creation Time default to the value in the Date header if the `created` parameter is not specified?",
+      "createdAt": "2020-05-25T22:02:26Z",
+      "updatedAt": "2020-05-25T23:15:30Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 1190,
+      "id": "MDU6SXNzdWU2MjQ1MDA3OTQ=",
+      "title": "Remove algorithm-specific rules for content identifiers",
+      "url": "https://github.com/httpwg/http-extensions/issues/1190",
+      "state": "OPEN",
+      "author": "richanna",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [
+        "signatures"
+      ],
+      "body": "The rules that restrict when the signer can or must include certain identifiers appear to be related to the pseudo-revving of the Cavage draft that happened when the `hs2019` algorithm was introduced.  We should drop these rules, as it can be expected that anyone implementing this draft will support all content identifiers.",
+      "createdAt": "2020-05-25T22:03:06Z",
+      "updatedAt": "2020-05-25T23:15:31Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 1191,
+      "id": "MDU6SXNzdWU2MjQ1MDA5MjM=",
+      "title": "Add guidance for signing compressed headers",
+      "url": "https://github.com/httpwg/http-extensions/issues/1191",
+      "state": "OPEN",
+      "author": "richanna",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [
+        "signatures"
+      ],
+      "body": "The draft should provide guidance on how to sign headers when RFC7541 is used. This guidance might be as simple as \"sign the uncompressed header field value.\"",
+      "createdAt": "2020-05-25T22:03:36Z",
+      "updatedAt": "2020-05-25T23:15:31Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 1192,
+      "id": "MDU6SXNzdWU2MjQ1MDEwMDY=",
+      "title": "Transformations to Via header field value break verification",
+      "url": "https://github.com/httpwg/http-extensions/issues/1192",
+      "state": "OPEN",
+      "author": "richanna",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [
+        "signatures"
+      ],
+      "body": "Intermediaries are permitted to strip comments from the `Via` header field value, and consolidate related sequences of entries.  The canonicalization rules do not account for these changes, and thus they cause signature verification to fail if the `Via` header is signed. At the very least, guidance on signing or not signing `Via` headers needs to be included.",
+      "createdAt": "2020-05-25T22:03:54Z",
+      "updatedAt": "2020-05-25T23:15:31Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 1193,
+      "id": "MDU6SXNzdWU2MjQ1MDEwOTU=",
+      "title": "Case changes to case-insensitive header field values break verification",
+      "url": "https://github.com/httpwg/http-extensions/issues/1193",
+      "state": "OPEN",
+      "author": "richanna",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [
+        "signatures"
+      ],
+      "body": "Some header field values are case-insensitive, in whole or in part. The canonicalization rules do not account for this, thus a case change to a covered header field value causes verification to fail.",
+      "createdAt": "2020-05-25T22:04:13Z",
+      "updatedAt": "2020-05-25T23:15:31Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 1194,
+      "id": "MDU6SXNzdWU2MjQ1MDExNjg=",
+      "title": "Expiration not needed",
+      "url": "https://github.com/httpwg/http-extensions/issues/1194",
+      "state": "OPEN",
+      "author": "richanna",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [
+        "signatures"
+      ],
+      "body": "In many cases, putting the expiration of the signature into the hands of the signer opens up more options for failures than necessary.  Instead of the `expires`, any verifier can use the `created` field and an internal lifetime or offset to calculate expiration.  We should consider dropping the `expires` field.",
+      "createdAt": "2020-05-25T22:04:33Z",
+      "updatedAt": "2020-05-25T23:15:31Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 1195,
+      "id": "MDU6SXNzdWU2MjQ1MDEzMjQ=",
+      "title": "Define more content identifiers",
+      "url": "https://github.com/httpwg/http-extensions/issues/1195",
+      "state": "OPEN",
+      "author": "richanna",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [
+        "signatures"
+      ],
+      "body": "It should be possible to independently include the following content and metadata properties in Covered Content:\r\n\r\n- The signature's Algorithm\r\n- The signature's Covered Content\r\n- The value used for the `keyId` parameter\r\n- Request method\r\n- Individual components of the effective request URI: scheme, authority, path, query\r\n- Status code\r\n- Request body (currently supported via Digest header RFC3230)",
+      "createdAt": "2020-05-25T22:05:08Z",
+      "updatedAt": "2020-05-25T23:15:32Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 1196,
+      "id": "MDU6SXNzdWU2MjQ1MDE0NTQ=",
+      "title": "Support expected authority changes",
+      "url": "https://github.com/httpwg/http-extensions/issues/1196",
+      "state": "OPEN",
+      "author": "richanna",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [
+        "signatures"
+      ],
+      "body": "In some cases, the authority of the effective request URI may be expected to change, for example from \"public-service-name.example.com\" to \"service-host-1.public-service-name.example.com\".  This is commonly the case for services that are hosted behind a load-balancing gateway, where the client sends requests to a publicly known domain name for the service, and these requests are transformed by the gateway into requests to specific hosts in the service fleet.\r\n\r\nOne possible way to handle this would be to special-case the Host header field to allow verifier to substitute a known expected value, or a value provided in another header field (e.g., `Via`) when generating the Signature Input, provided that the verifier also recognizes the real value in the `Host` header.  Alternatively, this logic could apply to an `(audience)` content identifier.",
+      "createdAt": "2020-05-25T22:05:41Z",
+      "updatedAt": "2020-05-25T23:15:32Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 1197,
+      "id": "MDU6SXNzdWU2MjQ1MDE1MTA=",
+      "title": "Support for signing specific cookies",
+      "url": "https://github.com/httpwg/http-extensions/issues/1197",
+      "state": "OPEN",
+      "author": "richanna",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [
+        "signatures"
+      ],
+      "body": "A signer may only wish to sign one or a few cookies, for example if the website requires its authentication state cookie to be signed, but also sets other cookies (e.g., for analytics, ad tracking, etc.)",
+      "createdAt": "2020-05-25T22:05:58Z",
+      "updatedAt": "2020-05-25T23:15:32Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 1198,
+      "id": "MDU6SXNzdWU2MjQ1MDUyMjA=",
+      "title": "Use Structured Headers",
+      "url": "https://github.com/httpwg/http-extensions/issues/1198",
+      "state": "OPEN",
+      "author": "richanna",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [
+        "signatures"
+      ],
+      "body": "Redefine the Signature header field to use [Structured Headers](https://httpwg.org/http-extensions/draft-ietf-httpbis-header-structure.html). This will simplify both the definition and the parsing of this header field value.",
+      "createdAt": "2020-05-25T22:21:44Z",
+      "updatedAt": "2020-05-25T23:15:32Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
@@ -60979,13 +61401,13 @@
       ],
       "body": "This attempts to address #1096 and #1079. It might help towards overcoming the headers vs frames debate.\r\n\r\nI made the call to restrict the PRIORITY_UPDATE frame to only be sent by clients.\r\n\r\nIt replaces ASCII art with new QUIC-style frame definitions.",
       "createdAt": "2020-04-30T13:45:24Z",
-      "updatedAt": "2020-05-22T13:52:03Z",
+      "updatedAt": "2020-05-22T18:21:30Z",
       "baseRepository": "httpwg/http-extensions",
       "baseRefName": "master",
-      "baseRefOid": "f40438f4582d1fdb5b894f382ce341686e38e7c3",
+      "baseRefOid": "9e2bb280faa05fb9b7af494287ef5f5ce19bdb77",
       "headRepository": "httpwg/http-extensions",
       "headRefName": "priority-update-frames",
-      "headRefOid": "ffae0f251f7b0902a35ad691d8ced3f835acd2a2",
+      "headRefOid": "e1a5f1763008c80181f09a50edd709ad7f0360f8",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -61072,13 +61494,13 @@
               "originalPosition": 21,
               "body": "```suggestion\r\nHaving two mechanisms to carry the initial priority signal brings the dilemma of\r\n```",
               "createdAt": "2020-05-05T17:50:00Z",
-              "updatedAt": "2020-05-22T13:52:03Z"
+              "updatedAt": "2020-05-22T18:21:30Z"
             },
             {
               "originalPosition": 61,
               "body": "```suggestion\r\nof any other value MUST be treated as a connection error of type PROTOCOL_ERROR.\r\n```",
               "createdAt": "2020-05-05T17:51:18Z",
-              "updatedAt": "2020-05-22T13:52:03Z"
+              "updatedAt": "2020-05-22T18:21:30Z"
             }
           ]
         },
@@ -61098,7 +61520,7 @@
               "originalPosition": 21,
               "body": "+1",
               "createdAt": "2020-05-05T18:05:45Z",
-              "updatedAt": "2020-05-22T13:52:03Z"
+              "updatedAt": "2020-05-22T18:21:30Z"
             }
           ]
         },
@@ -61118,7 +61540,7 @@
               "originalPosition": 45,
               "body": "Should be more like\r\n\r\n```\r\n  Therefore, a client cannot reprioritize a response by\r\n  sending additional metadata (e.g., trailer fields) on the request stream.\r\n  We avoid interoperability failure by restricting PRIORITY_UPDATE\r\n  frames to the control stream, with each such frame explicitly identifying\r\n  the stream to which the new priority applies.\r\n```",
               "createdAt": "2020-05-05T18:27:45Z",
-              "updatedAt": "2020-05-22T13:52:03Z"
+              "updatedAt": "2020-05-22T18:21:30Z"
             }
           ]
         },
@@ -61138,7 +61560,7 @@
               "originalPosition": 45,
               "body": "Thanks. I tweaked the suggestion slightly and made cbcdc60cf5a92. PTAL.",
               "createdAt": "2020-05-06T13:13:38Z",
-              "updatedAt": "2020-05-22T13:52:03Z"
+              "updatedAt": "2020-05-22T18:21:30Z"
             }
           ]
         },
@@ -61171,19 +61593,19 @@
               "originalPosition": 131,
               "body": "0x10?",
               "createdAt": "2020-05-14T01:00:08Z",
-              "updatedAt": "2020-05-22T13:52:03Z"
+              "updatedAt": "2020-05-22T18:21:30Z"
             },
             {
               "originalPosition": 11,
               "body": "How about stating that endpoints that do not want to expose an end-to-end signal MAY omit the header field, but send the PRIORITY_UPDATE frame at an early moment assuming that it would reach the server as early as the request headers? Would could go on to explain that in such case, all the responses that the server would send would have the priority in the frame being applied.\r\n\r\nThe benefit of phrasing that way is that we can get rid of the last paragraph of this section.",
               "createdAt": "2020-05-14T01:04:23Z",
-              "updatedAt": "2020-05-22T13:52:03Z"
+              "updatedAt": "2020-05-22T18:21:30Z"
             },
             {
               "originalPosition": 91,
               "body": "Seeing the definition of the frame _headers_ for H2 was surprising to me, though I understand that it reflects the change to the HTTP/3 draft. Maybe I should ask if the change in HTTP/3 is a good thing.",
               "createdAt": "2020-05-14T01:08:39Z",
-              "updatedAt": "2020-05-22T13:52:03Z"
+              "updatedAt": "2020-05-22T18:21:30Z"
             }
           ]
         },
@@ -61203,7 +61625,7 @@
               "originalPosition": 91,
               "body": "As a personal opinion I prefer to see the frame in whole because it avoids having to cross reference to the frame headers, which are defined in some other document. \r\n\r\nBut I can drop them if people want. I see that as an editorial change so perhaps we can avoid blocking this and fix up later if needs be.",
               "createdAt": "2020-05-14T01:21:41Z",
-              "updatedAt": "2020-05-22T13:52:03Z"
+              "updatedAt": "2020-05-22T18:21:30Z"
             }
           ]
         },
@@ -61223,7 +61645,7 @@
               "originalPosition": 91,
               "body": "I agree that this is an editorial issue, and that we need to ask the WG to resolve (because it is about the convention covering all H2 extensions, not just this one).",
               "createdAt": "2020-05-14T01:43:01Z",
-              "updatedAt": "2020-05-22T13:52:03Z"
+              "updatedAt": "2020-05-22T18:21:30Z"
             }
           ]
         },
@@ -61243,7 +61665,7 @@
               "originalPosition": 91,
               "body": "FWIW, ALTSVC is the only extension to have reached RFC status previously.  It [does not include](https://tools.ietf.org/html/rfc7838#section-4) the frame header; only the payload.",
               "createdAt": "2020-05-14T14:41:04Z",
-              "updatedAt": "2020-05-22T13:52:03Z"
+              "updatedAt": "2020-05-22T18:21:30Z"
             }
           ]
         },
@@ -61263,7 +61685,7 @@
               "originalPosition": 91,
               "body": "You forgot ORIGIN frame https://tools.ietf.org/html/rfc8336#section-2.1 which also specifies the frame payload.\r\n\r\nNow that H2 and H3 have different frame format definitions, I think extensions applicable to both will hit this problem. I'd like to figure what people think is the most acceptable way to present things.",
               "createdAt": "2020-05-14T14:53:09Z",
-              "updatedAt": "2020-05-22T13:52:03Z"
+              "updatedAt": "2020-05-22T18:21:30Z"
             }
           ]
         },
@@ -61283,7 +61705,7 @@
               "originalPosition": 91,
               "body": "One option would be to write documents that update RFC 7838 and RFC 8336 to use the new format and define the H3 frame at the same time...",
               "createdAt": "2020-05-14T14:56:10Z",
-              "updatedAt": "2020-05-22T13:52:03Z"
+              "updatedAt": "2020-05-22T18:21:30Z"
             }
           ]
         },
@@ -61303,7 +61725,7 @@
               "originalPosition": 11,
               "body": "I've tried to incorporate this suggestion in https://github.com/httpwg/http-extensions/pull/1167/commits/f5ac92a045a3074e503c93d304a90799e387ab07 but found it trickier to write than I first thought it would be, so it ended up a little different in the end. Please take a look and add some further suggestions if I'm not hitting your mark.",
               "createdAt": "2020-05-15T11:53:22Z",
-              "updatedAt": "2020-05-22T13:52:03Z"
+              "updatedAt": "2020-05-22T18:21:30Z"
             }
           ]
         },
@@ -61323,7 +61745,7 @@
               "originalPosition": 91,
               "body": "True, I try to block that one out.\r\n\r\nThey have different frame format definitions, sure; the question is whether the payload needs to vary between H2/H3.  I think the real things you need to specify are:\r\n\r\n- What stream it's on (part of the header in H2, intrinsic property in H3)\r\n  - Control stream vs. stream zero language plays into this\r\n- Flags if used in H2; since H3 doesn't have flags, this might lead to a payload difference\r\n- Payload\r\n\r\nThe simplest path for dual-version extensions is not to use flags and only define the payload.",
               "createdAt": "2020-05-15T18:15:38Z",
-              "updatedAt": "2020-05-22T13:52:03Z"
+              "updatedAt": "2020-05-22T18:21:30Z"
             }
           ]
         },
@@ -61343,7 +61765,7 @@
               "originalPosition": 32,
               "body": "How about changing the last sentence to something like: _The signal carried by a PRIORITY_UPDATE frame overrides that carried by the header, even when the frame was received before the request headers._\r\n\r\nNote that this PR recommends such a behavior; it states that a server SHOULD buffer and apply the content of PRIORITY_UPDATE frame that precedes the header field. For good reasons.\r\n\r\nConsider the case of an H3 client sending a HTTP request with a Priority header field, then changing its mind and sending a PRIORITY_UPDATE frame. As H3 does not guarantee delivery order across streams, the server might receive the frame before the header. I'd assume that we'd want servers to apply the value carried by the frame. Even when the protocol is H2, I am not sure if all the H2 stacks have the guarantee that the information across multiple streams are sent in the order they are issued, or that they are provided to the application in the order they are received.",
               "createdAt": "2020-05-15T20:17:34Z",
-              "updatedAt": "2020-05-22T13:52:03Z"
+              "updatedAt": "2020-05-22T18:21:30Z"
             }
           ]
         },
@@ -61376,49 +61798,69 @@
               "originalPosition": 30,
               "body": "The important \"when\" here is \"before prioritization information is not useful to the server\".  That might be later than when the server receives the request.",
               "createdAt": "2020-05-22T03:13:28Z",
-              "updatedAt": "2020-05-22T13:52:03Z"
+              "updatedAt": "2020-05-22T18:21:30Z"
             },
             {
               "originalPosition": 112,
               "body": "SHOULD.  I don't think that I could guarantee that this could be enforced.\r\n\r\n```suggestion\r\nthis SHOULD be treated as a connection error of type PROTOCOL_ERROR.\r\n```\r\n\r\nWell, I guess that this is the h2 variant, but still.",
               "createdAt": "2020-05-22T03:14:24Z",
-              "updatedAt": "2020-05-22T13:52:03Z"
+              "updatedAt": "2020-05-22T18:21:30Z"
             },
             {
               "originalPosition": 202,
               "body": "This needs to be qualified; if the frame contains a Push ID, then this doesn't apply.",
               "createdAt": "2020-05-22T03:16:46Z",
-              "updatedAt": "2020-05-22T13:52:03Z"
+              "updatedAt": "2020-05-22T18:21:30Z"
             },
             {
               "originalPosition": 203,
               "body": "```suggestion\r\nID that is beyond the stream limits, this SHOULD be treated as a connection error\r\n```",
               "createdAt": "2020-05-22T03:16:55Z",
-              "updatedAt": "2020-05-22T13:52:03Z"
+              "updatedAt": "2020-05-22T18:21:30Z"
             },
             {
               "originalPosition": 213,
               "body": "This one could be a MUST.",
               "createdAt": "2020-05-22T03:17:17Z",
-              "updatedAt": "2020-05-22T13:52:03Z"
+              "updatedAt": "2020-05-22T18:21:30Z"
             },
             {
               "originalPosition": 231,
               "body": "I would skip a number here and let people use the low bit of the type as a flag if they want.  Otherwise, this is a tiny bit more awkward.",
               "createdAt": "2020-05-22T03:18:10Z",
-              "updatedAt": "2020-05-22T13:52:03Z"
+              "updatedAt": "2020-05-22T18:21:30Z"
             },
             {
               "originalPosition": 91,
               "body": "```suggestion\r\n  Stream Identifier (31) = 0,\r\n```",
               "createdAt": "2020-05-22T03:18:52Z",
-              "updatedAt": "2020-05-22T13:52:03Z"
+              "updatedAt": "2020-05-22T18:21:30Z"
             },
             {
               "originalPosition": 28,
               "body": "I just have to say that this \"do not want\" statement assumes a great deal without a whole lot of support.",
               "createdAt": "2020-05-22T03:20:04Z",
-              "updatedAt": "2020-05-22T13:52:03Z"
+              "updatedAt": "2020-05-22T18:21:30Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDE2OTUyMjYz",
+          "commit": {
+            "abbreviatedOid": "41432cb"
+          },
+          "author": "LPardue",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-05-22T14:24:32Z",
+          "updatedAt": "2020-05-22T14:24:33Z",
+          "comments": [
+            {
+              "originalPosition": 213,
+              "body": "hmm yeah, the current text is actually a bit nasty because it doesn't restrict PRIORITY_UPDATE to be within MAX_PUSH_ID either. Combining those factors means the client has a bit too much sway over the amount of state a server needs to hold. Let me fix both things.",
+              "createdAt": "2020-05-22T14:24:32Z",
+              "updatedAt": "2020-05-22T18:21:30Z"
             }
           ]
         }
@@ -61878,6 +62320,63 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 1175,
+      "id": "MDExOlB1bGxSZXF1ZXN0NDIyOTA1ODY0",
+      "title": "Initial commit of message-signatures-00 draft, converted to Markdown.",
+      "url": "https://github.com/httpwg/http-extensions/pull/1175",
+      "state": "OPEN",
+      "author": "richanna",
+      "authorAssociation": "FIRST_TIME_CONTRIBUTOR",
+      "assignees": [],
+      "labels": [
+        "signatures"
+      ],
+      "body": "Version -00 was published to the data tracker from an XML file. This is the first conversion to Markdown and commit to the WG repo. No changes to semantics, only minor formatting changes due to the conversion.",
+      "createdAt": "2020-05-25T21:46:45Z",
+      "updatedAt": "2020-05-26T07:38:47Z",
+      "baseRepository": "httpwg/http-extensions",
+      "baseRefName": "master",
+      "baseRefOid": "9e2bb280faa05fb9b7af494287ef5f5ce19bdb77",
+      "headRepository": "richanna/http-extensions",
+      "headRefName": "master",
+      "headRefOid": "d5660b286070d185db5c92bff26ed5611633c249",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 1199,
+      "id": "MDExOlB1bGxSZXF1ZXN0NDIzMTMxNTMx",
+      "title": "digest-headers: remove non-ASCII characters from prose",
+      "url": "https://github.com/httpwg/http-extensions/pull/1199",
+      "state": "OPEN",
+      "author": "reschke",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [
+        "digest-headers",
+        "editorial"
+      ],
+      "body": "",
+      "createdAt": "2020-05-26T10:53:18Z",
+      "updatedAt": "2020-05-26T10:53:37Z",
+      "baseRepository": "httpwg/http-extensions",
+      "baseRefName": "master",
+      "baseRefOid": "9e2bb280faa05fb9b7af494287ef5f5ce19bdb77",
+      "headRepository": "httpwg/http-extensions",
+      "headRefName": "reschke-digest-non-ascii",
+      "headRefOid": "02861561f29fa00cf1aa2f19d9b427505cb913de",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
