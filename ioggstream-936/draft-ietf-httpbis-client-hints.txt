@@ -5,7 +5,7 @@
 HTTP Working Group                                           I. Grigorik
 Internet-Draft                                                  Y. Weiss
 Intended status: Experimental                                     Google
-Expires: April 11, 2020                                  October 9, 2019
+Expires: November 27, 2020                                  May 26, 2020
 
 
                            HTTP Client Hints
@@ -53,16 +53,16 @@ Status of This Memo
 
 
 
-Grigorik & Weiss         Expires April 11, 2020                 [Page 1]
+Grigorik & Weiss        Expires November 27, 2020               [Page 1]
 
-Internet-Draft              HTTP Client Hints               October 2019
+Internet-Draft              HTTP Client Hints                   May 2020
 
 
-   This Internet-Draft will expire on April 11, 2020.
+   This Internet-Draft will expire on November 27, 2020.
 
 Copyright Notice
 
-   Copyright (c) 2019 IETF Trust and the persons identified as the
+   Copyright (c) 2020 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -97,7 +97,7 @@ Table of Contents
      B.1.  Since -00 . . . . . . . . . . . . . . . . . . . . . . . .   9
      B.2.  Since -01 . . . . . . . . . . . . . . . . . . . . . . . .   9
      B.3.  Since -02 . . . . . . . . . . . . . . . . . . . . . . . .   9
-     B.4.  Since -03 . . . . . . . . . . . . . . . . . . . . . . . .   9
+     B.4.  Since -03 . . . . . . . . . . . . . . . . . . . . . . . .  10
      B.5.  Since -04 . . . . . . . . . . . . . . . . . . . . . . . .  10
      B.6.  Since -05 . . . . . . . . . . . . . . . . . . . . . . . .  10
      B.7.  Since -06 . . . . . . . . . . . . . . . . . . . . . . . .  10
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Grigorik & Weiss         Expires April 11, 2020                 [Page 2]
+Grigorik & Weiss        Expires November 27, 2020               [Page 2]
 
-Internet-Draft              HTTP Client Hints               October 2019
+Internet-Draft              HTTP Client Hints                   May 2020
 
 
 1.  Introduction
@@ -165,9 +165,9 @@ Internet-Draft              HTTP Client Hints               October 2019
 
 
 
-Grigorik & Weiss         Expires April 11, 2020                 [Page 3]
+Grigorik & Weiss        Expires November 27, 2020               [Page 3]
 
-Internet-Draft              HTTP Client Hints               October 2019
+Internet-Draft              HTTP Client Hints                   May 2020
 
 
    Client Hints mitigate the performance concerns by assuring that
@@ -221,9 +221,9 @@ Internet-Draft              HTTP Client Hints               October 2019
 
 
 
-Grigorik & Weiss         Expires April 11, 2020                 [Page 4]
+Grigorik & Weiss        Expires November 27, 2020               [Page 4]
 
-Internet-Draft              HTTP Client Hints               October 2019
+Internet-Draft              HTTP Client Hints                   May 2020
 
 
 2.2.  Server Processing of Client Hints
@@ -277,9 +277,9 @@ Internet-Draft              HTTP Client Hints               October 2019
 
 
 
-Grigorik & Weiss         Expires April 11, 2020                 [Page 5]
+Grigorik & Weiss        Expires November 27, 2020               [Page 5]
 
-Internet-Draft              HTTP Client Hints               October 2019
+Internet-Draft              HTTP Client Hints                   May 2020
 
 
    For example, based on the Accept-CH example above, which is received
@@ -333,9 +333,9 @@ Internet-Draft              HTTP Client Hints               October 2019
 
 
 
-Grigorik & Weiss         Expires April 11, 2020                 [Page 6]
+Grigorik & Weiss        Expires November 27, 2020               [Page 6]
 
-Internet-Draft              HTTP Client Hints               October 2019
+Internet-Draft              HTTP Client Hints                   May 2020
 
 
    Implementers ought to consider both user and server controlled
@@ -389,15 +389,15 @@ Internet-Draft              HTTP Client Hints               October 2019
 
 
 
-Grigorik & Weiss         Expires April 11, 2020                 [Page 7]
+Grigorik & Weiss        Expires November 27, 2020               [Page 7]
 
-Internet-Draft              HTTP Client Hints               October 2019
+Internet-Draft              HTTP Client Hints                   May 2020
 
 
    [I-D.ietf-httpbis-header-structure]
-              Nottingham, M. and P. Kamp, "Structured Headers for HTTP",
-              draft-ietf-httpbis-header-structure-13 (work in progress),
-              August 2019.
+              Nottingham, M. and P. Kamp, "Structured Field Values for
+              HTTP", draft-ietf-httpbis-header-structure-18 (work in
+              progress), April 2020.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -445,14 +445,15 @@ Internet-Draft              HTTP Client Hints               October 2019
 
 
 
-Grigorik & Weiss         Expires April 11, 2020                 [Page 8]
+Grigorik & Weiss        Expires November 27, 2020               [Page 8]
 
-Internet-Draft              HTTP Client Hints               October 2019
+Internet-Draft              HTTP Client Hints                   May 2020
 
 
    [VARIANTS]
               Nottingham, M., "HTTP Representation Variants", draft-
-              ietf-httpbis-variants-05 (work in progress), March 2019.
+              ietf-httpbis-variants-06 (work in progress), November
+              2019.
 
 6.3.  URIs
 
@@ -493,18 +494,23 @@ B.3.  Since -02
    o  Issue 241: Consistency in IANA considerations
    o  Issue 250: Clarified Accept-CH
 
+
+
+
+
+
+
+
+Grigorik & Weiss        Expires November 27, 2020               [Page 9]
+
+Internet-Draft              HTTP Client Hints                   May 2020
+
+
 B.4.  Since -03
 
    o  Issue 284: Extended guidance for Accept-CH
    o  Issue 308: Editorial cleanup
    o  Issue 306: Define Accept-CH-Lifetime
-
-
-
-Grigorik & Weiss         Expires April 11, 2020                 [Page 9]
-
-Internet-Draft              HTTP Client Hints               October 2019
-
 
 B.5.  Since -04
 
@@ -551,10 +557,4 @@ Authors' Addresses
 
 
 
-
-
-
-
-
-
-Grigorik & Weiss         Expires April 11, 2020                [Page 10]
+Grigorik & Weiss        Expires November 27, 2020              [Page 10]
